@@ -1,1 +1,328 @@
 <!--리뷰 작성 페이지-->
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ewha Market | 리뷰 작성</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background-color: #ffffff;
+      color: #333;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 40px;
+      border-bottom: 1px solid #eee;
+    }
+
+    .logo {
+      font-size: 24px;
+      font-weight: bold;
+      display: flex;
+    }
+    .logo-ewha { color: #007b43; margin-right: 2px; }
+    .logo-market { color: #70ad47; }
+
+    .nav-menu {
+      list-style: none;
+      display: flex;
+      gap: 25px;
+      margin: 0;
+      padding: 0;
+    }
+    .nav-menu li a {
+      text-decoration: none;
+      color: #333;
+      font-size: 14px;
+      transition: color 0.3s;
+    }
+    .nav-menu li a:hover { color: #007b43; }
+
+    main {
+      flex-grow: 1;
+      padding: 60px 100px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .review-container {
+      background-color: #fff;
+      border-radius: 15px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.05);
+      padding: 40px;
+      width: 80%;
+      max-width: 1000px;
+    }
+
+    /* 🔸 상단 상품정보 + 업로드 구역 */
+    .top-section {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 30px;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .product-info {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    .product-info img {
+      width: 130px;
+      border-radius: 8px;
+    }
+    .product-text {
+      font-size: 16px;
+      line-height: 1.8;
+    }
+    .product-text b {
+      display: block;
+      font-size: 18px;
+      margin-bottom: 5px;
+    }
+    .input-field {
+      border: none;
+      border-radius: 6px;
+      background-color: #f5f5f5;
+      padding: 6px 10px;
+      font-size: 15px;
+      font-family: inherit;
+      color: #333;
+      width: 160px;
+      margin-left: 5px;
+    }
+
+    /* 🔸 업로드 박스 */
+    .upload-area {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .upload-boxes {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .upload-box {
+      width: 140px;
+      height: 140px;
+      border-radius: 10px;
+      border: 2px dashed #ccc;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 36px;
+      color: #999;
+      background-color: #f6f6f6;
+      overflow: hidden;
+      cursor: pointer;
+      transition: border-color 0.3s;
+    }
+    .upload-box:hover { border-color: #4CAF50; }
+    .upload-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .choose-file {
+      background-color: #2b8a3e;
+      color: white;
+      border: none;
+      border-radius: 25px;
+      padding: 10px 25px;
+      font-size: 15px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    .choose-file:hover { background-color: #1c7030; }
+
+    /* 별점 */
+    .star-rating {
+      display: flex;
+      justify-content: center;
+      margin: 25px 0;
+    }
+    .star-rating span {
+      font-size: 32px;
+      color: #ccc;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+    .star-rating span.active {
+      color: #ffb400;
+    }
+
+    /* 리뷰 입력 */
+    .review-title,
+    .review-content {
+      width: 100%;
+      border: none;
+      border-radius: 8px;
+      background-color: #f5f5f5;
+      padding: 15px;
+      font-size: 15px;
+      margin-bottom: 20px;
+      font-family: inherit;
+      color: #333;
+    }
+    .review-content {
+      height: 150px;
+      resize: none;
+    }
+
+    .submit-btn {
+      display: block;
+      margin: 0 auto;
+      background-color: #004d2c;
+      color: #fff;
+      border: none;
+      border-radius: 25px;
+      padding: 12px 40px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    .submit-btn:hover { background-color: #00351f; }
+
+    footer {
+      background-color: #e8f5e9;
+      text-align: center;
+      padding: 15px 0;
+      color: #777;
+      font-size: 14px;
+      margin-top: auto;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">
+      <span class="logo-ewha">Ewha</span><span class="logo-market">market</span>
+    </div>
+    <nav>
+      <ul class="nav-menu">
+        <li><a href="#">상품 조회</a></li>
+        <li><a href="#">리뷰 조회</a></li>
+        <li><a href="#">리뷰 등록</a></li>
+        <li><a href="#">상품 등록</a></li>
+        <li><a href="#">마이페이지</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <div class="review-container">
+
+      <!-- 상단: 상품정보 + 파일업로드 -->
+      <div class="top-section">
+        <div class="product-info">
+          <img src="https://static.nike.com/a/images/t_PDP_1280_v1/f_auto,q_auto:eco/2f0c10b2-58f5-42f1-9c0a-293b146fe7db/superstar-82-shoes-3ZFtWb.png" alt="제품 이미지" />
+          <div class="product-text">
+            <b>아디다스 운동화</b>
+            구매일:
+            <input type="date" class="input-field" id="purchaseDate" /><br />
+            ID:
+            <input type="text" class="input-field" id="userId" placeholder="아이디 입력" />
+          </div>
+        </div>
+
+        <div class="upload-area" id="fileUploadArea">
+          <div class="upload-boxes">
+            <div class="upload-box">+</div>
+            <div class="upload-box">+</div>
+            <div class="upload-box">+</div>
+          </div>
+          <button class="choose-file" id="chooseBtn">Choose File</button>
+        </div>
+      </div>
+
+      <!-- 별점 -->
+      <div class="star-rating" id="starRating">
+        <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+      </div>
+
+      <!-- 리뷰 입력 -->
+      <input type="text" class="review-title" placeholder="리뷰 제목을 입력해 주세요!" />
+      <textarea class="review-content" placeholder="상품은 어떠셨나요? 자세한 후기를 남겨 주세요."></textarea>
+
+      <button class="submit-btn">등록하기</button>
+    </div>
+  </main>
+
+  <footer>@cloud9</footer>
+
+  <script>
+    // 🌟 별점 클릭 유지
+    const stars = document.querySelectorAll('#starRating span');
+    stars.forEach((star, index) => {
+      star.addEventListener('click', () => {
+        stars.forEach((s, i) => s.classList.toggle('active', i <= index));
+      });
+    });
+
+    // 🖼 이미지 업로드 (드래그 & 파일 선택)
+    const uploadArea = document.getElementById('fileUploadArea');
+    const chooseBtn = document.getElementById('chooseBtn');
+    const maxFiles = 10;
+
+    function createPreviewBox(file) {
+      const reader = new FileReader();
+      const box = document.createElement('div');
+      box.classList.add('upload-box');
+      reader.onload = e => {
+        box.innerHTML = `<img src="${e.target.result}" alt="미리보기" />`;
+      };
+      reader.readAsDataURL(file);
+      const boxes = uploadArea.querySelector('.upload-boxes');
+      boxes.appendChild(box);
+    }
+
+    function handleFiles(files) {
+      const boxes = uploadArea.querySelectorAll('.upload-box img').length;
+      const remaining = maxFiles - boxes;
+      Array.from(files)
+        .slice(0, remaining)
+        .forEach(file => {
+          if (file.type.startsWith('image/')) createPreviewBox(file);
+        });
+    }
+
+    chooseBtn.addEventListener('click', () => {
+      const input = document.createElement('input');
+      input.type = 'file';
+      input.accept = 'image/*';
+      input.multiple = true;
+      input.onchange = e => handleFiles(e.target.files);
+      input.click();
+    });
+
+    uploadArea.addEventListener('dragover', e => {
+      e.preventDefault();
+      uploadArea.classList.add('dragover');
+    });
+    uploadArea.addEventListener('dragleave', () => uploadArea.classList.remove('dragover'));
+    uploadArea.addEventListener('drop', e => {
+      e.preventDefault();
+      uploadArea.classList.remove('dragover');
+      handleFiles(e.dataTransfer.files);
+    });
+  </script>
+</body>
+</html>
