@@ -1,1 +1,216 @@
 <!--리뷰 전체 조회-->
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ewha Market | 전체 리뷰조회</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background-color: #ffffff;
+      color: #333;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 40px;
+      border-bottom: 1px solid #eee;
+    }
+
+    .logo {
+      font-size: 24px;
+      font-weight: bold;
+      display: flex;
+    }
+    .logo-ewha { color: #007b43; margin-right: 2px; }
+    .logo-market { color: #70ad47; }
+
+    .nav-menu {
+      list-style: none;
+      display: flex;
+      gap: 25px;
+      margin: 0;
+      padding: 0;
+    }
+    .nav-menu li a {
+      text-decoration: none;
+      color: #333;
+      font-size: 14px;
+      transition: color 0.3s;
+    }
+    .nav-menu li a:hover { color: #007b43; }
+
+    main {
+      flex-grow: 1;
+      padding: 50px 100px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .title {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 20px;
+      align-self: flex-start;
+    }
+
+    .review-count {
+      background-color: #2b8a3e;
+      color: #fff;
+      border: none;
+      border-radius: 25px;
+      padding: 8px 20px;
+      font-size: 15px;
+      font-weight: 500;
+      margin-bottom: 40px;
+      align-self: flex-start;
+    }
+
+    /* 리뷰 카드 레이아웃 */
+    .review-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 30px;
+      width: 100%;
+      max-width: 1000px;
+      justify-items: center;
+    }
+
+    .review-card {
+      background-color: #fff;
+      border: 1px solid #ddd;
+      border-radius: 20px;
+      padding: 20px;
+      width: 100%;
+      max-width: 280px;
+      text-align: center;
+      transition: transform 0.2s, box-shadow 0.2s;
+      text-decoration: none;
+      color: inherit;
+      display: block;
+    }
+    .review-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    }
+
+    .review-title {
+      background-color: #f7f7f7;
+      border-radius: 50px;
+      padding: 10px;
+      font-weight: bold;
+      font-size: 15px;
+      margin-bottom: 15px;
+    }
+
+    .review-card img {
+      width: 150px;
+      height: 150px;
+      object-fit: contain;
+      margin-bottom: 15px;
+    }
+
+    .stars {
+      color: #004d2c;
+      font-size: 22px;
+      letter-spacing: 4px;
+    }
+
+    /* 페이지네이션 */
+    .pagination {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 15px;
+      margin-top: 40px;
+      font-size: 16px;
+    }
+    .pagination span {
+      cursor: pointer;
+      transition: color 0.3s;
+    }
+    .pagination span.active {
+      font-weight: bold;
+      border-bottom: 2px solid #004d2c;
+      padding-bottom: 3px;
+      color: #004d2c;
+    }
+    .pagination span:hover {
+      color: #004d2c;
+    }
+
+    footer {
+      background-color: #e8f5e9;
+      text-align: center;
+      padding: 15px 0;
+      color: #777;
+      font-size: 14px;
+      margin-top: auto;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">
+      <span class="logo-ewha">Ewha</span><span class="logo-market">market</span>
+    </div>
+    <nav>
+      <ul class="nav-menu">
+        <li><a href="#">상품 조회</a></li>
+        <li><a href="#">리뷰 조회</a></li>
+        <li><a href="#">리뷰 등록</a></li>
+        <li><a href="#">상품 등록</a></li>
+        <li><a href="#">마이페이지</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <div class="title">전체 리뷰조회</div>
+    <button class="review-count">My review : 3</button>
+
+    <!-- 리뷰 카드 리스트 -->
+    <div class="review-grid">
+
+      <a href="review_detail.html" class="review-card">
+        <div class="review-title">나의 첫 러닝용 운동화</div>
+        <img src="https://static.nike.com/a/images/t_PDP_1280_v1/f_auto,q_auto:eco/2f0c10b2-58f5-42f1-9c0a-293b146fe7db/superstar-82-shoes-3ZFtWb.png" alt="아디다스 운동화" />
+        <div class="stars">★★★★★</div>
+      </a>
+
+      <a href="review_detail.html" class="review-card">
+        <div class="review-title">이번 겨울 딱 맞는 맨투맨!</div>
+        <img src="https://contents.sixshop.com/thumbnails/uploadedFiles/20086/product/image_1663687254436_1000.jpg" alt="맨투맨" />
+        <div class="stars">★★★☆☆</div>
+      </a>
+
+      <a href="review_detail.html" class="review-card">
+        <div class="review-title">아기가 있는 집 인테리어</div>
+        <img src="https://cdn.imweb.me/upload/S20210201b4caa9b8b7c16/fde121ff75a0c.png" alt="공기청정기" />
+        <div class="stars">★★★★☆</div>
+      </a>
+
+    </div>
+
+    <!-- 페이지 네비게이션 -->
+    <div class="pagination">
+      <span class="active">1</span>
+      <span>2</span>
+      <span>3</span>
+      <span>4</span>
+      <span>5</span>
+      <span>&gt;</span>
+    </div>
+  </main>
+
+  <footer>@cloud9</footer>
+</body>
+</html>
