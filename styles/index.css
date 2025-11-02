@@ -168,3 +168,9 @@
     color: #00462A;
     margin: 0;
 }
+
+.product-link {
+    text-decoration: none;
+    color: inherit; 
+    display: block; 
+}
