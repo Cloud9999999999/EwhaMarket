@@ -31,23 +31,28 @@
     <h2>My Page</h2>
     <main class="container">
       <div class="form-container">
-        <form action="/mypage/update-info" method="post">
+        <!--벡엔드 할때 Post로 다시 바꾸기-->
+        <form action="../mypage/index.html" method="Get">
 
           <div class="profile">
             <div class="profile-image">
               <i class="user"></i>
-              <img src="../mypage/profile.jpg" alt="프로필 이미지" class="profile-img"/>
+              <img src="../assets/profile-img.svg" alt="프로필 이미지" class="profile-img"/>
             </div>
+
             <div class="username">
               <input type="text" id="username" value="김이화" class="username-input">
                 <button type="button" class="icon-button">
                   <i class="fa-solid fa-camera"></i>
+                  <img src="../assets/profile-camera.jpg">
                 </button>
                 <button type="button" class="icon-button">
                   <i class="fa-solid fa-trash-can"></i>
+                  <img src="../assets/profile-image.jpg">
                 </button>
               </div>
             </div>
+
 
             <div class="form-group">
                 <label for="id">아이디</label>
@@ -79,7 +84,8 @@
     <footer><p>@cloud9</p></footer>
 
     <script>
-      document.getElementById("edit-button").addEventListener("click", () => {
+      var myButton = document.getElementById("btn");
+      myButton.addEventListener("click", () => {
         window.location.href = "../mypage/index.html";
       });
     </script>
