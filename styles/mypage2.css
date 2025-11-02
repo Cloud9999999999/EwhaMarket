@@ -1,0 +1,165 @@
+body {
+    background-color: #f8f9fa;
+    margin: 0;
+    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+
+h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #00462A;
+    width: 900px;
+    max-width: 90%;
+    margin: 2rem auto 1.5rem auto;
+}
+
+
+main.container {
+    display: flex;
+    justify-content: center;
+    padding-bottom: 3rem;
+}
+.form-container {
+    width: 900px;
+    max-width: 90%;
+    background-color: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    padding: 3rem;
+    box-sizing: border-box;
+}
+.form-container form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+.profile {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    max-width: 650px;
+    
+    margin-bottom: 2.5rem;
+}
+.profile-image {
+    width: 60px; height: 60px;
+    border-radius: 50%;
+    background-color: #e6f7ee;
+    display: flex;
+    justify-content: flex;
+    box-sizing: border-box;
+    align-items: center;
+    margin-right: 1.5rem;
+    flex-shrink: 0;
+}
+
+.profile-image .user,
+.profile-image .fa-user {
+    font-size: 2rem;
+    color: #3cb371;
+}
+
+.username {
+    display: flex;
+    align-items: center;
+    flex-grow: 1;
+}
+.username-input {
+    font-size: 1.5rem;
+    font-weight: bold;
+    border: none;
+    padding: 0.5rem 0.2rem;
+    outline: none;
+    color: #333;
+    width: 100%;
+}
+.username-input:focus {
+    border-bottom: 2px solid #3cb371;
+}
+
+.icon-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2rem;
+    color: #888;
+    margin-left: 0.75rem;
+}
+
+
+.form-group {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    max-width: 650px;
+    margin-bottom: 1rem;
+}
+
+.form-group label {
+    width: 130px;
+    flex-shrink: 0;
+    text-align: right;
+    margin-right: 1.5rem;
+    
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: #00462A;
+}
+
+
+.form-group input {
+    flex-grow: 1;
+    width: 100%;
+    
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+    box-sizing: border-box;
+    color: #333;
+}
+
+
+.form-group input#id {
+    background-color: #f4f4f4;
+    color: #555;
+    border-color: #eee;
+}
+
+.form-group input[type="password"] {
+    font-family: 'password';
+    font-size: 1.2rem;
+    letter-spacing: 2px;
+}
+.form-group input[type="password"]::placeholder {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-size: 1rem;
+    letter-spacing: normal;
+}
+
+
+
+.btn {
+    background-color: #34A853;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 300px;
+    
+    width: 100%;
+    max-width: 400px;
+    padding: 14px 20px;
+    
+    cursor: pointer;
+    text-align: center;
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin-top: 2rem;
+}
+
+.btn:hover {
+    background-color: #2c8c45;
+}
