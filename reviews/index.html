@@ -1,216 +1,199 @@
 <!--리뷰 전체 조회-->
 <!DOCTYPE html>
 <html lang="ko">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Ewha Market | 전체 리뷰조회</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      background-color: #ffffff;
-      color: #333;
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
-    }
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ewha Market | 전체 리뷰조회</title>
+    <link rel="stylesheet" href="../styles/global.css" />
+    <link rel="stylesheet" href="../styles/index.css" />
+    <link rel="stylesheet" href="../styles/auth.css" />
 
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 20px 40px;
-      border-bottom: 1px solid #eee;
-    }
+    <style>
+      body {
+        font-family: "Noto Sans KR", Arial, sans-serif;
+        background-color: #ffffff;
+        color: #333;
+      }
 
-    .logo {
-      font-size: 24px;
-      font-weight: bold;
-      display: flex;
-    }
-    .logo-ewha { color: #007b43; margin-right: 2px; }
-    .logo-market { color: #70ad47; }
+      main {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 60px 20px;
+      }
 
-    .nav-menu {
-      list-style: none;
-      display: flex;
-      gap: 25px;
-      margin: 0;
-      padding: 0;
-    }
-    .nav-menu li a {
-      text-decoration: none;
-      color: #333;
-      font-size: 14px;
-      transition: color 0.3s;
-    }
-    .nav-menu li a:hover { color: #007b43; }
+      .title {
+        font-size: 26px;
+        font-weight: 700;
+        margin-bottom: 15px;
+        align-self: flex-start;
+        color: #00462a;
+      }
 
-    main {
-      flex-grow: 1;
-      padding: 50px 100px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
+      .review-count {
+        background-color: #00462a;
+        color: #fff;
+        border: none;
+        border-radius: 25px;
+        padding: 8px 20px;
+        font-size: 15px;
+        font-weight: 500;
+        margin-bottom: 40px;
+        align-self: flex-start;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        cursor: default;
+      }
 
-    .title {
-      font-size: 24px;
-      font-weight: bold;
-      margin-bottom: 20px;
-      align-self: flex-start;
-    }
+      /* 리뷰 카드 레이아웃 */
+      .review-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 30px;
+        width: 100%;
+        max-width: 1000px;
+        justify-items: center;
+      }
 
-    .review-count {
-      background-color: #2b8a3e;
-      color: #fff;
-      border: none;
-      border-radius: 25px;
-      padding: 8px 20px;
-      font-size: 15px;
-      font-weight: 500;
-      margin-bottom: 40px;
-      align-self: flex-start;
-    }
+      .review-card {
+        background-color: #fff;
+        border-radius: 20px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        padding: 25px;
+        width: 100%;
+        max-width: 280px;
+        text-align: center;
+        text-decoration: none;
+        color: inherit;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+      }
 
-    /* 리뷰 카드 레이아웃 */
-    .review-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 30px;
-      width: 100%;
-      max-width: 1000px;
-      justify-items: center;
-    }
+      .review-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+      }
 
-    .review-card {
-      background-color: #fff;
-      border: 1px solid #ddd;
-      border-radius: 20px;
-      padding: 20px;
-      width: 100%;
-      max-width: 280px;
-      text-align: center;
-      transition: transform 0.2s, box-shadow 0.2s;
-      text-decoration: none;
-      color: inherit;
-      display: block;
-    }
-    .review-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 4px 10px rgba(0,0,0,0.08);
-    }
+      .review-title {
+        background-color: #f6f6f6;
+        border-radius: 50px;
+        padding: 10px 14px;
+        font-weight: 600;
+        font-size: 15px;
+        margin-bottom: 15px;
+      }
 
-    .review-title {
-      background-color: #f7f7f7;
-      border-radius: 50px;
-      padding: 10px;
-      font-weight: bold;
-      font-size: 15px;
-      margin-bottom: 15px;
-    }
+      .review-card img {
+        width: 160px;
+        height: 160px;
+        object-fit: contain;
+        margin-bottom: 15px;
+        border-radius: 12px;
+      }
 
-    .review-card img {
-      width: 150px;
-      height: 150px;
-      object-fit: contain;
-      margin-bottom: 15px;
-    }
+      .stars {
+        color: #00462a;
+        font-size: 20px;
+        letter-spacing: 3px;
+      }
 
-    .stars {
-      color: #004d2c;
-      font-size: 22px;
-      letter-spacing: 4px;
-    }
+      /* 페이지네이션 */
+      .pagination {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 15px;
+        margin-top: 50px;
+        font-size: 16px;
+      }
 
-    /* 페이지네이션 */
-    .pagination {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 15px;
-      margin-top: 40px;
-      font-size: 16px;
-    }
-    .pagination span {
-      cursor: pointer;
-      transition: color 0.3s;
-    }
-    .pagination span.active {
-      font-weight: bold;
-      border-bottom: 2px solid #004d2c;
-      padding-bottom: 3px;
-      color: #004d2c;
-    }
-    .pagination span:hover {
-      color: #004d2c;
-    }
+      .pagination span {
+        cursor: pointer;
+        transition: color 0.3s;
+      }
 
-    footer {
-      background-color: #e8f5e9;
-      text-align: center;
-      padding: 15px 0;
-      color: #777;
-      font-size: 14px;
-      margin-top: auto;
-    }
-  </style>
-</head>
-<body>
-  <header>
-    <div class="logo">
-      <span class="logo-ewha">Ewha</span><span class="logo-market">market</span>
-    </div>
-    <nav>
-      <ul class="nav-menu">
-        <li><a href="#">상품 조회</a></li>
-        <li><a href="#">리뷰 조회</a></li>
-        <li><a href="#">리뷰 등록</a></li>
-        <li><a href="#">상품 등록</a></li>
-        <li><a href="#">마이페이지</a></li>
-      </ul>
-    </nav>
-  </header>
+      .pagination span.active {
+        font-weight: bold;
+        border-bottom: 2px solid #00462a;
+        padding-bottom: 3px;
+        color: #00462a;
+      }
 
-  <main>
-    <div class="title">전체 리뷰조회</div>
-    <button class="review-count">My review : 3</button>
+      .pagination span:hover {
+        color: #00462a;
+      }
 
-    <!-- 리뷰 카드 리스트 -->
-    <div class="review-grid">
+      footer {
+        background-color: #e8f5e9;
+        text-align: center;
+        padding: 15px 0;
+        color: #777;
+        font-size: 14px;
+        margin-top: 60px;
+      }
+    </style>
+  </head>
 
-      <a href="review_detail.html" class="review-card">
-        <div class="review-title">나의 첫 러닝용 운동화</div>
-        <img src="https://i.pinimg.com/736x/c0/fc/82/c0fc8224b268ad56c9407109c96c357c.jpg" alt="아디다스 운동화" />
-        <div class="stars">★★★★★</div>
-      </a>
+  <body>
+    <header>
+      <div class="logo">
+        <img src="../assets/Market-logo.png" alt="Ewha Market" />
+      </div>
+      <nav>
+        <ul class="nav-menu">
+          <li><a href="../index.html">상품 조회</a></li>
+          <li><a href="../reviews/index.html" class="active">리뷰 조회</a></li>
+          <li><a href="../reviews/write-review.html">리뷰 등록</a></li>
+          <li><a href="../products/detail.html">상품 등록</a></li>
+          <li><a href="../mypage/index.html">마이페이지</a></li>
+        </ul>
+      </nav>
+    </header>
 
-      <a href="review_detail.html" class="review-card">
-        <div class="review-title">이번 겨울 딱 맞는 맨투맨!</div>
-        <img src="https://i.pinimg.com/736x/72/ca/b6/72cab6346a71277a9e1b003ae6a35e71.jpg" alt="맨투맨" />
-        <div class="stars">★★★☆☆</div>
-      </a>
+    <main>
+      <div class="title">전체 리뷰조회</div>
+      <button class="review-count">My review : 3</button>
 
-      <a href="review_detail.html" class="review-card">
-        <div class="review-title">아기가 있는 집 인테리어</div>
-        <img src="https://i.pinimg.com/736x/81/91/90/819190a44a6533f525664562240835b7.jpg" alt="공기청정기" />
-        <div class="stars">★★★★☆</div>
-      </a>
+      <!-- 리뷰 카드 리스트 -->
+      <div class="review-grid">
+        <a href="detail.html" class="review-card">
+          <div class="review-title">나의 첫 러닝용 운동화</div>
+          <img
+            src="https://i.pinimg.com/736x/c0/fc/82/c0fc8224b268ad56c9407109c96c357c.jpg"
+            alt="아디다스 운동화"
+          />
+          <div class="stars">★★★★★</div>
+        </a>
 
-    </div>
+        <a href="detail.html" class="review-card">
+          <div class="review-title">이번 겨울 딱 맞는 맨투맨!</div>
+          <img
+            src="https://i.pinimg.com/736x/72/ca/b6/72cab6346a71277a9e1b003ae6a35e71.jpg"
+            alt="맨투맨"
+          />
+          <div class="stars">★★★☆☆</div>
+        </a>
 
-    <!-- 페이지 네비게이션 -->
-    <div class="pagination">
-      <span class="active">1</span>
-      <span>2</span>
-      <span>3</span>
-      <span>4</span>
-      <span>5</span>
-      <span>&gt;</span>
-    </div>
-  </main>
+        <a href="detail.html" class="review-card">
+          <div class="review-title">아기가 있는 집 인테리어</div>
+          <img
+            src="https://i.pinimg.com/736x/81/91/90/819190a44a6533f525664562240835b7.jpg"
+            alt="공기청정기"
+          />
+          <div class="stars">★★★★☆</div>
+        </a>
+      </div>
 
-  <footer>@cloud9</footer>
-</body>
+      <!-- 페이지 네비게이션 -->
+      <div class="pagination">
+        <span class="active">1</span>
+        <span>2</span>
+        <span>3</span>
+        <span>4</span>
+        <span>5</span>
+        <span>&gt;</span>
+      </div>
+    </main>
+
+    <footer>@cloud9</footer>
+  </body>
 </html>
