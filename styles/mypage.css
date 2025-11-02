@@ -1,0 +1,192 @@
+/* 전체적인 마이페이지 컨테이너 */
+.mypage-container {
+  display: flex;
+  flex-direction: column;
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.08);
+  width: 100%;
+  height: auto;
+}
+
+/* 상단에 마이페이지 폰트 */
+.mypage-font {
+  color: #00462a;
+}
+
+/* 마이페이지 padding */
+#container {
+  padding: 1.5rem;
+}
+
+/* 이름, 참여도 레벨 컨테이너 */
+.content-container {
+  display: flex;
+  flex-direction: column;
+  padding: 25px;
+  border-radius: 1rem;
+  border: 1px solid #eafcf1;
+  width: 100%;
+  height: auto;
+  background-color: #fafffe;
+  margin: 1rem 0 1rem 0;
+}
+
+/* 찜목록, 상품등록, 리뷰 컨테이너 */
+.content-container2 {
+  display: flex;
+  flex-direction: column;
+  padding: 25px;
+  border-radius: 1rem;
+  border: 1px solid #d7d7d7;
+  width: 100%;
+  height: auto;
+  margin: 1rem 0 1rem 0;
+}
+
+/* 프로필 이미지 */
+.profile-img {
+  width: 100px;
+  heigh: 100px;
+}
+
+.content-font {
+  color: #00462a;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+/*  */
+.write-head {
+  color: #00462a;
+  font-size: 18px;
+}
+
+/* 등록일 */
+.write-date {
+  color: #888888;
+  font-size: 14px;
+}
+
+/* 게시글? 개수 */
+.num-font {
+  color: #888888;
+  font-size: 15px;
+}
+
+/* 컨테이너 제목 옆에 붙은 아이콘 */
+.content-icon {
+  width: 24px;
+  height: 24px;
+}
+
+/* 게시글들 박스 */
+.content-box {
+  padding: 1rem;
+  background-color: #fafafa;
+  border-radius: 10px;
+}
+
+/* 게시글 내용 */
+.write-content {
+  color: #333333;
+  font-size: 1rem;
+}
+
+/* 상태바 */
+.level-bar {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 10px;
+  border-radius: 10px;
+  background: #e8f5e9;
+  outline: none;
+  margin-top: 10px;
+}
+.level-bar::-webkit-slider-runnable-track {
+  height: 10px;
+  border-radius: 10px;
+  background: linear-gradient(
+    to right,
+    #00462a 0%,
+    #00462a calc(var(--val, 60) * 1%),
+    #e8f5e9 calc(var(--val, 60) * 1%),
+    #e8f5e9 100%
+  );
+}
+.level-bar::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 0;
+  height: 0;
+}
+
+/* 컨테이너 제목들 */
+.container-header {
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+/* 찜목록 관련 */
+.heart-container {
+  margin-top: 8px;
+}
+.heart-container img {
+  width: 250px;
+  height: 200px;
+  margin-bottom: 8px;
+  border-radius: 20px;
+}
+.price-write {
+  color: #34a853;
+  font-size: 14px;
+  margin-top: 8px;
+}
+
+/* 이름 관련 */
+.name-container {
+  padding: 8px 0 8px 16px;
+  height: 50px;
+  width: 200px;
+  display: flex;
+  align-items: center;
+  background-color: white;
+  border-radius: 10px;
+  border: 1px solid #d7d7d7;
+}
+.name-container p {
+  color: #00462a;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+/*  회원정보 수정 버튼 */
+.edit-button {
+  all: unset;
+  cursor: pointer;
+  border-radius: 10px;
+  padding: 9px 16px;
+  border: 1px solid #34a853;
+  color: #34a853;
+  background-color: white;
+}
+
+/*로그아웃 버튼*/
+.logout-button {
+  display: block;
+  all: unset;
+  cursor: pointer;
+  border: 2px solid #d7d7d7;
+  border-radius: 999px;
+  color: #666666;
+  font-size: 18px;
+  font-weight: 600;
+  padding: 18px 0px;
+  width: 400px;
+  text-align: center;
+  margin: 1rem auto 0 auto;
+}

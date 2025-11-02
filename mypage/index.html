@@ -1,1 +1,199 @@
 <!--마이페이지 첫 화면-->
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ewha Market</title>
+    <link rel="stylesheet" href="../styles/global.css" />
+    <link rel="stylesheet" href="../styles/mypage.css" />
+  </head>
+  <body>
+    <header>
+      <div class="logo">
+        <img src="../assets/Market-logo.png" alt="Ewha Market" />
+      </div>
+      <nav>
+        <ul class="nav-menu">
+          <li><a href="../index.html">상품 조회</a></li>
+          <li><a href="../reviews/index.html">리뷰 조회</a></li>
+          <li><a href="../reviews/new.html">리뷰 등록</a></li>
+          <li><a href="../products/enroll.html">상품 등록</a></li>
+          <li><a href="./index.html" class="active">마이페이지</a></li>
+          <li><a href="../auth/login.html">회원가입/로그인</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <section id="container">
+      <div class="mypage-container">
+        <h2 class="mypage-font">My Page</h2>
+
+        <!--프로필-->
+        <div class="content-container">
+          <div
+            style="
+              display: flex;
+              flex-direction: row;
+              align-items: center;
+              gap: 2rem;
+            "
+          >
+            <img
+              src="../assets/profile-img.svg"
+              alt="프로필 이미지"
+              class="profile-img"
+            />
+            <div>
+              <div style="display: flex; flex-direction: row; gap: 12px">
+                <div class="name-container">
+                  <p>김이화</p>
+                </div>
+                <button class="edit-button" id="edit-button">
+                  <img
+                    src="../assets/icon/pen.svg"
+                    style="margin-right: 8px"
+                  />회원정보 수정
+                </button>
+              </div>
+              <p class="write-date" style="margin-top: 8px">
+                ewha2025@ewha.ac.kr
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!--참여도 레벨-->
+        <div class="content-container">
+          <div class="container-header" style="justify-content: space-between">
+            <p class="content-font">참여도 레벨</p>
+            <p style="color: #34a853; font-size: 18px; font-weight: 600">
+              Level 3 • 120pts
+            </p>
+          </div>
+          <input
+            type="range"
+            min="0"
+            max="200"
+            value="120"
+            step="10"
+            class="level-bar"
+          />
+          <p style="color: #666666; font-size: 14px; margin-top: 12px">
+            다음 레벨까지 80pts 남았어요
+          </p>
+        </div>
+
+        <!--찜 목록 보기-->
+        <div class="content-container2">
+          <div class="container-header">
+            <img
+              src="../assets/icon/heart-fill.svg"
+              alt="하트 아이콘"
+              class="content-icon"
+            />
+            <p class="content-font">찜 목록 보기</p>
+            <p class="num-font">(4)</p>
+          </div>
+          <div
+            style="
+              display: flex;
+              flex-direction: row;
+              justify-content: space-evenly;
+            "
+          >
+            <div class="heart-container">
+              <img src="../assets/heart-img2.png" alt="블루 틴트 안경" />
+              <p class="write-head">블루 틴트 안경</p>
+              <p class="price-write">25,000원</p>
+            </div>
+            <div class="heart-container">
+              <img src="../assets/heart-img2.png" alt="블루 틴트 안경" />
+              <p class="write-head">블루 틴트 안경</p>
+              <p class="price-write">25,000원</p>
+            </div>
+            <div class="heart-container">
+              <img src="../assets/heart-img2.png" alt="블루 틴트 안경" />
+              <p class="write-head">블루 틴트 안경</p>
+              <p class="price-write">25,000원</p>
+            </div>
+            <div class="heart-container">
+              <img src="../assets/heart-img2.png" alt="블루 틴트 안경" />
+              <p class="write-head">블루 틴트 안경</p>
+              <p class="price-write">25,000원</p>
+            </div>
+          </div>
+        </div>
+
+        <!--상품 등록 내역 보기-->
+        <div class="content-container2">
+          <div class="container-header">
+            <img
+              src="../assets/icon/box.svg"
+              alt="박스 아이콘"
+              class="content-icon"
+            />
+            <p class="content-font">상품 등록 내역 보기</p>
+            <p class="num-font">(3)</p>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 12px">
+            <div class="content-box">
+              <p class="write-head" style="margin-bottom: 8px">
+                아이패드 9세대
+              </p>
+              <p class="write-date">등록일: 2025.03.10</p>
+            </div>
+            <div class="content-box">
+              <p class="write-head" style="margin-bottom: 8px">
+                전공책 (경영학 원론)
+              </p>
+              <p class="write-date">등록일: 2025.03.08</p>
+            </div>
+            <div class="content-box">
+              <p class="write-head" style="margin-bottom: 8px">무선 이어폰</p>
+              <p class="write-date">등록일: 2025.03.05</p>
+            </div>
+          </div>
+        </div>
+
+        <!--상품 리뷰 작성 내역-->
+        <div class="content-container2">
+          <div class="container-header">
+            <img
+              src="../assets/icon/comment.svg"
+              alt="댓글 아이콘"
+              class="content-icon"
+            />
+            <p class="content-font">상품 리뷰 작성 내역</p>
+            <p class="num-font">(2)</p>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 12px">
+            <div class="content-box">
+              <p class="write-head" style="margin-bottom: 4px">빈티지 가방</p>
+              <p class="write-content" style="margin-bottom: 8px">
+                상태가 매우 좋아요!
+              </p>
+              <p class="write-date">2025.03.12</p>
+            </div>
+            <div class="content-box">
+              <p class="write-head" style="margin-bottom: 4px">화장품 세트</p>
+              <p class="write-content" style="margin-bottom: 8px">
+                가격 대비 만족합니다.
+              </p>
+              <p class="write-date">2025.03.09</p>
+            </div>
+          </div>
+        </div>
+        <button id="logout-button" class="logout-button">로그아웃</button>
+      </div>
+    </section>
+
+    <footer><p>@cloud9</p></footer>
+
+    <script>
+      document.getElementById("edit-button").addEventListener("click", () => {
+        window.location.href = "../mypage/edit-info.html";
+      });
+    </script>
+  </body>
+</html>
