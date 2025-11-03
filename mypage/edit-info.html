@@ -7,7 +7,7 @@
     <title>Ewha Market</title>
     <link rel="stylesheet" href="../styles/global.css" />
     <link rel="stylesheet" href="../styles/index.css" />
-    <link rel="stylesheet" href="../styles/mypage2.css" />
+    <link rel="stylesheet" href="../styles/mypage.css" />
   </head>
 
   <body>
@@ -18,71 +18,135 @@
       </div>
       <nav>
         <ul class="nav-menu">
-          <li><a href="./index.html" class="active">상품 조회</a></li>
-          <li><a href="./reviews/index.html">리뷰 조회</a></li>
-          <li><a href="./reviews/new.html">리뷰 등록</a></li>
-          <li><a href="./products/enroll.html">상품 등록</a></li>
-          <li><a href="./mypage/index.html">마이페이지</a></li>
-          <li><a href="./auth/login.html">회원가입/로그인</a></li>
+          <li><a href="../index.html" class="active">상품 조회</a></li>
+          <li><a href="../reviews/index.html">리뷰 조회</a></li>
+          <li><a href="../reviews/new.html">리뷰 등록</a></li>
+          <li><a href="../products/enroll.html">상품 등록</a></li>
+          <li><a href="../mypage/index.html">마이페이지</a></li>
+          <li><a href="../auth/login.html">회원가입/로그인</a></li>
         </ul>
       </nav>
     </header>
 
-    <h2>My Page</h2>
-    <main class="container">
-      <div class="form-container">
-        <form action="/mypage/update-info" method="post">
+    <section id="container">
+      <div class="mypage-container">
+        <h2 class="mypage-font">My Page</h2>
 
-          <div class="profile">
-            <div class="profile-image">
-              <i class="user"></i>
-              <img src="../mypage/profile.jpg" alt="프로필 이미지" class="profile-img"/>
-            </div>
-            <div class="username">
-              <input type="text" id="username" value="김이화" class="username-input">
-                <button type="button" class="icon-button">
-                  <i class="fa-solid fa-camera"></i>
-                </button>
-                <button type="button" class="icon-button">
-                  <i class="fa-solid fa-trash-can"></i>
-                </button>
+        <!--프로필-->
+        <div class="edit-container">
+          <div class="content-container3">
+            <form action="/mypage/update-info" method="post">
+              <div
+                style="
+                  display: flex;
+                  flex-direction: row;
+                  align-items: center;
+                  gap: 2rem;
+                "
+              >
+                <img
+                  src="../assets/profile-img.svg"
+                  alt="프로필 이미지"
+                  class="profile-img"
+                />
+                <div>
+                  <div style="display: flex; flex-direction: row; gap: 12px">
+                    <input
+                      type="text"
+                      id="username"
+                      value="김이화"
+                      class="name-container"
+                    />
+                    <button type="button" class="icon-button">
+                      <img
+                        src="../assets/icon/camera.svg"
+                        alt="카메라 아이콘"
+                      />
+                    </button>
+                    <button type="button" class="icon-button">
+                      <img src="../assets/icon/image.svg" alt="갤러리 아이콘" />
+                    </button>
+                  </div>
+                </div>
               </div>
-            </div>
-
-            <div class="form-group">
+              <div style="margin-top: 2rem"></div>
+              <div class="form-group">
                 <label for="id">아이디</label>
-                <input type="text" id="id" name="id" placeholder="ewha2025" required>
-            </div>
-            <div class="form-group">
-                <label for="email">이메일</label>
-                <input type="email" id="email" name="email" placeholder="ewha@ewha.ac.kr" required>
-            </div>
-            <div class="form-group">
-                <label for="number">전화번호</label>
-                <input type="tel" id="number" name="number" placeholder="010-1234-5678" required>
-            </div>
-            <div class="form-group">
-                <label for="password">비밀번호</label>
-                <input type="password" id="password" name="password" placeholder="●●●●●●●" required>
-            </div>
-            <div class="form-group">
-                <label for="checkpw">비밀번호 확인</label>
-                <input type="password" id="checkpw" name="checkpw" placeholder="●●●●●●●" required>
-            </div>
+                <input
+                  type="text"
+                  id="id"
+                  name="id"
+                  placeholder="ewha2025"
+                  required
+                  class="id-input"
+                  readonly
+                />
+              </div>
 
-            <button class="btn" type="submit">수정 완료</button>
-          </form>
+              <div class="form-group">
+                <label for="email">이메일</label>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  placeholder="ewha@ewha.ac.kr"
+                  required
+                  class="form-input"
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="number">전화번호</label>
+                <input
+                  type="tel"
+                  id="number"
+                  name="number"
+                  placeholder="010-1234-5678"
+                  required
+                  class="form-input"
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="password">비밀번호</label>
+                <input
+                  type="password"
+                  id="password"
+                  name="password"
+                  placeholder="●●●●●●●"
+                  required
+                  class="form-input"
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="checkpw">비밀번호 확인</label>
+                <input
+                  type="password"
+                  id="checkpw"
+                  name="checkpw"
+                  placeholder="●●●●●●●"
+                  required
+                  class="form-input"
+                />
+              </div>
+
+              <button class="edit-btn" type="submit">수정</button>
+            </form>
+          </div>
+        </div>
       </div>
-    </main>
+    </section>
+
+    <main class="container"></main>
 
     <!-- Footer -->
     <footer><p>@cloud9</p></footer>
 
     <script>
-      document.getElementById("edit-button").addEventListener("click", () => {
+      document.getElementById("edit-btn").addEventListener("click", () => {
         window.location.href = "../mypage/index.html";
       });
     </script>
-
   </body>
 </html>
