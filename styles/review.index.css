@@ -1,0 +1,104 @@
+.review-container {
+  margin: 0 auto;
+  padding: 0;
+}
+
+.title {
+  font-size: 30px;
+  font-weight: bold;
+  color: #00462a;
+  margin: 0;
+  padding: 0 10px;
+}
+
+.review-count {
+  background-color: #34a853;
+  color: #fff;
+  border: none;
+  border-radius: 25px;
+  padding: 8px 30px;
+  font-size: 15px;
+  font-weight: 500;
+  margin-bottom: 40px;
+  align-self: flex-start;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  cursor: default;
+  margin-top: 30px;
+  margin-bottom: 30px;
+  margin-left: 10px;
+}
+
+.card-container {
+  display: flex;
+  justify-content: center;
+  gap: 5rem;
+}
+
+.review-card {
+  background-color: #fff;
+  border-radius: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  padding: 25px;
+  width: 100%;
+  max-width: 350px;
+  text-align: center;
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.review-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+}
+
+.review-title {
+  background-color: #f6f6f6;
+  border-radius: 50px;
+  padding: 10px 14px;
+  font-weight: 600;
+  font-size: 15px;
+  margin-bottom: 15px;
+}
+
+.review-card img {
+  width: 160px;
+  height: 160px;
+  object-fit: cover;
+  margin-bottom: 15px;
+  border-radius: 12px;
+}
+
+.stars {
+  color: #00462a;
+  font-size: 20px;
+  letter-spacing: 3px;
+}
+
+.border-container {
+  border: 1px solid #d7d7d7;
+  border-radius: 20px;
+  justify-content: center;
+  padding: 1rem 0 1rem 0;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  margin-top: 4rem;
+}
+.pagination a {
+  text-decoration: none;
+  color: #333;
+  padding: 6px 10px;
+  border-radius: 6px;
+}
+
+.pagination a.active {
+  /* 활성화된 페이지는 굵게만 처리 */
+  font-weight: bold;
+  background: none;
+  color: #217f39;
+}

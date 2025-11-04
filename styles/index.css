@@ -1,7 +1,6 @@
 /* index.css */
 /* ./index.html 스타일 - 시작페이지 */
 .container {
-  max-width: 1100px;
   margin: 0 auto;
   padding: 0 0 40px 0;
 }
@@ -25,17 +24,16 @@
 
 /* 최종 요청 사항 반영: 클릭 시 배경색 #00462A, 글씨색 흰색 */
 .filter.active {
-  background-color: #00462A;
+  background-color: #00462a;
   color: white;
-  border-color: #00462A;
+  border-color: #00462a;
 }
-
 
 /* --- 카드 레이아웃 --- */
 .product-list {
   display: grid;
   /* 4열 고정 */
-  grid-template-columns: repeat(4, 1fr); 
+  grid-template-columns: repeat(4, 1fr);
   gap: 24px;
 }
 
@@ -46,13 +44,13 @@
   background-color: #fff;
   /* padding을 유지하면서 내용을 배치하기 위해 flex 사용 */
   display: flex;
-  flex-direction: column; 
+  flex-direction: column;
   padding: 16px;
   text-align: left;
   transition: all 0.2s ease;
-  
+
   /* 정사각형 형태로 보이도록 aspect-ratio 사용 (CSS3) */
-  aspect-ratio: 1 / 1; 
+  aspect-ratio: 1 / 1;
   box-sizing: border-box;
 }
 
@@ -63,13 +61,13 @@
 
 /* 이미지 박스 추가 */
 .image-box {
-    width: 100%;
-    /* 카드의 나머지 공간 비율에 맞게 이미지 높이 지정 */
-    height: 70%; 
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
+  width: 100%;
+  /* 카드의 나머지 공간 비율에 맞게 이미지 높이 지정 */
+  height: 70%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
 }
 
 .product-card img {
@@ -83,7 +81,7 @@
 /* 텍스트 정보 (상품명, 가격) 그룹 */
 .text-info {
   /* 이미지와 하트 버튼을 제외한 남은 공간을 차지 */
-  flex-grow: 1; 
+  flex-grow: 1;
   display: flex;
   flex-direction: column;
   justify-content: flex-end; /* 텍스트를 카드 하단에 붙임 */
@@ -93,7 +91,7 @@
 .product-card h3 {
   font-size: 16px;
   margin: 8px 0 4px; /* 이미지와의 간격 조정 */
-  text-align: left; 
+  text-align: left;
 }
 
 .product-card p {
@@ -111,15 +109,15 @@
 .like-icon {
   position: absolute;
   /* 요청: 오른쪽 아래 모서리에 위치 */
-  bottom: 16px; 
-  right: 16px; 
-  
+  bottom: 16px;
+  right: 16px;
+
   display: inline-block;
   width: 24px; /* 크기 키움 */
   height: 24px; /* 크기 키움 */
   cursor: pointer;
   flex: 0 0 auto;
-  
+
   /* 배경 이미지 (SVG 사용) */
   background-image: url("../assets/icon/heart.svg");
   background-size: cover;
@@ -149,28 +147,28 @@
 
 .pagination a.active {
   /* 활성화된 페이지는 굵게만 처리 */
-  font-weight: bold; 
+  font-weight: bold;
   background: none;
   color: #217f39;
 }
 
 .list-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-    padding: 0 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding: 0 10px;
 }
 
 .section-title {
-    font-size: 30px;
-    font-weight: bold;
-    color: #00462A;
-    margin: 0;
+  font-size: 30px;
+  font-weight: bold;
+  color: #00462a;
+  margin: 0;
 }
 
 .product-link {
-    text-decoration: none;
-    color: inherit; 
-    display: block; 
+  text-decoration: none;
+  color: inherit;
+  display: block;
 }

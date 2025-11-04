@@ -1,0 +1,121 @@
+main {
+  flex-grow: 1; /* 푸터를 하단에 고정 */
+  display: flex;
+  justify-content: center; /* 폼을 수평 중앙에 위치 */
+  padding: 1rem 0 50px 0;
+}
+
+.container {
+  margin: 0 auto;
+  padding: 0 5rem 0 5rem;
+  justify-content: center;
+  display: flex;
+}
+
+.detail-container {
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  width: 100%;
+  padding: 40px 3rem;
+}
+
+/* 상단 제품 정보 */
+.product-section {
+  display: flex;
+  align-items: center;
+  gap: 25px;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 25px;
+}
+.product-section img {
+  width: 160px;
+  height: 160px;
+  object-fit: cover;
+  border-radius: 12px;
+}
+.product-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+.product-info b {
+  font-size: 22px;
+}
+.product-info span {
+  color: #555;
+  font-size: 15px;
+}
+
+/* 작성자 영역 */
+.author-section {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin: 30px 0 25px 0;
+}
+.author-section img {
+  width: 65px;
+  height: 65px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.author-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.author-name {
+  font-size: 18px;
+  font-weight: 600;
+}
+.author-date {
+  font-size: 14px;
+  color: #777;
+}
+
+/* 리뷰 본문 */
+.review-body {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 40px;
+}
+
+.review-text {
+  flex: 1 1 55%;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+.review-title {
+  background-color: #f6f6f6;
+  border-radius: 15px;
+  padding: 14px 20px;
+  font-weight: 600;
+  font-size: 16px;
+}
+.review-content {
+  background-color: #f6f6f6;
+  border-radius: 15px;
+  padding: 20px;
+  width: 100%;
+  height: 100%;
+  line-height: 1.7;
+  font-size: 15px;
+  color: #444;
+}
+
+/* 리뷰 이미지 */
+.review-images {
+  flex: 1 1 35%;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 15px;
+}
+.review-images img {
+  width: 100%;
+  border-radius: 12px;
+  object-fit: cover;
+  aspect-ratio: 4 / 3;
+}

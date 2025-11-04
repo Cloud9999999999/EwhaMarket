@@ -6,131 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Ewha Market | 전체 리뷰조회</title>
     <link rel="stylesheet" href="../styles/global.css" />
-    <link rel="stylesheet" href="../styles/index.css" />
     <link rel="stylesheet" href="../styles/auth.css" />
-
-    <style>
-      body {
-        font-family: "Noto Sans KR", Arial, sans-serif;
-        background-color: #ffffff;
-        color: #333;
-      }
-
-      main {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        padding: 60px 20px;
-      }
-
-      .title {
-        font-size: 26px;
-        font-weight: 700;
-        margin-bottom: 15px;
-        align-self: flex-start;
-        color: #00462a;
-      }
-
-      .review-count {
-        background-color: #00462a;
-        color: #fff;
-        border: none;
-        border-radius: 25px;
-        padding: 8px 20px;
-        font-size: 15px;
-        font-weight: 500;
-        margin-bottom: 40px;
-        align-self: flex-start;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        cursor: default;
-      }
-
-      /* 리뷰 카드 레이아웃 */
-      .review-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-        gap: 30px;
-        width: 100%;
-        max-width: 1000px;
-        justify-items: center;
-      }
-
-      .review-card {
-        background-color: #fff;
-        border-radius: 20px;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-        padding: 25px;
-        width: 100%;
-        max-width: 280px;
-        text-align: center;
-        text-decoration: none;
-        color: inherit;
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
-      }
-
-      .review-card:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
-      }
-
-      .review-title {
-        background-color: #f6f6f6;
-        border-radius: 50px;
-        padding: 10px 14px;
-        font-weight: 600;
-        font-size: 15px;
-        margin-bottom: 15px;
-      }
-
-      .review-card img {
-        width: 160px;
-        height: 160px;
-        object-fit: contain;
-        margin-bottom: 15px;
-        border-radius: 12px;
-      }
-
-      .stars {
-        color: #00462a;
-        font-size: 20px;
-        letter-spacing: 3px;
-      }
-
-      /* 페이지네이션 */
-      .pagination {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 15px;
-        margin-top: 50px;
-        font-size: 16px;
-      }
-
-      .pagination span {
-        cursor: pointer;
-        transition: color 0.3s;
-      }
-
-      .pagination span.active {
-        font-weight: bold;
-        border-bottom: 2px solid #00462a;
-        padding-bottom: 3px;
-        color: #00462a;
-      }
-
-      .pagination span:hover {
-        color: #00462a;
-      }
-
-      footer {
-        background-color: #e8f5e9;
-        text-align: center;
-        padding: 15px 0;
-        color: #777;
-        font-size: 14px;
-        margin-top: 60px;
-      }
-    </style>
+    <link rel="stylesheet" href="../styles/review.index.css" />
   </head>
 
   <body>
@@ -149,48 +26,59 @@
       </nav>
     </header>
 
-    <main>
-      <div class="title">전체 리뷰조회</div>
-      <button class="review-count">My review : 3</button>
+    <main class="review-container">
+      <section id="review">
+        <h2 class="title">전체 리뷰조회</h2>
+        <button class="review-count">My review : 3</button>
 
-      <!-- 리뷰 카드 리스트 -->
-      <div class="review-grid">
-        <a href="detail.html" class="review-card">
-          <div class="review-title">나의 첫 러닝용 운동화</div>
-          <img
-            src="https://i.pinimg.com/736x/c0/fc/82/c0fc8224b268ad56c9407109c96c357c.jpg"
-            alt="아디다스 운동화"
-          />
-          <div class="stars">★★★★★</div>
-        </a>
+        <!-- 리뷰 카드 리스트 -->
+        <div class="card-container">
+          <div class="review-card">
+            <a href="./reviews/detail.html" style="all: unset">
+              <div class="review-title">나의 첫 러닝용 운동화</div>
+              <div class="border-container">
+                <img
+                  src="https://i.pinimg.com/736x/c0/fc/82/c0fc8224b268ad56c9407109c96c357c.jpg"
+                  alt="아디다스 운동화"
+                />
+                <div class="stars">★★★★★</div>
+              </div>
+            </a>
+          </div>
 
-        <a href="detail.html" class="review-card">
-          <div class="review-title">이번 겨울 딱 맞는 맨투맨!</div>
-          <img
-            src="https://i.pinimg.com/736x/72/ca/b6/72cab6346a71277a9e1b003ae6a35e71.jpg"
-            alt="맨투맨"
-          />
-          <div class="stars">★★★☆☆</div>
-        </a>
+          <div class="review-card">
+            <a href="./reviews/detail.html" style="all: unset">
+              <div class="review-title">이번 겨울 딱 맞는 맨투맨!</div>
+              <div class="border-container">
+                <img
+                  src="https://i.pinimg.com/736x/72/ca/b6/72cab6346a71277a9e1b003ae6a35e71.jpg"
+                  alt="맨투맨"
+                />
+                <div class="stars">★★★☆☆</div>
+              </div>
+            </a>
+          </div>
 
-        <a href="detail.html" class="review-card">
-          <div class="review-title">아기가 있는 집 인테리어</div>
-          <img
-            src="https://i.pinimg.com/736x/81/91/90/819190a44a6533f525664562240835b7.jpg"
-            alt="공기청정기"
-          />
-          <div class="stars">★★★★☆</div>
-        </a>
-      </div>
-
-      <!-- 페이지 네비게이션 -->
+          <div class="review-card">
+            <a href="./reviews/detail.html" style="all: unset">
+              <div class="review-title">아기가 있는 집 인테리어</div>
+              <div class="border-container">
+                <img
+                  src="https://i.pinimg.com/736x/81/91/90/819190a44a6533f525664562240835b7.jpg"
+                  alt="공기청정기"
+                />
+                <div class="stars">★★★★☆</div>
+              </div>
+            </a>
+          </div>
+        </div>
+      </section>
       <div class="pagination">
-        <span class="active">1</span>
-        <span>2</span>
-        <span>3</span>
-        <span>4</span>
-        <span>5</span>
-        <span>&gt;</span>
+        <a href="#" class="active">1</a>
+        <a href="#">2</a>
+        <a href="#">3</a>
+        <a href="#">4</a>
+        <a href="#">&gt;</a>
       </div>
     </main>
 

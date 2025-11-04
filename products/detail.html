@@ -1,14 +1,13 @@
 <!DOCTYPE html>
 <html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>상품 상세 - 아디다스 운동화</title>
-    <link rel="stylesheet" href="../styles/global.css"> 
-    <link rel="stylesheet" href="../styles/products.css">
-</head>
-<body>
-
+    <link rel="stylesheet" href="../styles/global.css" />
+    <link rel="stylesheet" href="../styles/products.detail.css" />
+  </head>
+  <body>
     <header>
       <div class="logo">
         <img src="../assets/Market-logo.png" alt="Ewha Market" />
@@ -25,158 +24,39 @@
       </nav>
     </header>
 
-    <style>
-        main {
-            flex-grow: 1; 
-            display: flex;
-            justify-content: center;
-            align-items: flex-start; /* 콘텐츠를 상단에 정렬 */
-            padding: 50px 0;
-        }
-
-        /* 상품 상세 컨테이너 */
-        .detail-card {
-            width: 1000px;
-            padding: 50px;
-            background-color: #fff;
-            border-radius: 15px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-            border: 1px solid #eee;
-            display: flex;
-            gap: 40px;
-        }
-
-        /* 상품 이미지 영역 */
-        .product-image-area {
-            flex: 0 0 400px; /* 이미지 영역 너비 고정 */
-            height: 400px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-color: #f9f9f9; /* 배경색으로 이미지 영역 강조 */
-            border-radius: 10px;
-            overflow: hidden;
-        }
-
-        .product-image-area img {
-            max-width: 100%;
-            max-height: 100%;
-            object-fit: contain;
-        }
-
-        /* 상품 정보 영역 */
-        .product-info-area {
-            flex-grow: 1;
-            padding-top: 20px;
-        }
-
-        .product-title {
-            font-size: 32px;
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
-
-        .product-price {
-            font-size: 24px;
-            font-weight: 500;
-            color: #333;
-            margin-bottom: 25px;
-        }
-
-        .product-delivery-info {
-            font-size: 14px;
-            color: #555;
-            margin-bottom: 40px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid #eee;
-        }
-
-        .product-details {
-            list-style: none;
-            padding: 0;
-            margin-bottom: 50px;
-            line-height: 1.8;
-        }
-
-        .product-details li {
-            font-size: 16px;
-        }
-
-        .product-details li strong {
-            display: inline-block;
-            width: 80px; /* 라벨 너비 고정 */
-            font-weight: normal;
-        }
-
-        .product-details li::before {
-            content: '•';
-            color: #4CAF50; 
-            font-weight: bold;
-            display: inline-block;
-            width: 1em;
-            margin-left: -1em;
-        }
-
-        /* 액션 버튼 그룹 */
-        .action-buttons {
-            display: flex;
-            gap: 15px;
-        }
-
-        .action-buttons button {
-            padding: 12px 25px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            font-size: 16px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: background-color 0.2s;
-        }
-
-        .review-btn {
-            background-color: #EAFCF1;
-            color: #333;
-            border-color: #EAFCF1;
-        }
-
-        .zzim-btn {
-            background-color: #00462A;
-            color: white;
-            border-color: #00462A;
-        }
-    </style>
-
     <main>
-        <div class="detail-card">
-            <div class="product-image-area">
-                <img src="../assets/products/운동화.jpeg" alt="아디다스 운동화 상세 이미지">
-            </div>
-
-            <div class="product-info-area">
-                <h1 class="product-title">아디다스 운동화</h1>
-                <p class="product-price">₩109,000</p>
-                
-                <p class="product-delivery-info">
-                    직접거래 또는 배송비 3000원에 거래 가능합니다!
-                </p>
-
-                <ul class="product-details">
-                    <li><strong>상품 상태</strong> : 새상품</li>
-                    <li><strong>지역</strong> : 서울특별시 서대문구</li>
-                    <li><strong>판매자ID</strong> : seoh</li>
-                </ul>
-
-                <div class="action-buttons">
-                    <button class="review-btn">리뷰 보기</button>
-                    <button class="zzim-btn">찜 등록</button>
-                </div>
-            </div>
+      <div class="detail-card">
+        <div class="product-image-area">
+          <img
+            src="../assets/products/운동화.jpeg"
+            alt="아디다스 운동화 상세 이미지"
+          />
         </div>
+
+        <div class="product-info-area">
+          <h1 class="product-title">아디다스 운동화</h1>
+          <p class="product-price">₩109,000</p>
+
+          <p class="product-delivery-info">
+            직접거래 또는 배송비 3000원에 거래 가능합니다!
+          </p>
+
+          <ul class="product-details">
+            <li><strong>상품 상태</strong> : 새상품</li>
+            <li><strong>지역</strong> : 서울특별시 서대문구</li>
+            <li><strong>판매자ID</strong> : seoh</li>
+          </ul>
+
+          <div class="action-buttons">
+            <button class="review-btn">리뷰 보기</button>
+            <button class="zzim-btn">찜 등록</button>
+          </div>
+        </div>
+      </div>
     </main>
 
     <footer>
-        <p>@cloud9</p>
+      <p>@cloud9</p>
     </footer>
-
-</body>
+  </body>
 </html>

@@ -6,137 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Ewha Market | 리뷰 상세보기</title>
     <link rel="stylesheet" href="../styles/global.css" />
-    <link rel="stylesheet" href="../styles/index.css" />
+    <link rel="stylesheet" href="../styles/review.detail.css" />
     <link rel="stylesheet" href="../styles/auth.css" />
-
-    <style>
-      body {
-        font-family: "Noto Sans KR", Arial, sans-serif;
-        background-color: #f8fdf9;
-        color: #333;
-      }
-
-      main {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-direction: column;
-        padding: 50px 20px;
-      }
-
-      .detail-container {
-        background: #fff;
-        border-radius: 20px;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-        width: 90%;
-        max-width: 1100px;
-        padding: 40px;
-      }
-
-      /* 상단 제품 정보 */
-      .product-section {
-        display: flex;
-        align-items: center;
-        gap: 25px;
-        border-bottom: 1px solid #ddd;
-        padding-bottom: 25px;
-      }
-      .product-section img {
-        width: 200px;
-        border-radius: 12px;
-      }
-      .product-info {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-      }
-      .product-info b {
-        font-size: 22px;
-      }
-      .product-info span {
-        color: #555;
-        font-size: 15px;
-      }
-
-      /* 작성자 영역 */
-      .author-section {
-        display: flex;
-        align-items: center;
-        gap: 15px;
-        margin: 30px 0 25px 0;
-      }
-      .author-section img {
-        width: 65px;
-        height: 65px;
-        border-radius: 50%;
-        object-fit: cover;
-      }
-      .author-info {
-        display: flex;
-        flex-direction: column;
-      }
-      .author-name {
-        font-size: 18px;
-        font-weight: 600;
-      }
-      .author-date {
-        font-size: 14px;
-        color: #777;
-      }
-
-      /* 리뷰 본문 */
-      .review-body {
-        display: flex;
-        justify-content: space-between;
-        flex-wrap: wrap;
-        gap: 40px;
-      }
-
-      .review-text {
-        flex: 1 1 55%;
-        display: flex;
-        flex-direction: column;
-        gap: 15px;
-      }
-      .review-title {
-        background-color: #f6f6f6;
-        border-radius: 15px;
-        padding: 14px 20px;
-        font-weight: 600;
-        font-size: 16px;
-      }
-      .review-content {
-        background-color: #f6f6f6;
-        border-radius: 15px;
-        padding: 20px;
-        line-height: 1.7;
-        font-size: 15px;
-        color: #444;
-      }
-
-      /* 리뷰 이미지 */
-      .review-images {
-        flex: 1 1 35%;
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-        gap: 15px;
-      }
-      .review-images img {
-        width: 100%;
-        border-radius: 12px;
-        object-fit: cover;
-        aspect-ratio: 4 / 3;
-      }
-
-      footer {
-        background-color: #e8f5e9;
-        text-align: center;
-        padding: 15px 0;
-        color: #777;
-        font-size: 14px;
-        margin-top: 50px;
-      }
-    </style>
   </head>
 
   <body>
@@ -155,59 +26,61 @@
       </nav>
     </header>
 
-    <main>
-      <div class="detail-container">
-        <!-- 상단 제품 정보 -->
-        <div class="product-section">
-          <img
-            src="https://i.pinimg.com/736x/c0/fc/82/c0fc8224b268ad56c9407109c96c357c.jpg"
-            alt="아디다스 운동화"
-          />
-          <div class="product-info">
-            <b>아디다스 운동화</b>
-            <span>구매일 : YYYY.MM.DD</span>
-          </div>
-        </div>
-
-        <!-- 작성자 정보 -->
-        <div class="author-section">
-          <img
-            src="https://randomuser.me/api/portraits/women/44.jpg"
-            alt="작성자 프로필"
-          />
-          <div class="author-info">
-            <div class="author-name">이화인</div>
-            <div class="author-date">작성일 : YYYY.MM.DD</div>
-          </div>
-        </div>
-
-        <!-- 리뷰 본문 -->
-        <div class="review-body">
-          <div class="review-text">
-            <div class="review-title">나의 첫 러닝용 운동화</div>
-            <div class="review-content">
-              건강을 위해 러닝을 시작하려고 운동화를 찾아보던 중,  
-              후기가 좋은 이 아디다스 운동화를 구매했어요!  
-              오랫동안 신어도 발이 불편하지 않고 튼튼해요 :)
+    <main class="container">
+      <section>
+        <div class="detail-container">
+          <!-- 상단 제품 정보 -->
+          <div class="product-section">
+            <img
+              src="https://i.pinimg.com/736x/c0/fc/82/c0fc8224b268ad56c9407109c96c357c.jpg"
+              alt="아디다스 운동화"
+            />
+            <div class="product-info">
+              <b>아디다스 운동화</b>
+              <span>구매일 : YYYY.MM.DD</span>
             </div>
           </div>
 
-          <div class="review-images">
+          <!-- 작성자 정보 -->
+          <div class="author-section">
             <img
-              src="https://i.pinimg.com/736x/48/b9/fd/48b9fd0fec7fdc2721bfd29574a9a5c1.jpg"
-              alt="리뷰 이미지1"
+              src="https://randomuser.me/api/portraits/women/44.jpg"
+              alt="작성자 프로필"
             />
-            <img
-              src="https://i.pinimg.com/736x/94/f3/d0/94f3d0cb2522157545296c7e32105fa7.jpg"
-              alt="리뷰 이미지2"
-            />
-            <img
-              src="https://i.pinimg.com/736x/6a/bb/c8/6abbc88a85314ba9bea7472cac01a025.jpg"
-              alt="리뷰 이미지3"
-            />
+            <div class="author-info">
+              <div class="author-name">이화인</div>
+              <div class="author-date">작성일 : YYYY.MM.DD</div>
+            </div>
+          </div>
+
+          <!-- 리뷰 본문 -->
+          <div class="review-body">
+            <div class="review-text">
+              <div class="review-title">나의 첫 러닝용 운동화</div>
+              <div class="review-content">
+                건강을 위해 러닝을 시작하려고 운동화를 찾아보던 중, 후기가 좋은
+                이 아디다스 운동화를 구매했어요! 오랫동안 신어도 발이 불편하지
+                않고 튼튼해요 :)
+              </div>
+            </div>
+
+            <div class="review-images">
+              <img
+                src="https://i.pinimg.com/736x/48/b9/fd/48b9fd0fec7fdc2721bfd29574a9a5c1.jpg"
+                alt="리뷰 이미지1"
+              />
+              <img
+                src="https://i.pinimg.com/736x/94/f3/d0/94f3d0cb2522157545296c7e32105fa7.jpg"
+                alt="리뷰 이미지2"
+              />
+              <img
+                src="https://i.pinimg.com/736x/6a/bb/c8/6abbc88a85314ba9bea7472cac01a025.jpg"
+                alt="리뷰 이미지3"
+              />
+            </div>
           </div>
         </div>
-      </div>
+      </section>
     </main>
 
     <footer>@cloud9</footer>
