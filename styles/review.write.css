@@ -4,6 +4,11 @@
   justify-content: center;
   display: flex;
 }
+
+main {
+  padding: 0;
+}
+
 .review-container {
   background: #fff;
   border-radius: 20px;

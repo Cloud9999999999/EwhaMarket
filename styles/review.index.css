@@ -3,6 +3,9 @@
   padding: 0;
 }
 
+main {
+  padding: 0;
+}
 .title {
   font-size: 30px;
   font-weight: bold;

@@ -30,77 +30,79 @@
     </header>
 
     <main class="container">
-      <section>
-        <div class="review-container">
-          <!-- 상단: 상품정보 + 파일업로드 -->
-          <div class="top-section">
-            <div class="product-info">
-              <img
-                src="https://static.nike.com/a/images/t_PDP_1280_v1/f_auto,q_auto:eco/2f0c10b2-58f5-42f1-9c0a-293b146fe7db/superstar-82-shoes-3ZFtWb.png"
-                alt="제품 이미지"
-              />
-              <div class="product-text">
-                <b>아디다스 운동화</b>
-                <label> 구매일:</label>
-                <input
-                  type="date"
-                  class="input-field"
-                  id="purchaseDate"
-                /><br />
-                <label> ID:</label>
-                <input
-                  type="text"
-                  class="input-field"
-                  id="userId"
-                  placeholder="아이디 입력"
+      <div class="page">
+        <section>
+          <div class="review-container">
+            <!-- 상단: 상품정보 + 파일업로드 -->
+            <div class="top-section">
+              <div class="product-info">
+                <img
+                  src="https://static.nike.com/a/images/t_PDP_1280_v1/f_auto,q_auto:eco/2f0c10b2-58f5-42f1-9c0a-293b146fe7db/superstar-82-shoes-3ZFtWb.png"
+                  alt="제품 이미지"
                 />
+                <div class="product-text">
+                  <b>아디다스 운동화</b>
+                  <label> 구매일:</label>
+                  <input
+                    type="date"
+                    class="input-field"
+                    id="purchaseDate"
+                  /><br />
+                  <label> ID:</label>
+                  <input
+                    type="text"
+                    class="input-field"
+                    id="userId"
+                    placeholder="아이디 입력"
+                  />
+                </div>
+              </div>
+              <div class="upload-area" id="fileUploadArea">
+                <div class="upload-boxes">
+                  <div class="upload-box">+</div>
+                  <div>
+                    <div class="upload-img"></div>
+                    <div class="upload-img"></div>
+                  </div>
+                  <div>
+                    <div class="upload-img"></div>
+                    <div class="upload-img"></div>
+                  </div>
+                </div>
               </div>
             </div>
-            <div class="upload-area" id="fileUploadArea">
-              <div class="upload-boxes">
-                <div class="upload-box">+</div>
-                <div>
-                  <div class="upload-img"></div>
-                  <div class="upload-img"></div>
-                </div>
-                <div>
-                  <div class="upload-img"></div>
-                  <div class="upload-img"></div>
-                </div>
+
+            <div
+              style="
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+                padding: 0 1.5rem;
+              "
+            >
+              <div class="star-rating" id="starRating">
+                <span>★</span><span>★</span><span>★</span><span>★</span
+                ><span>★</span>
               </div>
+              <button class="choose-file" id="chooseBtn">파일 선택</button>
             </div>
+
+            <!-- 리뷰 입력 -->
+            <input
+              type="text"
+              class="review-title"
+              placeholder="리뷰 제목을 입력해 주세요!"
+            />
+            <textarea
+              class="review-content"
+              placeholder="상품은 어떠셨나요? 자세한 후기를 남겨 주세요."
+            ></textarea>
+
+            <button class="submit-btn">등록하기</button>
           </div>
-
-          <div
-            style="
-              display: flex;
-              flex-direction: row;
-              justify-content: space-between;
-              align-items: center;
-              padding: 0 1.5rem;
-            "
-          >
-            <div class="star-rating" id="starRating">
-              <span>★</span><span>★</span><span>★</span><span>★</span
-              ><span>★</span>
-            </div>
-            <button class="choose-file" id="chooseBtn">파일 선택</button>
-          </div>
-
-          <!-- 리뷰 입력 -->
-          <input
-            type="text"
-            class="review-title"
-            placeholder="리뷰 제목을 입력해 주세요!"
-          />
-          <textarea
-            class="review-content"
-            placeholder="상품은 어떠셨나요? 자세한 후기를 남겨 주세요."
-          ></textarea>
-
-          <button class="submit-btn">등록하기</button>
-        </div>
-      </section>
+        </section>
+      </div>
     </main>
 
     <footer>@cloud9</footer>
