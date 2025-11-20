@@ -19,9 +19,7 @@
         <ul class="nav-menu">
           <li><a href="../index.html">상품 조회</a></li>
           <li><a href="../reviews/index.html">리뷰 조회</a></li>
-          <li>
-            <a href="../reviews/write-review.html" class="active">리뷰 등록</a>
-          </li>
+          <li><a href="../reviews/write-review.html" class="active">리뷰 등록</a></li>
           <li><a href="../products/enroll.html">상품 등록</a></li>
           <li><a href="../mypage/index.html">마이페이지</a></li>
           <li><a href="../auth/login.html">회원가입/로그인</a></li>
@@ -32,75 +30,64 @@
     <main class="container">
       <div class="page">
         <section>
-          <div class="review-container">
-            <!-- 상단: 상품정보 + 파일업로드 -->
-            <div class="top-section">
-              <div class="product-info">
-                <img
-                  src="https://static.nike.com/a/images/t_PDP_1280_v1/f_auto,q_auto:eco/2f0c10b2-58f5-42f1-9c0a-293b146fe7db/superstar-82-shoes-3ZFtWb.png"
-                  alt="제품 이미지"
-                />
-                <div class="product-text">
-                  <b>아디다스 운동화</b>
-                  <label> 구매일:</label>
-                  <input
-                    type="date"
-                    class="input-field"
-                    id="purchaseDate"
-                  /><br />
-                  <label> ID:</label>
-                  <input
-                    type="text"
-                    class="input-field"
-                    id="userId"
-                    placeholder="아이디 입력"
-                  />
-                </div>
-              </div>
-              <div class="upload-area" id="fileUploadArea">
-                <div class="upload-boxes">
-                  <div class="upload-box">+</div>
-                  <div>
-                    <div class="upload-img"></div>
-                    <div class="upload-img"></div>
+
+          <!-- ⭐⭐⭐ form 태그 ⭐⭐⭐ -->
+          <form id="reviewForm" enctype="multipart/form-data">
+
+            <div class="review-container">
+              <!-- 상단: 상품정보 + 파일업로드 -->
+              <div class="top-section">
+                <div class="product-info">
+                  <img src="../assets/products/운동화.jpeg" alt="제품 이미지" />
+                  <div class="product-text">
+                    <b>아디다스 운동화</b>
+
+                    <label> 구매일:</label>
+                    <input type="date" class="input-field" name="purchase_date" />
+
+                    <br />
+
+                    <label> ID:</label>
+                    <input type="text" class="input-field" name="user_id" placeholder="아이디 입력" />
                   </div>
-                  <div>
-                    <div class="upload-img"></div>
-                    <div class="upload-img"></div>
+                </div>
+
+                <div class="upload-area" id="fileUploadArea">
+                  <div class="upload-boxes">
+                    <div class="upload-box">+</div>
+                    <div>
+                      <div class="upload-img"></div>
+                      <div class="upload-img"></div>
+                    </div>
+                    <div>
+                      <div class="upload-img"></div>
+                      <div class="upload-img"></div>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
 
-            <div
-              style="
-                display: flex;
-                flex-direction: row;
-                justify-content: space-between;
-                align-items: center;
-                padding: 0 1.5rem;
-              "
-            >
-              <div class="star-rating" id="starRating">
-                <span>★</span><span>★</span><span>★</span><span>★</span
-                ><span>★</span>
+              <div style="display: flex; justify-content: space-between; padding: 0 1.5rem;">
+                <div class="star-rating" id="starRating">
+                  <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+                </div>
+
+                <button type="button" class="choose-file" id="chooseBtn">파일 선택</button>
               </div>
-              <button class="choose-file" id="chooseBtn">파일 선택</button>
+
+              <!-- 리뷰 입력 -->
+              <input type="text" class="review-title" name="title" placeholder="리뷰 제목을 입력해 주세요!" />
+
+              <textarea class="review-content" name="content" placeholder="상품은 어떠셨나요? 자세한 후기를 남겨 주세요."></textarea>
+
+              <!-- product_id -->
+              <input type="hidden" name="product_id" value="1" />
+
+              <button type="button" class="submit-btn">등록하기</button>
             </div>
 
-            <!-- 리뷰 입력 -->
-            <input
-              type="text"
-              class="review-title"
-              placeholder="리뷰 제목을 입력해 주세요!"
-            />
-            <textarea
-              class="review-content"
-              placeholder="상품은 어떠셨나요? 자세한 후기를 남겨 주세요."
-            ></textarea>
+          </form>
 
-            <button class="submit-btn">등록하기</button>
-          </div>
         </section>
       </div>
     </main>
@@ -108,15 +95,19 @@
     <footer>@cloud9</footer>
 
     <script>
-      // 별점 클릭 유지
+      let selectedFiles = [];
+      let rating = 0;
+
+      // ⭐ 별점
       const stars = document.querySelectorAll("#starRating span");
       stars.forEach((star, index) => {
         star.addEventListener("click", () => {
+          rating = index + 1;
           stars.forEach((s, i) => s.classList.toggle("active", i <= index));
         });
       });
 
-      // 이미지 업로드 (파일 선택 + 미리보기)
+      // ⭐ 이미지 업로드
       const uploadArea = document.getElementById("fileUploadArea");
       const chooseBtn = document.getElementById("chooseBtn");
       const maxFiles = 10;
@@ -126,7 +117,7 @@
         const box = document.createElement("div");
         box.classList.add("upload-box");
         reader.onload = (e) => {
-          box.innerHTML = `<img src="${e.target.result}" alt="미리보기" />`;
+          box.innerHTML = `<img src="${e.target.result}" alt="preview" />`;
         };
         reader.readAsDataURL(file);
         uploadArea.querySelector(".upload-boxes").appendChild(box);
@@ -135,11 +126,13 @@
       function handleFiles(files) {
         const existing = uploadArea.querySelectorAll(".upload-box img").length;
         const remaining = maxFiles - existing;
-        Array.from(files)
-          .slice(0, remaining)
-          .forEach((file) => {
-            if (file.type.startsWith("image/")) createPreviewBox(file);
-          });
+
+        Array.from(files).slice(0, remaining).forEach((file) => {
+          if (file.type.startsWith("image/")) {
+            selectedFiles.push(file);
+            createPreviewBox(file);
+          }
+        });
       }
 
       chooseBtn.addEventListener("click", () => {
@@ -153,15 +146,51 @@
 
       uploadArea.addEventListener("dragover", (e) => {
         e.preventDefault();
-        uploadArea.classList.add("dragover");
       });
-      uploadArea.addEventListener("dragleave", () =>
-        uploadArea.classList.remove("dragover")
-      );
+
       uploadArea.addEventListener("drop", (e) => {
         e.preventDefault();
-        uploadArea.classList.remove("dragover");
         handleFiles(e.dataTransfer.files);
+      });
+
+      // ⭐ 리뷰 등록
+      document.querySelector(".submit-btn").addEventListener("click", async () => {
+        const form = document.getElementById("reviewForm");
+        const formData = new FormData(form);
+
+        formData.append("rating", rating);
+
+        selectedFiles.forEach((file) => {
+          formData.append("images", file);
+        });
+
+        let res;
+        try {
+          res = await fetch("http://127.0.0.1:5000/api/reviews", {
+            method: "POST",
+            body: formData,
+          });
+        } catch (err) {
+          alert("서버에 연결할 수 없습니다.");
+          return;
+        }
+
+        let data;
+
+        try {
+          data = await res.json();
+        } catch (e) {
+          console.error("서버가 JSON이 아닌 HTML을 반환함:", e);
+          alert("서버 오류가 발생했습니다.");
+          return;
+        }
+
+        if (data.success) {
+          alert("리뷰가 성공적으로 등록되었습니다!");
+          window.location.href = "../reviews/index.html";
+        } else {
+          alert("오류 발생: " + data.error);
+        }
       });
     </script>
   </body>
