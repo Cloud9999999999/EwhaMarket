@@ -5,22 +5,43 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Ewha Market</title>
-    <link rel="stylesheet" href="../styles/global.css" />
-    <link rel="stylesheet" href="../styles/mypage.css" />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='styles/global.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='styles/mypage.css') }}"
+    />
   </head>
   <body>
     <header>
       <div class="logo">
-        <img src="../assets/Market-logo.png" alt="Ewha Market" />
+        <img
+          src="{{ url_for('static', filename='image/Market-logo.png') }}"
+          alt="Ewha Market"
+        />
       </div>
       <nav>
         <ul class="nav-menu">
-          <li><a href="../index.html">상품 조회</a></li>
-          <li><a href="../reviews/index.html">리뷰 조회</a></li>
-          <li><a href="../reviews/write-review.html">리뷰 등록</a></li>
-          <li><a href="../products/enroll.html">상품 등록</a></li>
-          <li><a href="./index.html" class="active">마이페이지</a></li>
-          <li><a href="../auth/login.html">회원가입/로그인</a></li>
+          <li><a href="{{ url_for('home') }}">상품 조회</a></li>
+          <li><a href="{{ url_for('reviews_index') }}">리뷰 조회</a></li>
+          <li><a href="{{ url_for('reviews_write') }}">리뷰 등록</a></li>
+          <li><a href="{{ url_for('products_enroll') }}">상품 등록</a></li>
+          {% if session['id'] %}
+          <li>
+            <a href="{{ url_for('mypage_index') }}"
+              ><b>{{ session['id'] }}님 반갑습니다!</b></a
+            >
+          </li>
+          <li>
+            <a href="/logout"> 로그아웃 </a>
+          </li>
+          {% else %}
+          <li>
+            <a href="{{ url_for('login') }}">회원가입/로그인</a>
+          </li>
+          {% endif %}
         </ul>
       </nav>
     </header>
@@ -40,7 +61,7 @@
             "
           >
             <img
-              src="../assets/profile-img.svg"
+              src="{{ url_for('static', filename='image/icon/profile-img.svg') }}"
               alt="프로필 이미지"
               class="profile-img"
             />
@@ -51,7 +72,7 @@
                 </div>
                 <button class="edit-button" id="edit-button">
                   <img
-                    src="../assets/icon/pen.svg"
+                    src="{{ url_for('static', filename='image/icon/pen.svg') }}"
                     style="margin-right: 8px"
                   />회원정보 수정
                 </button>
@@ -88,7 +109,7 @@
         <div class="content-container2">
           <div class="container-header">
             <img
-              src="../assets/icon/heart-fill.svg"
+              src="{{ url_for('static', filename='image/icon/heart-fill.svg') }}"
               alt="하트 아이콘"
               class="content-icon"
             />
@@ -130,7 +151,7 @@
         <div class="content-container2">
           <div class="container-header">
             <img
-              src="../assets/icon/box.svg"
+              src="{{ url_for('static', filename='image/icon/box.svg') }}"
               alt="박스 아이콘"
               class="content-icon"
             />
@@ -161,7 +182,7 @@
         <div class="content-container2">
           <div class="container-header">
             <img
-              src="../assets/icon/comment.svg"
+              src="{{ url_for('static', filename='image/icon/comment.svg') }}"
               alt="댓글 아이콘"
               class="content-icon"
             />
@@ -193,7 +214,7 @@
 
     <script>
       document.getElementById("edit-button").addEventListener("click", () => {
-        window.location.href = "../mypage/edit-info.html";
+        window.location.href = "{{ url_for('mypage_edit') }}";
       });
     </script>
   </body>
