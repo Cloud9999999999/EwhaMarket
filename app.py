@@ -1,14 +1,54 @@
-from flask import Flask, render_template,flash, redirect, url_for, session, request
+from flask import Flask, render_template, flash, redirect, url_for, session, request
 from database import DBhandler
 import hashlib
 import sys
+import os
+import math
+
 application = Flask(__name__)
 application.config["SECRET_KEY"] = "helloosp"
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+UPLOAD_FOLDER = os.path.join(BASE_DIR, "static", "image")
+
+if not os.path.exists(UPLOAD_FOLDER):
+    os.makedirs(UPLOAD_FOLDER)
+
+application.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
 DB = DBhandler()
+
 # 홈
 @application.route("/")
 def home():
-    return render_template("index.html")
+    page = request.args.get("page", 0, type=int)
+
+    # 1. DB에서 데이터 가져오기
+    data = DB.get_items()
+    if data is None:
+        data = {}
+
+    # 2. 전체 상품 수 및 페이지 수 계산
+    item_counts = len(data)
+    per_page = 8
+    page_count = math.ceil(item_counts / per_page)
+
+    # 3. 데이터 슬라이싱 (page 변수 사용)
+    start_idx = per_page * page
+    end_idx = per_page * (page + 1)
+
+    data_list = list(data.items())
+    current_page_data = data_list[start_idx:end_idx]
+
+    # 4. 템플릿 렌더링
+    return render_template(
+        "index.html",
+        datas=current_page_data,
+        page=page,
+        page_count=page_count,
+        total=item_counts,
+        limit=per_page
+    )
 
 # 리뷰 목록
 @application.route("/reviews")
@@ -31,9 +71,10 @@ def products_enroll():
     return render_template("products/enroll.html")
 
 # 상품 상세
-@application.route("/products/detail")
-def products_detail():
-    return render_template("products/detail.html")
+@application.route("/products/detail/<name>")
+def products_detail(name):
+    data = DB.get_item_byname(str(name))
+    return render_template("products/detail.html", name=name, data=data)
 
 # 마이페이지
 @application.route("/mypage")
@@ -89,6 +130,37 @@ def register_user():
 def logout_user():
     session.clear()
     return redirect(url_for('home'))
+
+if __name__ == "__main__":
+    application.run(host="0.0.0.0", debug=True)
+
+
+# ----------------------------------------------------
+# 상품 등록 POST 처리 함수
+# ----------------------------------------------------
+@application.route("/reg_item_submit_post", methods=['POST'])
+def reg_item_submit_post():
+    # 1. 이미지 파일 받기
+    image_file = request.files.get("productImage")
+    data = request.form
+    
+    # 2. 이미지 저장
+    if image_file and image_file.filename != "":
+        filename = image_file.filename
+        save_path = os.path.join(application.config['UPLOAD_FOLDER'], filename)
+        image_file.save(save_path)
+    else:
+        filename = "default.png"
+
+    # 3. DB 저장 함수 호출
+    product_name = data.get('productName')
+    
+    if DB.insert_item(product_name, data, filename):
+        flash(f"상품 '{product_name}' 등록이 완료되었습니다.")
+        return redirect(url_for('products_enroll'))
+    else:
+        flash("상품 등록에 실패했습니다.")
+        return redirect(url_for('products_enroll'))
 
 if __name__ == "__main__":
     application.run(host="0.0.0.0", debug=True)

@@ -1,94 +1,80 @@
-<!--시작 페이지 : 상품 전체 조회-->
 <!DOCTYPE html>
 <html lang="ko">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Ewha Market</title>
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='styles/global.css') }}"
-    />
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='styles/products.enroll.css') }}"
-    />
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/global.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/products.enroll.css') }}" />
   </head>
 
   <body>
     <!-- 헤더 -->
     <header>
       <div class="logo">
-        <img
-          src="{{ url_for('static', filename='image/Market-logo.png') }}"
-          alt="Ewha Market"
-        />
+        <img src="{{ url_for('static', filename='image/Market-logo.png') }}" alt="Ewha Market" />
       </div>
       <nav>
         <ul class="nav-menu">
           <li><a href="{{ url_for('home') }}">상품 조회</a></li>
           <li><a href="{{ url_for('reviews_index') }}">리뷰 조회</a></li>
           <li><a href="{{ url_for('reviews_write') }}">리뷰 등록</a></li>
-          <li>
-            <a href="{{ url_for('products_enroll') }}" class="active"
-              >상품 등록</a
-            >
-          </li>
+          <li><a href="{{ url_for('products_enroll') }}" class="active">상품 등록</a></li>
           {% if session['id'] %}
-          <li>
-            <a href="{{ url_for('mypage_index') }}"
-              ><b>{{ session['id'] }}님 반갑습니다!</b></a
-            >
-          </li>
-          <li>
-            <a href="/logout"> 로그아웃 </a>
-          </li>
+          <li><a href="{{ url_for('mypage_index') }}"><b>{{ session['id'] }}님 반갑습니다!</b></a></li>
+          <li><a href="/logout"> 로그아웃 </a></li>
           {% else %}
-          <li>
-            <a href="{{ url_for('login') }}">회원가입/로그인</a>
-          </li>
+          <li><a href="{{ url_for('login') }}">회원가입/로그인</a></li>
           {% endif %}
         </ul>
       </nav>
     </header>
 
-    <style></style>
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <div style="text-align:center; color:green; padding:10px; font-weight:bold;">
+          {% for message in messages %}
+            <p>{{ message }}</p>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
 
     <main>
       <div class="page">
         <div class="register-container">
           <h2>상품 등록</h2>
 
-          <form action="/api/products" method="POST">
+          <!-- [중요] action 및 enctype 확인 -->
+          <form action="/reg_item_submit_post" method="POST" enctype="multipart/form-data">
+            
+            <input type="hidden" id="statusHidden" name="status" value="새 상품" />
+
             <div class="form-row">
               <label for="productName" class="form-label">상품명</label>
               <div class="form-input-group">
-                <input
-                  type="text"
-                  id="productName"
-                  name="productName"
-                  required
-                />
+                <input type="text" id="productName" name="productName" required />
               </div>
             </div>
 
             <div class="form-row">
               <label for="sellerId" class="form-label">판매자ID</label>
               <div class="form-input-group">
-                <input type="text" id="sellerId" name="sellerId" required />
+                <input 
+                  type="text" 
+                  id="sellerId" 
+                  name="sellerId" 
+                  required 
+                  placeholder="아이디 입력"
+                  value="{{ session['id'] if session.get('id') else '' }}"
+                />
               </div>
             </div>
 
             <div class="form-row">
               <label for="price" class="form-label">가격</label>
               <div class="form-input-group">
-                <input
-                  type="number"
-                  id="price"
-                  name="price"
-                  required
-                  placeholder="숫자만 입력"
-                />
+                <input type="number" id="price" name="price" required placeholder="숫자만 입력" />
               </div>
             </div>
 
@@ -128,6 +114,7 @@
                   <option value="clothes">의류</option>
                   <option value="electronics">가전</option>
                   <option value="books">도서</option>
+                  <option value="etc">기타</option>
                 </select>
               </div>
             </div>
@@ -135,47 +122,33 @@
             <div class="form-row">
               <label for="description" class="form-label">상품 설명</label>
               <div class="form-input-group">
-                <textarea
-                  id="description"
-                  name="description"
-                  required
-                ></textarea>
+                <textarea id="description" name="description" required></textarea>
               </div>
             </div>
 
             <div class="form-row">
               <label class="form-label">상품 상태</label>
               <div class="form-input-group status-group">
-                <button type="button" class="status-button active">
-                  새 상품
-                </button>
-                <button type="button" class="status-button">중고 (최상)</button>
-                <button type="button" class="status-button">중고 (중상)</button>
+                <button type="button" class="status-button active" data-status="새 상품">새 상품</button>
+                <button type="button" class="status-button" data-status="중고 (최상)">중고 (최상)</button>
+                <button type="button" class="status-button" data-status="중고 (중상)">중고 (중상)</button>
+                <button type="button" class="status-button" data-status="중고 (하)">중고 (하)</button>
               </div>
             </div>
 
             <div class="form-row">
               <label class="form-label">상품 사진</label>
               <div class="form-input-group photo-upload-group">
-                <div class="photo-upload-box photo-add-icon">+</div>
-                <input
-                  type="file"
-                  id="productImage"
-                  name="productImage"
-                  multiple
-                  accept="image/*"
-                  style="display: none"
-                />
+                <div class="photo-preview-container">
+                    <div class="photo-upload-box photo-add-icon">+</div>
+                    <input type="file" id="productImage" name="productImage" accept="image/*" style="display: none" required />
+                </div>
               </div>
             </div>
 
             <div class="action-buttons">
-              <button type="submit" class="action-button register-btn">
-                등록 신청
-              </button>
-              <button type="button" class="action-button cancel-btn">
-                취소
-              </button>
+              <button type="submit" class="action-button register-btn">등록 신청</button>
+              <button type="button" class="action-button cancel-btn" onclick="history.back();">취소</button>
             </div>
           </form>
         </div>
@@ -183,27 +156,39 @@
     </main>
 
     <script>
-      // 상품 상태 버튼 클릭 시 활성화/비활성화 토글 (기존 코드 유지)
+      // 상태 버튼 처리
+      const statusHiddenInput = document.getElementById("statusHidden");
       document.querySelectorAll(".status-button").forEach((button) => {
         button.addEventListener("click", function () {
-          document
-            .querySelectorAll(".status-button")
-            .forEach((btn) => btn.classList.remove("active"));
+          document.querySelectorAll(".status-button").forEach((btn) => btn.classList.remove("active"));
           this.classList.add("active");
+          statusHiddenInput.value = this.getAttribute('data-status');
         });
       });
 
-      // 사진 추가 버튼 클릭 시 파일 선택 창 열기 (기존 코드 유지)
-      document
-        .querySelector(".photo-add-icon")
-        .addEventListener("click", function () {
+      // 사진 업로드 및 미리보기
+      document.querySelector(".photo-add-icon").addEventListener("click", function () {
           document.getElementById("productImage").click();
-        });
+      });
 
-      /* --- 시/도 및 시/군/구 동적 로딩 JavaScript 추가 --- */
-
+      document.getElementById('productImage').addEventListener('change', function(event) {
+          const previewContainer = document.querySelector('.photo-preview-container');
+          const file = event.target.files[0];
+          previewContainer.querySelectorAll('.photo-preview').forEach(img => img.remove());
+          if (file) {
+              const reader = new FileReader();
+              reader.onload = function(e) {
+                  const img = document.createElement('img');
+                  img.src = e.target.result;
+                  img.classList.add('photo-preview');
+                  previewContainer.insertBefore(img, document.querySelector('.photo-add-icon').nextSibling);
+              }
+              reader.readAsDataURL(file);
+          }
+      });
+      
+      /* --- 시/도 및 시/군/구 동적 로딩 JavaScript --- */
       // 1. 전국 시/군/구 데이터 정의
-      // 실제 모든 시/군/구 목록은 너무 길어지므로, 요청하신 서울특별시와 경기도만 상세히 넣고 나머지는 대표 예시로 대체합니다.
       const regionalData = {
         서울특별시: [
           "종로구",
