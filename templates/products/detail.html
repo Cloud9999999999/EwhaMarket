@@ -4,22 +4,43 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>상품 상세 - 아디다스 운동화</title>
-    <link rel="stylesheet" href="../styles/global.css" />
-    <link rel="stylesheet" href="../styles/products.detail.css" />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='styles/global.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='styles/products.detail.css') }}"
+    />
   </head>
   <body>
     <header>
       <div class="logo">
-        <img src="../assets/Market-logo.png" alt="Ewha Market" />
+        <img
+          src="{{ url_for('static', filename='image/Market-logo.png') }}"
+          alt="Ewha Market"
+        />
       </div>
       <nav>
         <ul class="nav-menu">
-          <li><a href="../index.html">상품 조회</a></li>
-          <li><a href="../reviews/index.html">리뷰 조회</a></li>
-          <li><a href="../reviews/write-review.html">리뷰 등록</a></li>
-          <li><a href="../products/enroll.html">상품 등록</a></li>
-          <li><a href="../mypage/index.html">마이페이지</a></li>
-          <li><a href="../auth/login.html">회원가입/로그인</a></li>
+          <li><a href="{{ url_for('home') }}" class="active">상품 조회</a></li>
+          <li><a href="{{ url_for('reviews_index') }}">리뷰 조회</a></li>
+          <li><a href="{{ url_for('reviews_write') }}">리뷰 등록</a></li>
+          <li><a href="{{ url_for('products_enroll') }}">상품 등록</a></li>
+          {% if session['id'] %}
+          <li>
+            <a href="{{ url_for('mypage_index') }}"
+              ><b>{{ session['id'] }}님 반갑습니다!</b></a
+            >
+          </li>
+          <li>
+            <a href="/logout"> 로그아웃 </a>
+          </li>
+          {% else %}
+          <li>
+            <a href="{{ url_for('login') }}">회원가입/로그인</a>
+          </li>
+          {% endif %}
         </ul>
       </nav>
     </header>
