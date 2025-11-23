@@ -50,7 +50,7 @@
       <div class="page">
         <section id="product">
           <div class="list-header">
-            <h2 class="section-title">전체 상품조회</h2>
+            <h2 class="section-title">전체 상품조회 (총 {{ total }}개)</h2>
 
             <div class="filter-bar">
               <button class="filter">저가순</button>
@@ -61,118 +61,39 @@
           </div>
 
           <div class="product-list">
-            <a href="./products/detail.html" class="product-link">
-              <div class="product-card">
-                <div class="image-box">
-                  <img
-                    src="./assets/products/운동화.jpeg"
-                    alt="아디다스 운동화"
-                  />
+            {% if total > 0 %}
+                {% for key, value in datas %}
+                <div class="product-card" onclick="location.href='{{ url_for('products_detail', name=key) }}';" style="cursor:pointer;">
+                    <div class="image-box">
+                        <img src="{{ url_for('static', filename='image/' + value.img_path) }}" alt="{{ key }}">
+                    </div>
+                    <div class="text-info">
+                        <h3>{{ key }}</h3>
+                        <p>₩{{ value.price }}</p>
+                        <p style="font-size:0.8rem; color:gray;">{{ value.status }}</p>
+                    </div>
                 </div>
-                <div class="text-info">
-                  <h3>아디다스 운동화</h3>
-                  <p>₩109,000</p>
-                </div>
-                <input type="checkbox" id="like1" class="like-toggle" />
-                <label for="like1" class="like-icon"></label>
-              </div>
-            </a>
+                {% endfor %}
 
-            <div class="product-card">
-              <div class="image-box">
-                <img src="./assets/products/맨투맨.jpeg" alt="맨투맨" />
-              </div>
-              <div class="text-info">
-                <h3>맨투맨</h3>
-                <p>₩40,000</p>
-              </div>
-              <input type="checkbox" id="like2" class="like-toggle" />
-              <label for="like2" class="like-icon"></label>
-            </div>
-
-            <div class="product-card">
-              <div class="image-box">
-                <img src="./assets/products/공기청정기.jpeg" alt="공기청정기" />
-              </div>
-              <div class="text-info">
-                <h3>공기청정기</h3>
-                <p>₩200,000</p>
-              </div>
-              <input type="checkbox" id="like3" class="like-toggle" />
-              <label for="like3" class="like-icon"></label>
-            </div>
-
-            <div class="product-card">
-              <div class="image-box">
-                <img src="./assets/products/화분.jpeg" alt="화분" />
-              </div>
-              <div class="text-info">
-                <h3>화분</h3>
-                <p>₩10,000</p>
-              </div>
-              <input type="checkbox" id="like4" class="like-toggle" />
-              <label for="like4" class="like-icon"></label>
-            </div>
-
-            <div class="product-card">
-              <div class="image-box">
-                <img src="./assets/products/의자.jpeg" alt="의자" />
-              </div>
-              <div class="text-info">
-                <h3>의자</h3>
-                <p>₩50,000</p>
-              </div>
-              <input type="checkbox" id="like5" class="like-toggle" />
-              <label for="like5" class="like-icon"></label>
-            </div>
-
-            <div class="product-card">
-              <div class="image-box">
-                <img src="./assets/products/탁상조명.jpeg" alt="탁상용 조명" />
-              </div>
-              <div class="text-info">
-                <h3>탁상용 조명</h3>
-                <p>₩40,000</p>
-              </div>
-              <input type="checkbox" id="like6" class="like-toggle" />
-              <label for="like6" class="like-icon"></label>
-            </div>
-
-            <div class="product-card">
-              <div class="image-box">
-                <img
-                  src="./assets/products/핸드폰거치대.jpeg"
-                  alt="핸드폰 거치대"
-                />
-              </div>
-              <div class="text-info">
-                <h3>핸드폰 거치대</h3>
-                <p>₩9,000</p>
-              </div>
-              <input type="checkbox" id="like7" class="like-toggle" />
-              <label for="like7" class="like-icon"></label>
-            </div>
-
-            <div class="product-card">
-              <div class="image-box">
-                <img src="./assets/products/드라이기.jpeg" alt="드라이기" />
-              </div>
-              <div class="text-info">
-                <h3>드라이기</h3>
-                <p>₩100,000</p>
-              </div>
-              <input type="checkbox" id="like8" class="like-toggle" />
-              <label for="like8" class="like-icon"></label>
-            </div>
+            {% else %}
+                <p>등록된 상품이 없습니다.</p>
+            {% endif %}
           </div>
         </section>
 
-        <div class="pagination">
-          <a href="#" class="active">1</a>
-          <a href="#">2</a>
-          <a href="#">3</a>
-          <a href="#">4</a>
-          <a href="#">&gt;</a>
+        <div class="page-wrap">
+            <div class="page-nation">
+                <ul>
+                    {% for i in range(page_count) %}
+                    <li>
+                        <a href="{{ url_for('home', page=i) }}" 
+                          style="{{ 'background-color: #00462a; color: #fff;' if i == page else '' }}">
+                          {{ i + 1 }}
+                        </a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
         </div>
       </div>
     </main>

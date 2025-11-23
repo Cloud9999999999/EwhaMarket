@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>상품 상세 - 아디다스 운동화</title>
+    <title>상품 상세 - {{ name }}</title>
     <link
       rel="stylesheet"
       href="{{ url_for('static', filename='styles/global.css') }}"
@@ -49,24 +49,33 @@
       <div class="page">
         <div class="detail-card">
           <div class="product-image-area">
+            <!-- [수정됨] DB 이미지 경로 사용 -->
             <img
-              src="../assets/products/운동화.jpeg"
-              alt="아디다스 운동화 상세 이미지"
+              src="{{ url_for('static', filename='image/' + data.img_path) }}"
+              alt="{{ name }} 상세 이미지"
             />
           </div>
 
           <div class="product-info-area">
-            <h1 class="product-title">아디다스 운동화</h1>
-            <p class="product-price">₩109,000</p>
+            <!-- [수정됨] 상품명 및 가격 출력 -->
+            <h1 class="product-title">{{ name }}</h1>
+            <p class="product-price">₩{{ data.price }}</p>
 
+            <!-- [수정됨] 상세 설명 출력 -->
             <p class="product-delivery-info">
-              직접거래 또는 배송비 3000원에 거래 가능합니다!
+              {{ data.description }}
             </p>
 
+            <!-- [수정됨] 상세 정보 리스트 출력 -->
             <ul class="product-details">
-              <li><strong>상품 상태</strong> : 새상품</li>
-              <li><strong>지역</strong> : 서울특별시 서대문구</li>
-              <li><strong>판매자ID</strong> : seoh</li>
+              <li><strong>상품 상태</strong> : {{ data.status }}</li>
+              <li><strong>지역</strong> : {{ data.addr }}</li>
+              <li><strong>판매자ID</strong> : {{ data.seller }}</li>
+              <li><strong>카테고리</strong> : {{ data.category }}</li>
+              <!-- 전화번호 (있을 경우만 표시) -->
+              {% if data.phone %}
+              <li><strong>연락처</strong> : {{ data.phone }}</li>
+              {% endif %}
             </ul>
 
             <div class="action-buttons">

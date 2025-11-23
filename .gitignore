@@ -1,0 +1,14 @@
+# macOS 시스템 파일
+.DS_Store
+._*
+
+# Python 캐시 및 컴파일 파일
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# 가상환경 폴더 (혹시 프로젝트 내부에 있다면)
+venv/
+env/
+.env
