@@ -13,38 +13,36 @@
           <!--프로필-->
           <div class="edit-container">
             <div class="content-container3">
-              <form action="/mypage/update-info" method="post">
+              <form action="{{ url_for('update_info') }}" method="post">
                 <div
                   style="
                     display: flex;
                     flex-direction: row;
                     align-items: center;
-                    gap: 2rem;"
-                >
+                    gap: 2rem;">
                   <img
                     src="{{ url_for('static', filename='image/icon/profile-img.svg') }}"
                     alt="프로필 이미지"
-                    class="profile-img"
-                  />
+                    class="profile-img"/>
                   <div>
                     <div style="display: flex; flex-direction: row; gap: 12px">
+                      <label for="username">이름</label>
                       <input
                         type="text"
                         id="username"
-                        value="김이화"
-                        class="name-container"
-                      />
+                        name="username"
+                        value="{{ username }}"
+                        class="name-container"/>
+
                       <button type="button" class="icon-button">
                         <img
                           src="{{ url_for('static', filename='image/icon/camera.svg') }}"
-                          alt="카메라 아이콘"
-                        />
+                          alt="카메라 아이콘"/>
                       </button>
                       <button type="button" class="icon-button">
                         <img
                           src="{{ url_for('static', filename='image/icon/image.svg') }}"
-                          alt="갤러리 아이콘"
-                        />
+                          alt="갤러리 아이콘"/>
                       </button>
                     </div>
                   </div>
@@ -59,8 +57,7 @@
                     placeholder="ewha2025"
                     required
                     class="id-input"
-                    readonly
-                  />
+                    readonly/>
                 </div>
 
                 <div class="form-group">
@@ -71,8 +68,7 @@
                     name="email"
                     placeholder="ewha@ewha.ac.kr"
                     required
-                    class="form-input"
-                  />
+                    class="form-input"/>
                 </div>
 
                 <div class="form-group">
@@ -83,8 +79,7 @@
                     name="number"
                     placeholder="010-1234-5678"
                     required
-                    class="form-input"
-                  />
+                    class="form-input"/>
                 </div>
 
                 <div class="form-group">
@@ -95,8 +90,7 @@
                     name="password"
                     placeholder="●●●●●●●"
                     required
-                    class="form-input"
-                  />
+                    class="form-input"/>
                 </div>
 
                 <div class="form-group">
@@ -107,8 +101,7 @@
                     name="checkpw"
                     placeholder="●●●●●●●"
                     required
-                    class="form-input"
-                  />
+                    class="form-input"/>
                 </div>
 
                 <button class="edit-btn" type="submit">수정</button>
