@@ -81,10 +81,64 @@ def products_detail(name):
 def mypage_index():
     return render_template("mypage/index.html")
 
-# 마이페이지 수정
-@application.route("/mypage/edit")
+# 마이페이지-2 수정
+@application.route("/mypage/edit-info", methods=['POST'])
 def mypage_edit():
-    return render_template("mypage/edit-info.html")
+    username = request.form.get('username')
+    user_id = session.get('id')
+    email = request.form.get('email')
+    number = request.form.get('number')
+    password = request.form.get('password')
+    checkpw = request.form.get('checkpw')
+    
+    error = []
+    
+    if not username:
+        error.append("이름을 입력해주세요.")
+    if not user_id:
+        error.append("아이디를 입력해주세요.")
+    if not email:
+        error.append("이메일을 입력해주세요.")
+    if not number:
+        error.append("전화번호를 입력해주세요.")
+    if not password:
+        error.append("비밀번호를 입력해주세요.")
+    
+    if password != checkpw:
+        error.append("비밀번호와 비밀번호 확인이 일치하지 않습니다.")
+    
+    
+    if error:
+        for msg in error:
+            flash(msg)
+        return render_template("index.html", username=username, user_id=user_id, email=email, number=number)
+    
+    
+    # 실제 사용자 찾기
+    user = db.child("users").child(user_id).get().val()
+    if user is None:
+        flash("해당 사용자를 찾을 수 없습니다.", "error")
+        return redirect(url_for("index"))
+    
+    # DB 업데이트
+    update_data = {
+        "username": username,
+        "email": email,
+        "number": number,
+        "password": password
+    }
+    
+    db.child("users").child(user_id).update(update_data)
+
+    flash("회원 정보가 수정되었습니다.", "success")
+    return redirect(url_for("index"))
+    
+    
+    #return render_template("mypage/edit-info.html")
+
+
+
+
 
 # 로그인 / 회원가입
 @application.route("/login")
