@@ -85,7 +85,7 @@ def mypage_index():
 @application.route("/mypage/edit-info", methods=['POST'])
 def mypage_edit():
     username = request.form.get('username')
-    user_id = session.get('id')
+    user_id = request.form.get('id')
     email = request.form.get('email')
     number = request.form.get('number')
     password = request.form.get('password')
@@ -103,16 +103,13 @@ def mypage_edit():
         error.append("전화번호를 입력해주세요.")
     if not password:
         error.append("비밀번호를 입력해주세요.")
-    
     if password != checkpw:
         error.append("비밀번호와 비밀번호 확인이 일치하지 않습니다.")
-    
     
     if error:
         for msg in error:
             flash(msg)
         return render_template("index.html", username=username, user_id=user_id, email=email, number=number)
-    
     
     # 실제 사용자 찾기
     user = db.child("users").child(user_id).get().val()
@@ -133,11 +130,7 @@ def mypage_edit():
     flash("회원 정보가 수정되었습니다.", "success")
     return redirect(url_for("index"))
     
-    
     #return render_template("mypage/edit-info.html")
-
-
-
 
 
 # 로그인 / 회원가입
