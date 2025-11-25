@@ -129,9 +129,6 @@ def mypage_edit():
 
     flash("회원 정보가 수정되었습니다.", "success")
     return redirect(url_for("index"))
-    
-    #return render_template("mypage/edit-info.html")
-
 
 # 로그인 / 회원가입
 @application.route("/login")
