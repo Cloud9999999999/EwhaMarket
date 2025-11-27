@@ -161,32 +161,26 @@ def products_detail(name):
 # 마이페이지
 @application.route("/mypage")
 def mypage_index():
-    user_id = "testuser2"           # 로그인이 안되서 임시로(id) 지정함(나중에 지우기)
-    #user_id = session.get("id")    # 지금 로그인이 안됨(나중에 이걸로 고치기)
-    user = DB.get_user(user_id) or {}
-    
-    username = user.get("username") or ""
-    email = user.get("email") or ""
-    number = user.get("number") or ""
-    password = user.get("password") or ""
-    
-    # 마이페이지 템플릿으로 넘기기
-    return render_template(
-        "mypage/index.html",
-        username=username,
-        user_id=user_id,
-        email=email,
-        number=number,
-        password=password,
-        total=0,
-        page_count=0,
-    )
+    user_id = session.get("id")
+    if not user_id:
+        flash("로그인 후 이용 가능합니다.")
+        return redirect(url_for("login"))
+
+    user = DB.get_user(user_id)   
+
+    if not user:
+        flash("사용자 정보를 찾을 수 없습니다.")
+        return redirect(url_for("home"))
+
+    return render_template("mypage/index.html", user=user)
+
 
 # 마이페이지-2 (회원 정보 수정 페이지)
 @application.route("/mypage/edit-info", methods=['GET', 'POST'])
 def mypage_edit():
-    user_id = "testuser2"           # 로그인이 안되서 임시로(id) 지정함(나중에 지우기)
-    #user_id = session.get("id")    # 지금 로그인이 안됨(나중에 이걸로 고치기)
+    user_id = session.get("id")    # 로그인한 사용자의 id
+    if not user_id:
+        return redirect(url_for("login"))
     
     # 페이지 요청(GET): 수정 폼 표시
     if request.method == "GET":
@@ -198,7 +192,7 @@ def mypage_edit():
             user_id=user_id,
             email=user.get("email") or "",
             number=user.get("number") or "",
-            password=user.get("password") or "",
+            password="",
             checkpw="",
             total=0,
             page_count=0,
@@ -243,14 +237,16 @@ def mypage_edit():
             page_count=0,
         )
 
+    pw_hash = hashlib.sha256(password.encode('utf-8')).hexdigest()
+
     update_data = {
         "username": username,
         "email": email,
         "number": number,
-        "password": password,
+        "pw": pw_hash,
     }
     DB.update_user(user_id, update_data)
-    session["username"]=username
+    session["username"] = username
     
     flash("회원 정보가 수정되었습니다.", "success")
     return redirect(url_for("mypage_index"))
@@ -264,7 +260,7 @@ def mypage_edit():
 def login():
     return render_template("auth/login.html")
 
-@application.route("/login_confirm", methods=['POST'])
+@application.route("/", methods=['POST'])
 def login_user():
     id_=request.form['id']
     pw=request.form['pw']
@@ -304,8 +300,6 @@ def logout_user():
     session.clear()
     return redirect(url_for('home'))
 
-if __name__ == "__main__":
-    application.run(host="0.0.0.0", debug=True)
 
 
 # ----------------------------------------------------

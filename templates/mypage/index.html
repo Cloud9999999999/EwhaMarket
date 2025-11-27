@@ -58,7 +58,8 @@
               flex-direction: row;
               align-items: center;
               gap: 2rem;
-            ">
+            "
+          >
             <img
               src="{{ url_for('static', filename='image/icon/profile-img.svg') }}"
               alt="프로필 이미지"
@@ -67,19 +68,18 @@
             <div>
               <div style="display: flex; flex-direction: row; gap: 12px">
                 <div class="name-container">
-                  <p>{{ username }}</p>          <!--username으로 바꿈-->
+                  <p>{{ user.username }}</p>
+                  <!--username으로 바꿈-->
                 </div>
-                <form action="{{ url_for('mypage_edit') }}" method="post">
-                <button class="edit-button" id="edit-button" type="submit">
-                  <img
-                    src="{{ url_for('static', filename='image/icon/pen.svg') }}"
-                    style="margin-right: 8px"
-                  />회원정보 수정
-                </button>
+                <form action="{{ url_for('mypage_edit') }}" method="get">
+                  <button class="edit-button" id="edit-button" type="submit">
+                    프로필 수정하기
+                  </button>
                 </form>
               </div>
               <p class="write-date" style="margin-top: 8px">
-                {{ email }}          <!--email로 바꿈-->
+                {{ user.email }}
+                <!--email로 바꿈-->
               </p>
             </div>
           </div>
