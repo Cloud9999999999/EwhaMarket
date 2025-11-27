@@ -156,59 +156,108 @@ def products_detail(name):
     data = DB.get_item_byname(str(name))
     return render_template("products/detail.html", name=name, data=data)
 
+
+
 # 마이페이지
 @application.route("/mypage")
 def mypage_index():
-    return render_template("mypage/index.html")
+    user_id = "testuser2"           # 로그인이 안되서 임시로(id) 지정함(나중에 지우기)
+    #user_id = session.get("id")    # 지금 로그인이 안됨(나중에 이걸로 고치기)
+    user = DB.get_user(user_id) or {}
+    
+    username = user.get("username") or ""
+    email = user.get("email") or ""
+    number = user.get("number") or ""
+    password = user.get("password") or ""
+    
+    # 마이페이지 템플릿으로 넘기기
+    return render_template(
+        "mypage/index.html",
+        username=username,
+        user_id=user_id,
+        email=email,
+        number=number,
+        password=password,
+        total=0,
+        page_count=0,
+    )
 
-# 마이페이지-2 수정
-@application.route("/mypage/edit-info", methods=['POST'])
+# 마이페이지-2 (회원 정보 수정 페이지)
+@application.route("/mypage/edit-info", methods=['GET', 'POST'])
 def mypage_edit():
+    user_id = "testuser2"           # 로그인이 안되서 임시로(id) 지정함(나중에 지우기)
+    #user_id = session.get("id")    # 지금 로그인이 안됨(나중에 이걸로 고치기)
+    
+    # 페이지 요청(GET): 수정 폼 표시
+    if request.method == "GET":
+        user = DB.get_user(user_id) or {}
+        
+        return render_template(
+            "mypage/edit-info.html",
+            username=user.get("username") or "",
+            user_id=user_id,
+            email=user.get("email") or "",
+            number=user.get("number") or "",
+            password=user.get("password") or "",
+            checkpw="",
+            total=0,
+            page_count=0,
+        )
+    
+    # POST: 수정 저장
     username = request.form.get('username')
-    user_id = request.form.get('id')
-    email = request.form.get('email')
-    number = request.form.get('number')
+    form_id  = request.form.get('id')
+    email    = request.form.get('email')
+    number   = request.form.get('number')
     password = request.form.get('password')
-    checkpw = request.form.get('checkpw')
+    checkpw  = request.form.get('checkpw')
     
-    error = []
-    
+    errors = []
     if not username:
-        error.append("이름을 입력해주세요.")
-    if not user_id:
-        error.append("아이디를 입력해주세요.")
+        errors.append("이름을 입력해주세요.")
+    if not form_id:
+        errors.append("아이디를 입력해주세요.")
+    if form_id != user_id:
+        errors.append("아이디 값이 올바르지 않습니다.")
     if not email:
-        error.append("이메일을 입력해주세요.")
+        errors.append("이메일을 입력해주세요.")
     if not number:
-        error.append("전화번호를 입력해주세요.")
+        errors.append("전화번호를 입력해주세요.")
     if not password:
-        error.append("비밀번호를 입력해주세요.")
+        errors.append("비밀번호를 입력해주세요.")
     if password != checkpw:
-        error.append("비밀번호와 비밀번호 확인이 일치하지 않습니다.")
+        errors.append("비밀번호와 비밀번호 확인이 일치하지 않습니다.")
     
-    if error:
-        for msg in error:
-            flash(msg)
-        return render_template("index.html", username=username, user_id=user_id, email=email, number=number)
-    
-    # 실제 사용자 찾기
-    user = db.child("users").child(user_id).get().val()
-    if user is None:
-        flash("해당 사용자를 찾을 수 없습니다.", "error")
-        return redirect(url_for("index"))
-    
-    # DB 업데이트
+    if errors:
+        for msg in errors:
+            flash(msg, "error")
+        return render_template(
+            "mypage/edit-info.html",
+            username=username or "",
+            user_id=user_id,
+            email=email or "",
+            number=number or "",
+            password=password or "",
+            checkpw=checkpw or "",
+            total=0,
+            page_count=0,
+        )
+
     update_data = {
         "username": username,
         "email": email,
         "number": number,
-        "password": password
+        "password": password,
     }
+    DB.update_user(user_id, update_data)
+    session["username"]=username
     
-    db.child("users").child(user_id).update(update_data)
-
     flash("회원 정보가 수정되었습니다.", "success")
-    return redirect(url_for("index"))
+    return redirect(url_for("mypage_index"))
+
+# (->다시 수정들어가면 이전 정보가 안뜸.. firebase에 업데이트는 되어있음. 로그인을 안해서??)
+# ----------------------------------------------------
+
 
 # 로그인 / 회원가입
 @application.route("/login")
