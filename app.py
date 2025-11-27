@@ -4,6 +4,10 @@ import hashlib
 import sys
 import os
 import math
+from datetime import datetime             
+import uuid                                
+from werkzeug.utils import secure_filename
+
 
 application = Flask(__name__)
 application.config["SECRET_KEY"] = "helloosp"
@@ -60,46 +64,48 @@ def reviews_index():
 def reviews_write():
     return render_template("reviews/write-review.html")
 
-# 리뷰 등록
-@application.route("/reviews/submit", methods=["POST"])
+#리뷰 등록 
+@application.route("/reviews/submit", methods=['POST'])
 def review_submit_post():
 
-    # 로그인 체크
-    if "id" not in session:
-        flash("로그인이 필요한 서비스입니다.")
-        return redirect(url_for("login"))
+    # ★ 로그인 필요 시 사용
+    user_id = session.get("id", "guest")
 
-    user_id = session["id"]
-    data = request.form
-    image_file = request.files.get("images")  # input name="images"
+    # 1) form 데이터 읽기
+    product_id = request.form.get("product_id")
+    rating = request.form.get("rating")
+    title = request.form.get("title", "")
+    content = request.form.get("content", "")
 
-    # 1. 이미지 저장(static/image)
-    if image_file and image_file.filename != "":
-        filename = image_file.filename
-        save_path = os.path.join(application.config["UPLOAD_FOLDER"], filename)
-        image_file.save(save_path)
-    else:
-        filename = "default.png"
+    if not product_id or not rating or not content:
+        return jsonify({"success": False, "error": "필수 항목 누락"}), 400
 
-    # 2. 리뷰 정보 구성
+    # 2) 이미지 처리
+    images = request.files.getlist("images")
+    saved_paths = []
+
+    for img in images:
+        if img.filename != "":
+            filename = secure_filename(f"{uuid.uuid4().hex}_{img.filename}")
+            save_path = os.path.join(UPLOAD_FOLDER, filename)
+            img.save(save_path)
+            saved_paths.append(f"/static/image/{filename}")
+
+    # 3) DB 저장
     review_data = {
+        "product_id": product_id,
         "user_id": user_id,
-        "product_id": data.get("product_id"),
-        "rating": data.get("rating"),
-        "title": data.get("title"),
-        "content": data.get("content"),
-        "img_path": filename,
-        "created_at": datetime.utcnow().isoformat()
+        "rating": float(rating),
+        "title": title,
+        "content": content,
+        "images": saved_paths,
+        "created_at": str(datetime.utcnow())
     }
 
-    # 3. DB 저장
-    if DB.insert_review(review_data):
-        flash("리뷰 등록이 완료되었습니다!")
-        return redirect(url_for("reviews_index"))
-    else:
-        flash("리뷰 등록 중 오류가 발생했습니다.")
-        return redirect(url_for("reviews_write"))
+    DB.insert_review(review_data)      
 
+    return jsonify({"success": True})
+    
 # 리뷰 상세 
 @application.route("/reviews/detail")
 def reviews_detail():
