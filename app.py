@@ -64,6 +64,33 @@ def reviews_index():
 def reviews_write():
     return render_template("reviews/write-review.html")
 
+# 리뷰 전체 조회 API
+@application.route("/api/reviews", methods=["GET"])
+def get_all_reviews():
+    reviews = DB.get_all_reviews()
+
+    if not reviews:
+        return jsonify([]), 200
+    
+    # Firebase는 dict 형태라서 리스트로 변환
+    review_list = []
+    for rid, rdata in reviews.items():
+        rdata["id"] = rid
+        review_list.append(rdata)
+
+    return jsonify(review_list), 200
+
+# 리뷰 상세 조회 API
+@application.route("/api/reviews/<review_id>", methods=["GET"])
+def get_review_detail(review_id):
+    review = DB.get_review_by_id(review_id)
+
+    if review:
+        review["id"] = review_id
+        return jsonify(review), 200
+    
+    return jsonify({"error": "review not found"}), 404
+
 #리뷰 등록 
 @application.route("/reviews/submit", methods=['POST'])
 def review_submit_post():
