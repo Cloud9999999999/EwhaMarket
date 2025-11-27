@@ -1,119 +1,90 @@
-<!--리뷰 상세 조회-->
+<!-- 리뷰 상세 조회 -->
 <!DOCTYPE html>
 <html lang="ko">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Ewha Market | 리뷰 상세보기</title>
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='styles/global.css') }}"
-    />
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='styles/review.detail.css') }}"
-    />
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='styles/auth.css') }}"
-    />
-  </head>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ewha Market | 리뷰 상세보기</title>
 
-  <body>
-    <header>
-      <div class="logo">
-        <img
-          src="{{ url_for('static', filename='image/Market-logo.png') }}"
-          alt="Ewha Market"
-        />
-      </div>
-      <nav>
-        <ul class="nav-menu">
-          <li><a href="{{ url_for('home') }}">상품 조회</a></li>
-          <li>
-            <a href="{{ url_for('reviews_index') }}" class="active"
-              >리뷰 조회</a
-            >
-          </li>
-          <li><a href="{{ url_for('reviews_write') }}">리뷰 등록</a></li>
-          <li><a href="{{ url_for('products_enroll') }}">상품 등록</a></li>
-          {% if session['id'] %}
-          <li>
-            <a href="{{ url_for('mypage_index') }}"
-              ><b>{{ session['id'] }}님 반갑습니다!</b></a
-            >
-          </li>
-          <li>
-            <a href="/logout"> 로그아웃 </a>
-          </li>
-          {% else %}
-          <li>
-            <a href="{{ url_for('login') }}">회원가입/로그인</a>
-          </li>
-          {% endif %}
-        </ul>
-      </nav>
-    </header>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles/global.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles/review.detail.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles/auth.css') }}">
+</head>
 
-    <main class="container">
-      <div class="page">
-        <section>
-          <div class="detail-container">
-            <!-- 상단 제품 정보 -->
-            <div class="product-section">
-              <img
-                src="https://i.pinimg.com/736x/c0/fc/82/c0fc8224b268ad56c9407109c96c357c.jpg"
-                alt="아디다스 운동화"
-              />
-              <div class="product-info">
-                <b>아디다스 운동화</b>
-                <span>구매일 : YYYY.MM.DD</span>
-              </div>
-            </div>
+<body>
+<header>
+  <div class="logo">
+    <img src="{{ url_for('static', filename='image/Market-logo.png') }}" alt="Ewha Market" />
+  </div>
 
-            <!-- 작성자 정보 -->
-            <div class="author-section">
-              <img
-                src="https://randomuser.me/api/portraits/women/44.jpg"
-                alt="작성자 프로필"
-              />
-              <div class="author-info">
-                <div class="author-name">이화인</div>
-                <div class="author-date">작성일 : YYYY.MM.DD</div>
-              </div>
-            </div>
+  <nav>
+    <ul class="nav-menu">
+      <li><a href="{{ url_for('home') }}">상품 조회</a></li>
+      <li><a href="{{ url_for('reviews_index') }}" class="active">리뷰 조회</a></li>
+      <li><a href="{{ url_for('reviews_write') }}">리뷰 등록</a></li>
+      <li><a href="{{ url_for('products_enroll') }}">상품 등록</a></li>
 
-            <!-- 리뷰 본문 -->
-            <div class="review-body">
-              <div class="review-text">
-                <div class="review-title">나의 첫 러닝용 운동화</div>
-                <div class="review-content">
-                  건강을 위해 러닝을 시작하려고 운동화를 찾아보던 중, 후기가
-                  좋은 이 아디다스 운동화를 구매했어요! 오랫동안 신어도 발이
-                  불편하지 않고 튼튼해요 :)
-                </div>
-              </div>
+      {% if session['id'] %}
+      <li><a href="{{ url_for('mypage_index') }}"><b>{{ session['id'] }}님 반갑습니다!</b></a></li>
+      <li><a href="/logout">로그아웃</a></li>
+      {% else %}
+      <li><a href="{{ url_for('login') }}">회원가입/로그인</a></li>
+      {% endif %}
+    </ul>
+  </nav>
+</header>
 
-              <div class="review-images">
-                <img
-                  src="https://i.pinimg.com/736x/48/b9/fd/48b9fd0fec7fdc2721bfd29574a9a5c1.jpg"
-                  alt="리뷰 이미지1"
-                />
-                <img
-                  src="https://i.pinimg.com/736x/94/f3/d0/94f3d0cb2522157545296c7e32105fa7.jpg"
-                  alt="리뷰 이미지2"
-                />
-                <img
-                  src="https://i.pinimg.com/736x/6a/bb/c8/6abbc88a85314ba9bea7472cac01a025.jpg"
-                  alt="리뷰 이미지3"
-                />
-              </div>
-            </div>
+<main class="container">
+  <div class="page">
+    <section>
+      <div class="detail-container">
+
+        <!-- ⭐ 상단 제품 정보 -->
+        <div class="product-section">
+          <img 
+            src="{{ review.images[0] if review.images else '/static/image/default.png' }}" 
+            alt="제품 이미지"
+          />
+          <div class="product-info">
+            <b>{{ review.product_id }}</b>
+            <span>구매일 : {{ review.purchase_date if review.purchase_date else '-' }}</span>
           </div>
-        </section>
-      </div>
-    </main>
+        </div>
 
-    <footer>@cloud9</footer>
-  </body>
+        <!-- ⭐ 작성자 정보 -->
+        <div class="author-section">
+          <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="작성자 프로필" />
+          <div class="author-info">
+            <div class="author-name">{{ review.user_id }}</div>
+            <div class="author-date">작성일 : {{ review.created_at[:10] }}</div>
+          </div>
+        </div>
+
+        <!-- ⭐ 리뷰 본문 -->
+        <div class="review-body">
+          <div class="review-text">
+            <div class="review-title">{{ review.title }}</div>
+            <div class="review-content">{{ review.content }}</div>
+          </div>
+
+          <!-- ⭐ 이미지 출력 -->
+          <div class="review-images">
+            {% if review.images %}
+              {% for img in review.images %}
+              <img src="{{ img }}" alt="리뷰 이미지">
+              {% endfor %}
+            {% else %}
+              <p>등록된 이미지가 없습니다.</p>
+            {% endif %}
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+  </div>
+</main>
+
+<footer>@cloud9</footer>
+</body>
 </html>
