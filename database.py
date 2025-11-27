@@ -37,7 +37,7 @@ class DBhandler:
                 value = res.val()
                 if value['id'] == id_string:
                     return False
-     
+    
     def find_user(self, id_, pw_):
         users = self.db.child("user").get()
         target_value=[]
@@ -87,6 +87,17 @@ class DBhandler:
             if key_value == name:
                 target_value=res.val()
         return target_value
+    
+    
+    # ----------------------------------------------------
+    # 마이페이지
+    # ----------------------------------------------------
+    # 회원 정보/사용자 관련
+    def get_user(self, user_id: str):
+        return self.db.child("user").child(user_id).get().val()
+    
+    def update_user(self, user_id: str, data: dict):
+        return self.db.child("user").child(user_id).update(data)
 
     # ----------------------------------------------------
     # 리뷰 관련 함수
