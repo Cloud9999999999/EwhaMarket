@@ -60,6 +60,46 @@ def reviews_index():
 def reviews_write():
     return render_template("reviews/write-review.html")
 
+# 리뷰 등록
+@application.route("/reviews/submit", methods=["POST"])
+def review_submit_post():
+
+    # 로그인 체크
+    if "id" not in session:
+        flash("로그인이 필요한 서비스입니다.")
+        return redirect(url_for("login"))
+
+    user_id = session["id"]
+    data = request.form
+    image_file = request.files.get("images")  # input name="images"
+
+    # 1. 이미지 저장(static/image)
+    if image_file and image_file.filename != "":
+        filename = image_file.filename
+        save_path = os.path.join(application.config["UPLOAD_FOLDER"], filename)
+        image_file.save(save_path)
+    else:
+        filename = "default.png"
+
+    # 2. 리뷰 정보 구성
+    review_data = {
+        "user_id": user_id,
+        "product_id": data.get("product_id"),
+        "rating": data.get("rating"),
+        "title": data.get("title"),
+        "content": data.get("content"),
+        "img_path": filename,
+        "created_at": datetime.utcnow().isoformat()
+    }
+
+    # 3. DB 저장
+    if DB.insert_review(review_data):
+        flash("리뷰 등록이 완료되었습니다!")
+        return redirect(url_for("reviews_index"))
+    else:
+        flash("리뷰 등록 중 오류가 발생했습니다.")
+        return redirect(url_for("reviews_write"))
+
 # 리뷰 상세 
 @application.route("/reviews/detail")
 def reviews_detail():
