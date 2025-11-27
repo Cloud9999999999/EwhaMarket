@@ -58,8 +58,7 @@
               flex-direction: row;
               align-items: center;
               gap: 2rem;
-            "
-          >
+            ">
             <img
               src="{{ url_for('static', filename='image/icon/profile-img.svg') }}"
               alt="프로필 이미지"
@@ -68,17 +67,19 @@
             <div>
               <div style="display: flex; flex-direction: row; gap: 12px">
                 <div class="name-container">
-                  <p>김이화</p>
+                  <p>{{ username }}</p>          <!--username으로 바꿈-->
                 </div>
-                <button class="edit-button" id="edit-button">
+                <form action="{{ url_for('mypage_edit') }}" method="post">
+                <button class="edit-button" id="edit-button" type="submit">
                   <img
                     src="{{ url_for('static', filename='image/icon/pen.svg') }}"
                     style="margin-right: 8px"
                   />회원정보 수정
                 </button>
+                </form>
               </div>
               <p class="write-date" style="margin-top: 8px">
-                ewha2025@ewha.ac.kr
+                {{ email }}          <!--email로 바꿈-->
               </p>
             </div>
           </div>
