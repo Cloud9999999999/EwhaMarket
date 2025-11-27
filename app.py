@@ -133,10 +133,17 @@ def review_submit_post():
 
     return jsonify({"success": True})
     
-# 리뷰 상세 
-@application.route("/reviews/detail")
-def reviews_detail():
-    return render_template("reviews/detail.html")
+# 리뷰 상세 조회
+@application.route("/reviews/detail/<review_id>")
+def review_detail(review_id):
+
+    review = DB.get_review_by_id(review_id)
+
+    if not review:
+        return "리뷰를 찾을 수 없습니다.", 404
+
+    return render_template("reviews/detail.html", review=review)
+
 
 # 상품 등록
 @application.route("/products/enroll")
