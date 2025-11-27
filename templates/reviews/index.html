@@ -1,118 +1,81 @@
-<!--리뷰 전체 조회-->
+<!-- 리뷰 전체 조회 -->
 <!DOCTYPE html>
 <html lang="ko">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Ewha Market | 전체 리뷰조회</title>
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='styles/global.css') }}"
-    />
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='styles/review.index.css') }}"
-    />
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='styles/auth.css') }}"
-    />
-  </head>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ewha Market | 전체 리뷰조회</title>
 
-  <body>
-    <header>
-      <div class="logo">
-        <img
-          src="{{ url_for('static', filename='image/Market-logo.png') }}"
-          alt="Ewha Market"
-        />
-      </div>
-      <nav>
-        <ul class="nav-menu">
-          <li><a href="{{ url_for('home') }}">상품 조회</a></li>
-          <li>
-            <a href="{{ url_for('reviews_index') }}" class="active"
-              >리뷰 조회</a
-            >
-          </li>
-          <li><a href="{{ url_for('reviews_write') }}">리뷰 등록</a></li>
-          <li><a href="{{ url_for('products_enroll') }}">상품 등록</a></li>
-          {% if session['id'] %}
-          <li>
-            <a href="{{ url_for('mypage_index') }}"
-              ><b>{{ session['id'] }}님 반갑습니다!</b></a
-            >
-          </li>
-          <li>
-            <a href="/logout"> 로그아웃 </a>
-          </li>
-          {% else %}
-          <li>
-            <a href="{{ url_for('login') }}">회원가입/로그인</a>
-          </li>
-          {% endif %}
-        </ul>
-      </nav>
-    </header>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles/global.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles/review.index.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles/auth.css') }}">
+</head>
 
-    <main class="review-container">
-      <div class="page">
-        <section id="review">
-          <h2 class="title">전체 리뷰조회</h2>
-          <button class="review-count">My review : 3</button>
+<body>
+<header>
+  <div class="logo">
+    <img src="{{ url_for('static', filename='image/Market-logo.png') }}" alt="Ewha Market">
+  </div>
+  <nav>
+    <ul class="nav-menu">
+      <li><a href="{{ url_for('home') }}">상품 조회</a></li>
+      <li><a href="{{ url_for('reviews_index') }}" class="active">리뷰 조회</a></li>
+      <li><a href="{{ url_for('reviews_write') }}">리뷰 등록</a></li>
+      <li><a href="{{ url_for('products_enroll') }}">상품 등록</a></li>
+      {% if session['id'] %}
+      <li><a href="{{ url_for('mypage_index') }}"><b>{{ session['id'] }}님 반갑습니다!</b></a></li>
+      <li><a href="/logout"> 로그아웃 </a></li>
+      {% else %}
+      <li><a href="{{ url_for('login') }}">회원가입/로그인</a></li>
+      {% endif %}
+    </ul>
+  </nav>
+</header>
 
-          <!-- 리뷰 카드 리스트 -->
-          <div class="card-container">
-            <div class="review-card">
-              <a href="./reviews/detail.html" style="all: unset">
-                <div class="review-title">나의 첫 러닝용 운동화</div>
-                <div class="border-container">
-                  <img
-                    src="https://i.pinimg.com/736x/c0/fc/82/c0fc8224b268ad56c9407109c96c357c.jpg"
-                    alt="아디다스 운동화"
-                  />
-                  <div class="stars">★★★★★</div>
+<main class="review-container">
+  <div class="page">
+    <section id="review">
+      <h2 class="title">전체 리뷰조회</h2>
+      <button class="review-count">전체 리뷰 : {{ reviews|length }}</button>
+
+      <!-- ★ 리뷰 카드 리스트 -->
+      <div class="card-container">
+
+        {% if reviews %}
+          {% for rid, r in reviews %}
+          <div class="review-card">
+            <a href="{{ url_for('review_detail', review_id=rid) }}" style="all: unset; cursor: pointer;">
+              
+              <div class="review-title">{{ r.title }}</div>
+
+              <div class="border-container">
+                <img 
+                  src="{{ r.images[0] if r.images else '/static/image/default.png' }}"
+                  alt="review image"
+                />
+
+                <div class="stars">
+                  {% for i in range(1, 6) %}
+                    {% if r.rating >= i %}
+                      ★
+                    {% else %}
+                      ☆
+                    {% endif %}
+                  {% endfor %}
                 </div>
-              </a>
-            </div>
-
-            <div class="review-card">
-              <a href="./reviews/detail.html" style="all: unset">
-                <div class="review-title">이번 겨울 딱 맞는 맨투맨!</div>
-                <div class="border-container">
-                  <img
-                    src="https://i.pinimg.com/736x/72/ca/b6/72cab6346a71277a9e1b003ae6a35e71.jpg"
-                    alt="맨투맨"
-                  />
-                  <div class="stars">★★★☆☆</div>
-                </div>
-              </a>
-            </div>
-
-            <div class="review-card">
-              <a href="{{ url_for('reviews_detail') }}" style="all: unset">
-                <div class="review-title">아기가 있는 집 인테리어</div>
-                <div class="border-container">
-                  <img
-                    src="https://i.pinimg.com/736x/81/91/90/819190a44a6533f525664562240835b7.jpg"
-                    alt="공기청정기"
-                  />
-                  <div class="stars">★★★★☆</div>
-                </div>
-              </a>
-            </div>
+              </div>
+            </a>
           </div>
-        </section>
-        <div class="pagination">
-          <a href="#" class="active">1</a>
-          <a href="#">2</a>
-          <a href="#">3</a>
-          <a href="#">4</a>
-          <a href="#">&gt;</a>
-        </div>
-      </div>
-    </main>
+          {% endfor %}
+        {% else %}
+          <p>등록된 리뷰가 없습니다.</p>
+        {% endif %}
 
-    <footer>@cloud9</footer>
-  </body>
+      </div>
+    </section>
+  </div>
+</main>
+
+<footer>@cloud9</footer>
+</body>
 </html>

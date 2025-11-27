@@ -87,3 +87,28 @@ class DBhandler:
             if key_value == name:
                 target_value=res.val()
         return target_value
+
+    # ----------------------------------------------------
+    # 리뷰 관련 함수
+    # ----------------------------------------------------
+    def insert_review(self, review_data):
+        self.db.child("reviews").push(review_data)
+        return True
+    def get_all_reviews(self):
+        return self.db.child("reviews").get().val()
+
+    def get_review_by_id(self, rid):
+        return self.db.child("reviews").child(rid).get().val()
+
+    def get_review_by_id(self, review_id): #상세조회용 함수
+        reviews = self.db.child("reviews").get()
+
+        if not reviews.val():
+            return None
+
+        for r in reviews.each():
+            if r.key() == review_id:
+                return r.val()
+
+        return None
+

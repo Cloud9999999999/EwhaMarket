@@ -4,6 +4,10 @@ import hashlib
 import sys
 import os
 import math
+from datetime import datetime             
+import uuid                                
+from werkzeug.utils import secure_filename
+
 
 application = Flask(__name__)
 application.config["SECRET_KEY"] = "helloosp"
@@ -60,10 +64,86 @@ def reviews_index():
 def reviews_write():
     return render_template("reviews/write-review.html")
 
-# 리뷰 상세 
-@application.route("/reviews/detail")
-def reviews_detail():
-    return render_template("reviews/detail.html")
+# 리뷰 전체 조회 API
+@application.route("/api/reviews", methods=["GET"])
+def get_all_reviews():
+    reviews = DB.get_all_reviews()
+
+    if not reviews:
+        return jsonify([]), 200
+    
+    # Firebase는 dict 형태라서 리스트로 변환
+    review_list = []
+    for rid, rdata in reviews.items():
+        rdata["id"] = rid
+        review_list.append(rdata)
+
+    return jsonify(review_list), 200
+
+# 리뷰 상세 조회 API
+@application.route("/api/reviews/<review_id>", methods=["GET"])
+def get_review_detail(review_id):
+    review = DB.get_review_by_id(review_id)
+
+    if review:
+        review["id"] = review_id
+        return jsonify(review), 200
+    
+    return jsonify({"error": "review not found"}), 404
+
+#리뷰 등록 
+@application.route("/reviews/submit", methods=['POST'])
+def review_submit_post():
+
+    # ★ 로그인 필요 시 사용
+    user_id = session.get("id", "guest")
+
+    # 1) form 데이터 읽기
+    product_id = request.form.get("product_id")
+    rating = request.form.get("rating")
+    title = request.form.get("title", "")
+    content = request.form.get("content", "")
+
+    if not product_id or not rating or not content:
+        return jsonify({"success": False, "error": "필수 항목 누락"}), 400
+
+    # 2) 이미지 처리
+    images = request.files.getlist("images")
+    saved_paths = []
+
+    for img in images:
+        if img.filename != "":
+            filename = secure_filename(f"{uuid.uuid4().hex}_{img.filename}")
+            save_path = os.path.join(UPLOAD_FOLDER, filename)
+            img.save(save_path)
+            saved_paths.append(f"/static/image/{filename}")
+
+    # 3) DB 저장
+    review_data = {
+        "product_id": product_id,
+        "user_id": user_id,
+        "rating": float(rating),
+        "title": title,
+        "content": content,
+        "images": saved_paths,
+        "created_at": str(datetime.utcnow())
+    }
+
+    DB.insert_review(review_data)      
+
+    return jsonify({"success": True})
+    
+# 리뷰 상세 조회
+@application.route("/reviews/detail/<review_id>")
+def review_detail(review_id):
+
+    review = DB.get_review_by_id(review_id)
+
+    if not review:
+        return "리뷰를 찾을 수 없습니다.", 404
+
+    return render_template("reviews/detail.html", review=review)
+
 
 # 상품 등록
 @application.route("/products/enroll")
