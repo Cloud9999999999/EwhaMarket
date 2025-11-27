@@ -92,9 +92,5 @@ class DBhandler:
     # 리뷰 관련 함수
     # ----------------------------------------------------
     def insert_review(self, review_data):
-        """ 리뷰 한 개 등록 """
-        try:
-            self.db.child("reviews").push(review_data)
-            return True
-        except:
-            return False
+        self.db.child("reviews").push(review_data)
+        return True
