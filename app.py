@@ -154,7 +154,18 @@ def products_enroll():
 @application.route("/products/detail/<name>")
 def products_detail(name):
     data = DB.get_item_byname(str(name))
-    return render_template("products/detail.html", name=name, data=data)
+
+    user_id = session.get("id")
+    is_favorite = False
+    if user_id:
+        is_favorite = DB.is_favorite(user_id, str(name))
+
+    return render_template(
+        "products/detail.html",
+        name=name,
+        data=data,
+        is_favorite=is_favorite,
+    )
 
 
 

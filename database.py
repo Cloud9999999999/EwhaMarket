@@ -141,7 +141,24 @@ class DBhandler:
 
         return False
     
-    
+    # 찜 목록
+    def add_favorite(self, user_id: str, item_name: str):
+        self.db.child("favorites").child(user_id).child(item_name).set(True)
+        return True
+
+    def remove_favorite(self, user_id: str, item_name: str):
+        self.db.child("favorites").child(user_id).child(item_name).remove()
+        return True
+
+    def is_favorite(self, user_id: str, item_name: str) -> bool:
+        val = self.db.child("favorites").child(user_id).child(item_name).get().val()
+        return bool(val)
+
+    def get_favorites(self, user_id: str):
+        data = self.db.child("favorites").child(user_id).get().val()
+        if not data:
+            return []
+        return list(data.keys())
     
 
     # ----------------------------------------------------
