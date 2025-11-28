@@ -154,24 +154,124 @@ def products_enroll():
 @application.route("/products/detail/<name>")
 def products_detail(name):
     data = DB.get_item_byname(str(name))
-    return render_template("products/detail.html", name=name, data=data)
+
+    user_id = session.get("id")
+    is_favorite = False
+    if user_id:
+        is_favorite = DB.is_favorite(user_id, str(name))
+
+    return render_template(
+        "products/detail.html",
+        name=name,
+        data=data,
+        is_favorite=is_favorite,
+    )
+
+
 
 # 마이페이지
 @application.route("/mypage")
 def mypage_index():
-    return render_template("mypage/index.html")
+    user_id = session.get("id")
+    if not user_id:
+        flash("로그인 후 이용 가능합니다.")
+        return redirect(url_for("login"))
 
-# 마이페이지 수정
-@application.route("/mypage/edit")
+    user = DB.get_user(user_id)   
+
+    if not user:
+        flash("사용자 정보를 찾을 수 없습니다.")
+        return redirect(url_for("home"))
+
+    return render_template("mypage/index.html", user=user)
+
+
+# 마이페이지-2 (회원 정보 수정 페이지)
+@application.route("/mypage/edit-info", methods=['GET', 'POST'])
 def mypage_edit():
-    return render_template("mypage/edit-info.html")
+    user_id = session.get("id")    # 로그인한 사용자의 id
+    if not user_id:
+        return redirect(url_for("login"))
+    
+    # 페이지 요청(GET): 수정 폼 표시
+    if request.method == "GET":
+        user = DB.get_user(user_id) or {}
+        
+        return render_template(
+            "mypage/edit-info.html",
+            username=user.get("username") or "",
+            user_id=user_id,
+            email=user.get("email") or "",
+            number=user.get("number") or "",
+            password="",
+            checkpw="",
+            total=0,
+            page_count=0,
+        )
+    
+    # POST: 수정 저장
+    username = request.form.get('username')
+    form_id  = request.form.get('id')
+    email    = request.form.get('email')
+    number   = request.form.get('number')
+    password = request.form.get('password')
+    checkpw  = request.form.get('checkpw')
+    
+    errors = []
+    if not username:
+        errors.append("이름을 입력해주세요.")
+    if not form_id:
+        errors.append("아이디를 입력해주세요.")
+    if form_id != user_id:
+        errors.append("아이디 값이 올바르지 않습니다.")
+    if not email:
+        errors.append("이메일을 입력해주세요.")
+    if not number:
+        errors.append("전화번호를 입력해주세요.")
+    if not password:
+        errors.append("비밀번호를 입력해주세요.")
+    if password != checkpw:
+        errors.append("비밀번호와 비밀번호 확인이 일치하지 않습니다.")
+    
+    if errors:
+        for msg in errors:
+            flash(msg, "error")
+        return render_template(
+            "mypage/edit-info.html",
+            username=username or "",
+            user_id=user_id,
+            email=email or "",
+            number=number or "",
+            password=password or "",
+            checkpw=checkpw or "",
+            total=0,
+            page_count=0,
+        )
+
+    pw_hash = hashlib.sha256(password.encode('utf-8')).hexdigest()
+
+    update_data = {
+        "username": username,
+        "email": email,
+        "number": number,
+        "pw": pw_hash,
+    }
+    DB.update_user(user_id, update_data)
+    session["username"] = username
+    
+    flash("회원 정보가 수정되었습니다.", "success")
+    return redirect(url_for("mypage_index"))
+
+# (->다시 수정들어가면 이전 정보가 안뜸.. firebase에 업데이트는 되어있음. 로그인을 안해서??)
+# ----------------------------------------------------
+
 
 # 로그인 / 회원가입
 @application.route("/login")
 def login():
     return render_template("auth/login.html")
 
-@application.route("/login_confirm", methods=['POST'])
+@application.route("/", methods=['POST'])
 def login_user():
     id_=request.form['id']
     pw=request.form['pw']
@@ -211,8 +311,6 @@ def logout_user():
     session.clear()
     return redirect(url_for('home'))
 
-if __name__ == "__main__":
-    application.run(host="0.0.0.0", debug=True)
 
 
 # ----------------------------------------------------

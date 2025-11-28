@@ -1,10 +1,23 @@
 import pyrebase
-import json
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+config = {
+    "apiKey": os.getenv("FIREBASE_API_KEY"),
+    "authDomain": os.getenv("FIREBASE_AUTH_DOMAIN"),
+    "databaseURL": os.getenv("FIREBASE_DB_URL"),
+    "projectId": os.getenv("FIREBASE_PROJECT_ID"),
+    "storageBucket": os.getenv("FIREBASE_STORAGE_BUCKET"),
+    "messagingSenderId": os.getenv("FIREBASE_SENDER_ID"),
+    "appId": os.getenv("FIREBASE_APP_ID"),
+    "measurementId": os.getenv("FIREBASE_MEASUREMENT_ID")
+}
+
 
 class DBhandler:
     def __init__(self):
-        with open('./authentication/firebase_auth.json') as f:
-            config=json.load(f)
         firebase = pyrebase.initialize_app(config)
         self.db = firebase.database()
         
@@ -16,7 +29,9 @@ class DBhandler:
         user_info = {
             "id": data['id'],
             "pw": pw,
-            "email": data['email'] 
+            "email": data['email'],
+            "username" : data['username'],
+            "number": data['number']
         }
         
         #중복체크
@@ -26,7 +41,7 @@ class DBhandler:
         else:
             return False
 
-    #중복체크
+        #중복체크
     def user_duplicate_check(self, id_string):
         users = self.db.child("user").get()
         
@@ -35,9 +50,13 @@ class DBhandler:
         else:
             for res in users.each():
                 value = res.val()
-                if value['id'] == id_string:
+                user_id = value.get('id')
+                if user_id is None:
+                    continue
+                if user_id == id_string:
                     return False
-     
+        return True
+    
     def find_user(self, id_, pw_):
         users = self.db.child("user").get()
         target_value=[]
@@ -46,11 +65,14 @@ class DBhandler:
 
         for res in users.each():
             value = res.val()
-            if value['id'] == id_ and value['pw'] == pw_:
+            user_id = value.get('id')
+            user_pw = value.get('pw')
+            if user_id is None or user_pw is None:
+                continue
+            if user_id == id_ and user_pw == pw_:
                 return True
             
         return False
-    
     
     # ----------------------------------------------------
     # 상품 관련 함수
@@ -87,6 +109,57 @@ class DBhandler:
             if key_value == name:
                 target_value=res.val()
         return target_value
+    
+    
+    # ----------------------------------------------------
+    # 마이페이지
+    # ----------------------------------------------------
+    # 회원 정보/사용자 관련
+    def get_user(self, user_id: str):
+        users = self.db.child("user").get()
+        if not users.val():
+            return None
+
+        for res in users.each():
+            value = res.val()
+            if value.get("id") == user_id:
+                return value
+
+        return None
+    
+    def update_user(self, user_id: str, data: dict):
+        users = self.db.child("user").get()
+        if not users.val():
+            return False
+
+        for res in users.each():
+            key = res.key()
+            value = res.val()
+            if value.get("id") == user_id:
+                self.db.child("user").child(key).update(data)
+                return True
+
+        return False
+    
+    # 찜 목록
+    def add_favorite(self, user_id: str, item_name: str):
+        self.db.child("favorites").child(user_id).child(item_name).set(True)
+        return True
+
+    def remove_favorite(self, user_id: str, item_name: str):
+        self.db.child("favorites").child(user_id).child(item_name).remove()
+        return True
+
+    def is_favorite(self, user_id: str, item_name: str) -> bool:
+        val = self.db.child("favorites").child(user_id).child(item_name).get().val()
+        return bool(val)
+
+    def get_favorites(self, user_id: str):
+        data = self.db.child("favorites").child(user_id).get().val()
+        if not data:
+            return []
+        return list(data.keys())
+    
 
     # ----------------------------------------------------
     # 리뷰 관련 함수
@@ -111,4 +184,3 @@ class DBhandler:
                 return r.val()
 
         return None
-
