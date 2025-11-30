@@ -117,6 +117,20 @@ textarea {
   background-color: #ffffff;
 }
 
+.photo-preview {
+  width: 100px;
+  height: 100px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #ccc;
+  font-size: 30px;
+  background-color: #f9f9f9;
+  margin-top: 20px;
+}
+
 /* 하단 액션 버튼 그룹 */
 .action-buttons {
   display: flex;

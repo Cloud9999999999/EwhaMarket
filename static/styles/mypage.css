@@ -257,6 +257,11 @@
   font-size: 20px;
   color: #00462a;
 }
+
+.form-group input:focus::placeholder {
+  color: transparent;
+}
+
 .id-input {
   height: 48px;
   border: none;

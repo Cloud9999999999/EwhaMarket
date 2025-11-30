@@ -114,3 +114,10 @@ footer p {
     --page-y: 24px;
   }
 }
+
+input[type="number"]:hover::-webkit-inner-spin-button,
+input[type="number"]:hover::-webkit-outer-spin-button,
+input[type="number"]:focus::-webkit-inner-spin-button,
+input[type="number"]:focus::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+}
