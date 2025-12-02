@@ -59,7 +59,7 @@
     <main class="container">
       <div class="page">
         <section>
-          <!-- ⭐⭐⭐ form 태그 ⭐⭐⭐ -->
+          <!--  form 태그  -->
           <form id="reviewForm" enctype="multipart/form-data">
             <div class="review-container">
               <!-- 상단: 상품정보 + 파일업로드 -->
@@ -92,7 +92,8 @@
                       type="text"
                       class="input-field"
                       name="user_id"
-                      placeholder="아이디 입력"
+                      value="{{ session['id'] }}"
+                      readonly
                     />
                   </div>
                 </div>
@@ -163,7 +164,7 @@
       let selectedFiles = [];
       let rating = 0;
 
-      /* ⭐ 별점 기능 */
+      /*  별점 기능 */
       const stars = document.querySelectorAll("#starRating span");
       stars.forEach((star, index) => {
         star.addEventListener("click", () => {
@@ -172,7 +173,7 @@
         });
       });
 
-      /* ⭐ 파일 업로드 */
+      /*  파일 업로드 */
       const uploadArea = document.getElementById("fileUploadArea");
       const chooseBtn = document.getElementById("chooseBtn");
       const maxFiles = 10;
@@ -219,7 +220,7 @@
         handleFiles(e.dataTransfer.files);
       });
 
-      /* ⭐ 리뷰 등록 */
+      /*  리뷰 등록 */
       document
         .querySelector(".submit-btn")
         .addEventListener("click", async () => {
