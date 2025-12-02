@@ -32,7 +32,6 @@
 /* --- 카드 레이아웃 --- */
 .product-list {
   display: grid;
-  /* 4열 고정 */
   grid-template-columns: repeat(4, 1fr);
   gap: 24px;
 }
@@ -40,16 +39,13 @@
 .product-card {
   position: relative;
   border: 1px solid #ddd;
-  border-radius: 12px; /* 모서리 둥글게 */
+  border-radius: 12px;
   background-color: #fff;
-  /* padding을 유지하면서 내용을 배치하기 위해 flex 사용 */
   display: flex;
   flex-direction: column;
   padding: 16px;
   text-align: left;
   transition: all 0.2s ease;
-
-  /* 정사각형 형태로 보이도록 aspect-ratio 사용 (CSS3) */
   aspect-ratio: 1 / 1;
   box-sizing: border-box;
 }
@@ -62,7 +58,6 @@
 /* 이미지 박스 추가 */
 .image-box {
   width: 100%;
-  /* 카드의 나머지 공간 비율에 맞게 이미지 높이 지정 */
   height: 70%;
   display: flex;
   justify-content: center;
@@ -73,29 +68,28 @@
 .product-card img {
   width: auto;
   max-width: 100%;
-  max-height: 100%; /* image-box 높이에 맞춤 */
-  object-fit: contain; /* 비율 유지하며 이미지 표시 */
+  max-height: 100%;
+  object-fit: contain;
   border-radius: 6px;
 }
 
 /* 텍스트 정보 (상품명, 가격) 그룹 */
 .text-info {
-  /* 이미지와 하트 버튼을 제외한 남은 공간을 차지 */
   flex-grow: 1;
   display: flex;
   flex-direction: column;
-  justify-content: flex-end; /* 텍스트를 카드 하단에 붙임 */
-  padding-right: 30px; /* 하트 버튼 공간 확보 */
+  justify-content: flex-end;
+  padding-right: 30px;
 }
 
 .product-card h3 {
   font-size: 16px;
-  margin: 8px 0 4px; /* 이미지와의 간격 조정 */
+  margin: 8px 0 4px;
   text-align: left;
 }
 
 .product-card p {
-  color: #333; /* 가격은 진하게 */
+  color: #333;
   font-weight: bold;
   font-size: 16px;
   text-align: left;
@@ -108,25 +102,24 @@
 
 .like-icon {
   position: absolute;
-  /* 요청: 오른쪽 아래 모서리에 위치 */
   bottom: 16px;
   right: 16px;
 
   display: inline-block;
-  width: 24px; /* 크기 키움 */
-  height: 24px; /* 크기 키움 */
+  width: 24px;
+  height: 24px;
   cursor: pointer;
   flex: 0 0 auto;
 
   /* 배경 이미지 (SVG 사용) */
-  background-image: url("../assets/icon/heart.svg");
+  background-image: url("../image/icon/heart.svg");
   background-size: cover;
   transition: transform 0.2s ease;
 }
 
 .like-toggle:checked + .like-icon {
   /* 하트가 채워진 이미지 (활성화 상태) */
-  background-image: url("../assets/icon/heart-fill.svg");
+  background-image: url("../image/icon/heart-fill.svg");
 }
 
 /* --- 페이지네이션 --- */

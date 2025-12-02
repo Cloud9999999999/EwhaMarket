@@ -58,20 +58,6 @@
             </div>
 
             <div class="form-row">
-              <label for="sellerId" class="form-label">판매자ID</label>
-              <div class="form-input-group">
-                <input 
-                  type="text" 
-                  id="sellerId" 
-                  name="sellerId" 
-                  required 
-                  placeholder="아이디 입력"
-                  value="{{ session['id'] if session.get('id') else '' }}"
-                />
-              </div>
-            </div>
-
-            <div class="form-row">
               <label for="price" class="form-label">가격</label>
               <div class="form-input-group">
                 <input type="number" id="price" name="price" required placeholder="숫자만 입력" />
@@ -112,8 +98,25 @@
               <div class="form-input-group">
                 <select id="category" name="category" style="width: 150px">
                   <option value="clothes">의류</option>
-                  <option value="electronics">가전</option>
-                  <option value="books">도서</option>
+                  <option value="shoes">신발</option>
+                  <option value="bags_wallets">가방/지갑</option>
+                  <option value="watches">시계</option>
+                  <option value="jewelry">쥬얼리/액세서리</option>
+                  <option value="digital">디지털/가전</option>
+                  <option value="sports">스포츠/레저</option>
+                  <option value="vehicle">차량/오토바이</option>
+                  <option value="star_goods">스타굿즈</option>
+                  <option value="kidult">키덜트/취미</option>
+                  <option value="art">예술/희귀/수집품</option>
+                  <option value="music_instruments">음반/악기</option>
+                  <option value="books">도서/티켓/문구</option>
+                  <option value="beauty">뷰티/미용</option>
+                  <option value="furniture">가구/인테리어</option>
+                  <option value="kitchen">생활/주방용품</option>
+                  <option value="tools">공구/산업용품</option>
+                  <option value="food">식품</option>
+                  <option value="baby">유아동/출산</option>
+                  <option value="pet">반려동물용품</option>
                   <option value="etc">기타</option>
                 </select>
               </div>

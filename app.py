@@ -5,7 +5,7 @@ import sys
 import os
 import math
 from datetime import datetime             
-import uuid                                
+import uuid         
 from werkzeug.utils import secure_filename
 from dotenv import load_dotenv
 load_dotenv()
@@ -16,7 +16,7 @@ application = Flask(__name__)
 application.config["SECRET_KEY"] = "helloosp"
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-UPLOAD_FOLDER = os.path.join(BASE_DIR, "static", "image")
+UPLOAD_FOLDER = os.path.join(BASE_DIR, "static", "image", "products")
 
 if not os.path.exists(UPLOAD_FOLDER):
     os.makedirs(UPLOAD_FOLDER)
@@ -29,33 +29,55 @@ DB = DBhandler()
 @application.route("/")
 def home():
     page = request.args.get("page", 0, type=int)
+    sort_type = request.args.get("sort", "new")
 
-    # 1. DB에서 데이터 가져오기
     data = DB.get_items()
     if data is None:
         data = {}
+    
+    items_list = []
+    for key, value in data.items():
+        value['name'] = key
+        if "id" in session:
+            value['is_liked'] = DB.is_heart(session['id'], key)
+        else:
+            value['is_liked'] = False
+        items_list.append(value)
 
-    # 2. 전체 상품 수 및 페이지 수 계산
-    item_counts = len(data)
+    if sort_type == "low":
+        items_list.sort(key=lambda x: int(x.get('price', 0)))
+    elif sort_type == "high":
+        items_list.sort(key=lambda x: int(x.get('price', 0)), reverse=True)
+    elif sort_type == "popular":
+        items_list.sort(key=lambda x: int(x.get('like_count', 0)), reverse=True)
+    else:
+        items_list.sort(key=lambda x: x.get('reg_date', ''), reverse=True)
+
+    item_counts = len(items_list)
     per_page = 8
     page_count = math.ceil(item_counts / per_page)
-
-    # 3. 데이터 슬라이싱 (page 변수 사용)
     start_idx = per_page * page
     end_idx = per_page * (page + 1)
 
-    data_list = list(data.items())
-    current_page_data = data_list[start_idx:end_idx]
+    current_page_data = items_list[start_idx:end_idx]
 
-    # 4. 템플릿 렌더링
     return render_template(
         "index.html",
         datas=current_page_data,
         page=page,
         page_count=page_count,
         total=item_counts,
-        limit=per_page
+        limit=per_page,
+        sort_type=sort_type
     )
+    
+@application.route("/show_heart/<name>", methods=['GET'])
+def show_heart(name):
+    if "id" not in session:
+        return jsonify({"msg": "로그인이 필요합니다."}), 401
+
+    my_heart = DB.toggle_heart(session['id'], name)
+    return jsonify({'my_heart': my_heart})
 
 # 리뷰 목록
 @application.route("/reviews")
@@ -162,6 +184,11 @@ def get_my_reviews():
 # 상품 등록
 @application.route("/products/enroll")
 def products_enroll():
+    # 로그인 여부 확인
+    if "id" not in session:
+        flash("상품을 등록하려면 로그인이 필요합니다.")
+        return redirect(url_for("login"))
+        
     return render_template("products/enroll.html")
 
 # 상품 상세
@@ -169,18 +196,16 @@ def products_enroll():
 def products_detail(name):
     data = DB.get_item_byname(str(name))
 
-    user_id = session.get("id")
-    is_favorite = False
-    if user_id:
-        is_favorite = DB.is_favorite(user_id, str(name))
+    is_liked = False
+    if "id" in session:
+        is_liked = DB.is_heart(session['id'], str(name))
 
     return render_template(
         "products/detail.html",
         name=name,
         data=data,
-        is_favorite=is_favorite,
+        is_liked=is_liked,
     )
-
 
 
 # 마이페이지
@@ -196,9 +221,23 @@ def mypage_index():
     if not user:
         flash("사용자 정보를 찾을 수 없습니다.")
         return redirect(url_for("home"))
+    
+    # 내가 등록한 상품 가져오기 & 최신순 정력
+    my_items = DB.get_items_byseller(user_id)
+    my_items.sort(key=lambda x: x.get('reg_date', ''), reverse=True)
+    
+    return render_template("mypage/index.html", user=user, my_items=my_items)
 
-    return render_template("mypage/index.html", user=user)
-
+# 마이페이지 - 상품 등록 내역 보기
+@application.route("/mypage/products")
+def my_products():
+    user_id = session.get("id")
+    
+    if not user_id: return redirect(url_for("login"))
+    my_items = DB.get_items_byseller(user_id)
+    my_items.sort(key=lambda x: x.get('reg_date', ''), reverse=True)
+    
+    return render_template("mypage/my_products.html", my_items=my_items)
 
 # 마이페이지-2 (회원 정보 수정 페이지)
 @application.route("/mypage/edit-info", methods=['GET', 'POST'])
@@ -332,6 +371,10 @@ def logout_user():
 # ----------------------------------------------------
 @application.route("/reg_item_submit_post", methods=['POST'])
 def reg_item_submit_post():
+    # 로그인 확인
+    if "id" not in session:
+        return redirect(url_for("login"))
+
     # 1. 이미지 파일 받기
     image_file = request.files.get("productImage")
     data = request.form
@@ -346,8 +389,10 @@ def reg_item_submit_post():
 
     # 3. DB 저장 함수 호출
     product_name = data.get('productName')
+    seller_id = session.get('id')  # 세션에서 판매자 ID 가져오기
     
-    if DB.insert_item(product_name, data, filename):
+    # DB 함수 호출 시 seller_id를 추가로 전달
+    if DB.insert_item(product_name, data, filename, seller_id):
         flash(f"상품 '{product_name}' 등록이 완료되었습니다.")
         return redirect(url_for('products_enroll'))
     else:
