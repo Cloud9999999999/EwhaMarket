@@ -184,3 +184,20 @@ class DBhandler:
                 return r.val()
 
         return None
+    
+    #내가 쓴 리뷰만 조회 함수 추가
+    def get_reviews_by_user(self, user_id):
+        reviews = self.db.child("reviews").get()
+
+        if not reviews.val():
+            return []
+
+        result = []
+        for r in reviews.each():
+            data = r.val()
+            if data.get("user_id") == user_id:
+                item = data.copy()
+                item["id"] = r.key()
+                result.append(item)
+
+        return result
