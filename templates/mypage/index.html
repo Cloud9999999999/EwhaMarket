@@ -208,9 +208,10 @@
           </div>
         </div>
 
+        
         <!--상품 리뷰 작성 내역-->
         <div class="content-container2">
-          <div class="container-header">
+        <div class="container-header">
             <img
               src="{{ url_for('static', filename='image/icon/comment.svg') }}"
               alt="댓글 아이콘"
@@ -219,12 +220,11 @@
             <p class="content-font">상품 리뷰 작성 내역</p>
             <p class="num-font" id="myReviewCount">(0)</p>
           </div>
-          <div style="display: flex; flex-direction: column; gap: 12px">
-            <!--기존 실제 연동되게 일단 더미 등록 상품들 삭제-->>
+          <div id="myReviewList" style="display:flex; flex-direction:column; gap:12px;">
+            <p style="color:#888; font-size:14px;">불러오는 중...</p>
           </div>
         </div>
-        <button id="logout-button" class="logout-button">로그아웃</button>
-      </div>
+
     </section>
 
     <footer><p>@cloud9</p></footer>
@@ -234,5 +234,55 @@
         window.location.href = "{{ url_for('mypage_edit') }}";
       });
     </script>
+    <script>
+    async function loadMyReviews() {
+        const container = document.getElementById("myReviewList");
+        const counter = document.getElementById("myReviewCount");
+
+        try {
+            const res = await fetch("/api/my-reviews");
+            const reviews = await res.json();
+
+            // 리뷰가 없을 때
+            if (!Array.isArray(reviews) || reviews.length === 0) {
+               container.innerHTML = `<p style="padding:10px; color:#666">작성한 리뷰가 없습니다.</p>`;
+                counter.innerText = "(0)";
+                return;
+            }
+
+            // 리뷰 개수 표시
+            counter.innerText = `(${reviews.length})`;
+            container.innerHTML = "";
+
+            // 리뷰 하나씩 출력
+            reviews.forEach(r => {
+                const img = r.images?.length > 0 ? r.images[0] : "/static/image/default.png";
+
+                const card = `
+                    <div class="content-box"
+                         onclick="location.href='/reviews/detail/${r.id}'"
+                        style="cursor:pointer;">
+                    
+                        <p class="write-head" style="margin-bottom:4px">${r.product_id}</p>
+                        <p class="write-content" style="margin-bottom:4px">${r.title}</p>
+
+                        <div style="display:flex; justify-content:space-between">
+                            <p class="write-date">${r.created_at.slice(0,10)}</p>
+                            <img src="${img}" style="width:60px; height:60px; border-radius:8px;">
+                        </div>
+                    </div>
+            `   ;
+                container.insertAdjacentHTML("beforeend", card);
+            });
+
+        } catch (err) {
+            container.innerHTML = `<p style="color:red">리뷰를 불러오는 중 오류가 발생했습니다.</p>`;
+            console.error(err);
+        }
+    }
+
+    loadMyReviews();
+    </script>
+
   </body>
 </html>
