@@ -17,10 +17,13 @@
   <body>
     <header>
       <div class="logo">
-        <img
-          src="{{ url_for('static', filename='image/Market-logo.png') }}"
-          alt="Ewha Market"
-        />
+        <a href="{{ url_for('home') }}">
+          <img
+            src="{{ url_for('static', filename='image/Market-logo.png') }}"
+            alt="Ewha Market"
+            class="logo"
+          />
+        </a>
       </div>
       <nav>
         <ul class="nav-menu">
@@ -53,47 +56,98 @@
             <h2 class="section-title">전체 상품조회 (총 {{ total }}개)</h2>
 
             <div class="filter-bar">
-              <button class="filter">저가순</button>
-              <button class="filter">고가순</button>
-              <button class="filter">인기순</button>
-              <button class="filter">신상품순</button>
+              <button
+                class="filter {{ 'active' if sort_type == 'low' else '' }}"
+                onclick="location.href='{{ url_for('home', sort='low') }}'"
+              >
+                저가순
+              </button>
+              <button
+                class="filter {{ 'active' if sort_type == 'high' else '' }}"
+                onclick="location.href='{{ url_for('home', sort='high') }}'"
+              >
+                고가순
+              </button>
+              <button
+                class="filter {{ 'active' if sort_type == 'popular' else '' }}"
+                onclick="location.href='{{ url_for('home', sort='popular') }}'"
+              >
+                인기순
+              </button>
+              <button
+                class="filter {{ 'active' if sort_type == 'new' else '' }}"
+                onclick="location.href='{{ url_for('home', sort='new') }}'"
+              >
+                신상품순
+              </button>
             </div>
           </div>
 
           <div class="product-list">
-            {% if total > 0 %}
-                {% for key, value in datas %}
-                <div class="product-card" onclick="location.href='{{ url_for('products_detail', name=key) }}';" style="cursor:pointer;">
-                    <div class="image-box">
-                        <img src="{{ url_for('static', filename='image/' + value.img_path) }}" alt="{{ key }}">
-                    </div>
-                    <div class="text-info">
-                        <h3>{{ key }}</h3>
-                        <p>₩{{ value.price }}</p>
-                        <p style="font-size:0.8rem; color:gray;">{{ value.status }}</p>
-                    </div>
-                </div>
-                {% endfor %}
+            {% if total > 0 %} {% for item in datas %}
+            <div class="product-card">
+              <!-- 상품 이미지 및 정보 클릭 시 상세페이지 이동 -->
+              <div
+                class="image-box"
+                onclick="location.href='{{ url_for('products_detail', name=item.name) }}';"
+                style="cursor: pointer"
+              >
+                <img
+                  src="{{ url_for('static', filename='image/products/' + item.img_path) }}"
+                  alt="{{ item.name }}"
+                />
+              </div>
+              <div
+                class="text-info"
+                onclick="location.href='{{ url_for('products_detail', name=item.name) }}';"
+                style="cursor: pointer"
+              >
+                <h3>{{ item.name }}</h3>
+                <p>₩{{ item.price }}</p>
+                <p style="font-size: 0.8rem; color: gray">{{ item.status }}</p>
+              </div>
 
-            {% else %}
-                <p>등록된 상품이 없습니다.</p>
+              <!-- 하트 버튼 -->
+              <div class="like-wrapper-card">
+                <span id="count_{{ item.name }}" class="like-count"
+                  >{{ item.like_count }}</span
+                >
+                <input
+                  type="checkbox"
+                  id="like_{{ item.name }}"
+                  class="like-toggle"
+                  {%
+                  if
+                  item.is_liked
+                  %}checked{%
+                  endif
+                  %}
+                  onchange="toggleLike('{{ item.name }}')"
+                />
+                <label for="like_{{ item.name }}" class="like-icon"></label>
+              </div>
+            </div>
+            {% endfor %} {% else %}
+            <p>등록된 상품이 없습니다.</p>
             {% endif %}
           </div>
         </section>
 
         <div class="page-wrap">
-            <div class="page-nation">
-                <ul>
-                    {% for i in range(page_count) %}
-                    <li>
-                        <a href="{{ url_for('home', page=i) }}" 
-                          style="{{ 'background-color: #00462a; color: #fff;' if i == page else '' }}">
-                          {{ i + 1 }}
-                        </a>
-                    </li>
-                    {% endfor %}
-                </ul>
-            </div>
+          <div class="page-nation">
+            <ul>
+              {% for i in range(page_count) %}
+              <li>
+                <a
+                  href="{{ url_for('home', page=i) }}"
+                  style="{{ 'background-color: #00462a; color: #fff;' if i == page else '' }}"
+                >
+                  {{ i + 1 }}
+                </a>
+              </li>
+              {% endfor %}
+            </ul>
+          </div>
         </div>
       </div>
     </main>
@@ -101,14 +155,27 @@
     <footer><p>@cloud9</p></footer>
 
     <script>
-      const filterButtons = document.querySelectorAll(".filter");
-
-      filterButtons.forEach((button) => {
-        button.addEventListener("click", function () {
-          filterButtons.forEach((btn) => btn.classList.remove("active"));
-          this.classList.add("active");
-        });
-      });
+      function toggleLike(productName) {
+          fetch(`/show_heart/${productName}`)
+          .then(response => {
+              if (response.status === 401) {
+                  alert("로그인이 필요합니다.");
+                  document.getElementById(`like_${productName}`).checked = false;
+                  window.location.href = "/login";
+                  return null;
+              }
+              return response.json();
+          })
+          .then(data => {
+              if (data) {
+                  console.log("찜 상태 변경:", data.my_heart);
+                  const countSpan = document.getElementById(`count_${productName}`);
+                  if(countSpan) {
+                      countSpan.innerText = data.like_count;
+                  }
+          })
+          .catch(error => console.error('Error:', error));
+      }
     </script>
   </body>
 </html>
