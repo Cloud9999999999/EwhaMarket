@@ -99,7 +99,15 @@
             </ul>
 
             <div class="action-buttons">
-              <button class="review-btn">리뷰 보기</button>
+              <!--이 상품(name)에 대한 리뷰 작성 페이지로 이동 -->
+              <a
+                href="{{ url_for('reviews_write') }}?product={{ name }}&img={{ data.img_path }}"
+                class="review-btn"
+                >
+                리뷰 작성
+              </a>
+              <button class="zzim-btn">찜 등록</button>
+            </div>
 
               <div class="like-wrapper">
                 <input
