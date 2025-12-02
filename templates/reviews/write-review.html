@@ -64,10 +64,13 @@
                     <!-- 상단: 상품정보 + 파일업로드 -->
                     <div class="top-section">
                         <div class="product-info">
-                            <img src="../assets/products/운동화.jpeg" alt="제품 이미지" />
+                            <img src="{{ url_for('static', filename='image/' + img_path) }}" alt="제품 이미지" />
+
 
                             <div class="product-text">
-                                <b>아디다스 운동화</b>
+                                <b>{{ product }}</b>
+                                <input type="hidden" name="product_id" value="{{ product }}">
+
 
                                 <label>구매일:</label>
                                 <input
