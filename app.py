@@ -273,7 +273,6 @@ def mypage_edit():
         save_path = os.path.join(save_dir, filename)
         uploaded.save(save_path)
 
-        # DB에는 static 기준 상대경로만 저장
         update_data["profile_img"] = f"image/myprofile/{filename}"
     
     
