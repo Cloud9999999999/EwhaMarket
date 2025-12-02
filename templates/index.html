@@ -75,10 +75,13 @@
                     </div>
                     
                     <!-- 하트 버튼 -->
-                    <input type="checkbox" id="like_{{ item.name }}" class="like-toggle" 
-                           {% if item.is_liked %}checked{% endif %} 
-                           onchange="toggleLike('{{ item.name }}')">
-                    <label for="like_{{ item.name }}" class="like-icon"></label>
+                    <div class="like-wrapper-card">
+                      <span id="count_{{ item.name }}" class="like-count">{{ item.like_count }}</span>
+                        <input type="checkbox" id="like_{{ item.name }}" class="like-toggle" 
+                              {% if item.is_liked %}checked{% endif %} 
+                              onchange="toggleLike('{{ item.name }}')">
+                        <label for="like_{{ item.name }}" class="like-icon"></label>
+                    </div>
                 </div>
                 {% endfor %}
 
@@ -122,7 +125,10 @@
           .then(data => {
               if (data) {
                   console.log("찜 상태 변경:", data.my_heart);
-              }
+                  const countSpan = document.getElementById(`count_${productName}`);
+                  if(countSpan) {
+                      countSpan.innerText = data.like_count;
+                  }
           })
           .catch(error => console.error('Error:', error));
       }

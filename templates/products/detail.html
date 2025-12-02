@@ -103,6 +103,7 @@
                          {% if is_liked %}checked{% endif %} 
                          onchange="toggleLike('{{ name }}')">
                   <label for="like_detail" class="like-icon"></label>
+                  <span id="count_detail" class="like-count-detail">{{ data.like_count }}</span>
               </div>
             </div>
           </div>
@@ -129,6 +130,7 @@
           .then(data => {
               if (data) {
                   console.log("찜 상태 변경:", data.my_heart);
+                  document.getElementById("count_detail").innerText = data.like_count;
               }
           })
           .catch(error => console.error('Error:', error));

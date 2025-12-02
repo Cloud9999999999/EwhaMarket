@@ -168,12 +168,12 @@ class DBhandler:
             self.db.child("favorites").child(user_id).child(item_name).remove()
             new_count = max(0, current_like_count - 1)
             self.db.child("item").child(item_name).update({"like_count": new_count})
-            return False 
+            return False, new_count
         else:
             self.db.child("favorites").child(user_id).child(item_name).set(True)
             new_count = current_like_count + 1
             self.db.child("item").child(item_name).update({"like_count": new_count})
-            return True 
+            return True, new_count
 
     def is_heart(self, user_id, item_name):
         val = self.db.child("favorites").child(user_id).child(item_name).get().val()
