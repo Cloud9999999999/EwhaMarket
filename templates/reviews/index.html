@@ -1,81 +1,130 @@
-<!-- 리뷰 전체 조회 -->
+<!--리뷰 전체 조회-->
 <!DOCTYPE html>
 <html lang="ko">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Ewha Market | 전체 리뷰조회</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ewha Market | 전체 리뷰조회</title>
 
-  <link rel="stylesheet" href="{{ url_for('static', filename='styles/global.css') }}">
-  <link rel="stylesheet" href="{{ url_for('static', filename='styles/review.index.css') }}">
-  <link rel="stylesheet" href="{{ url_for('static', filename='styles/auth.css') }}">
-</head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/global.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/review.index.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/auth.css') }}" />
+  </head>
 
-<body>
-<header>
-  <div class="logo">
-    <img src="{{ url_for('static', filename='image/Market-logo.png') }}" alt="Ewha Market">
-  </div>
-  <nav>
-    <ul class="nav-menu">
-      <li><a href="{{ url_for('home') }}">상품 조회</a></li>
-      <li><a href="{{ url_for('reviews_index') }}" class="active">리뷰 조회</a></li>
-      <li><a href="{{ url_for('reviews_write') }}">리뷰 등록</a></li>
-      <li><a href="{{ url_for('products_enroll') }}">상품 등록</a></li>
-      {% if session['id'] %}
-      <li><a href="{{ url_for('mypage_index') }}"><b>{{ session['id'] }}님 반갑습니다!</b></a></li>
-      <li><a href="/logout"> 로그아웃 </a></li>
-      {% else %}
-      <li><a href="{{ url_for('login') }}">회원가입/로그인</a></li>
-      {% endif %}
-    </ul>
-  </nav>
-</header>
-
-<main class="review-container">
-  <div class="page">
-    <section id="review">
-      <h2 class="title">전체 리뷰조회</h2>
-      <button class="review-count">전체 리뷰 : {{ reviews|length }}</button>
-
-      <!-- ★ 리뷰 카드 리스트 -->
-      <div class="card-container">
-
-        {% if reviews %}
-          {% for rid, r in reviews %}
-          <div class="review-card">
-            <a href="{{ url_for('review_detail', review_id=rid) }}" style="all: unset; cursor: pointer;">
-              
-              <div class="review-title">{{ r.title }}</div>
-
-              <div class="border-container">
-                <img 
-                  src="{{ r.images[0] if r.images else '/static/image/default.png' }}"
-                  alt="review image"
-                />
-
-                <div class="stars">
-                  {% for i in range(1, 6) %}
-                    {% if r.rating >= i %}
-                      ★
-                    {% else %}
-                      ☆
-                    {% endif %}
-                  {% endfor %}
-                </div>
-              </div>
-            </a>
-          </div>
-          {% endfor %}
-        {% else %}
-          <p>등록된 리뷰가 없습니다.</p>
-        {% endif %}
-
+  <body>
+    <header>
+      <div class="logo">
+        <img src="{{ url_for('static', filename='image/Market-logo.png') }}" alt="Ewha Market" />
       </div>
-    </section>
-  </div>
-</main>
 
-<footer>@cloud9</footer>
-</body>
+      <nav>
+        <ul class="nav-menu">
+          <li><a href="{{ url_for('home') }}">상품 조회</a></li>
+          <li><a href="{{ url_for('reviews_index') }}" class="active">리뷰 조회</a></li>
+          <li><a href="{{ url_for('reviews_write') }}">리뷰 등록</a></li>
+          <li><a href="{{ url_for('products_enroll') }}">상품 등록</a></li>
+
+          {% if session['id'] %}
+          <li><a href="{{ url_for('mypage_index') }}"><b>{{ session['id'] }}님 반갑습니다!</b></a></li>
+          <li><a href="/logout">로그아웃</a></li>
+          {% else %}
+          <li><a href="{{ url_for('login') }}">회원가입/로그인</a></li>
+          {% endif %}
+        </ul>
+      </nav>
+    </header>
+
+    <main class="review-container">
+      <div class="page">
+        <section id="review">
+          <h2 class="title">전체 리뷰조회</h2>
+          <button class="review-count" id="reviewCount">My review : 0</button>
+          <div class="card-container" id="reviewList"></div>
+        </section>
+
+        <!-- ⭐ 페이지네이션 -->
+        <div class="pagination" id="pagination"></div>
+      </div>
+    </main>
+
+    <footer>@cloud9</footer>
+
+    <!-- ===================== JS 코드 추가 ===================== -->
+    <script>
+      const reviewContainer = document.getElementById("reviewList");
+      const pagination = document.getElementById("pagination");
+
+      let reviews = [];      // 전체 리뷰 데이터 저장
+      let currentPage = 1;   // 현재 페이지
+      const perPage = 6;     // ➜ 한 페이지 6개
+
+      // ⭐ 리뷰 불러오기 API
+      async function fetchReviews() {
+        try {
+          const res = await fetch("/api/reviews");
+          const data = await res.json();
+          reviews = data;
+
+          // 상단 "My review : n"
+          document.getElementById("reviewCount").innerText =
+            "전체 리뷰 : " + reviews.length;
+
+          renderPage();
+          renderPagination();
+
+        } catch (e) {
+          console.error("리뷰 로딩 실패:", e);
+        }
+      }
+
+      // ⭐ 페이지별 렌더링
+      function renderPage() {
+        reviewContainer.innerHTML = "";
+
+        const start = (currentPage - 1) * perPage;
+        const end = start + perPage;
+        const pageItems = reviews.slice(start, end);
+
+        pageItems.forEach((r) => {
+          const stars = "★★★★★".slice(0, r.rating) + "☆☆☆☆☆".slice(r.rating);
+
+          const img = r.images?.length > 0 ? r.images[0] : "/static/image/default.png";
+
+          const card = `
+            <div class="review-card">
+              <a href="/reviews/detail/${r.id}" style="all:unset; cursor:pointer;">
+                <div class="review-title">${r.title}</div>
+                <div class="border-container">
+                  <img src="${img}" alt="리뷰 이미지">
+                  <div class="stars">${stars}</div>
+                </div>
+              </a>
+            </div>
+          `;
+          reviewContainer.insertAdjacentHTML("beforeend", card);
+        });
+      }
+
+      // ⭐ 페이지네이션
+      function renderPagination() {
+        pagination.innerHTML = "";
+
+        const totalPages = Math.ceil(reviews.length / perPage);
+
+        for (let i = 1; i <= totalPages; i++) {
+          const btn = `<a href="#" class="${i === currentPage ? "active" : ""}" onclick="movePage(${i})">${i}</a>`;
+          pagination.insertAdjacentHTML("beforeend", btn);
+        }
+      }
+
+      function movePage(p) {
+        currentPage = p;
+        renderPage();
+        renderPagination();
+      }
+
+      // 페이지 로드 시 실행
+      fetchReviews();
+    </script>
+  </body>
 </html>
