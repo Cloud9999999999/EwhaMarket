@@ -61,9 +61,14 @@
             "
           >
             <img
-              src="{{ url_for('static', filename='image/icon/profile-img.svg') }}"
+              src="{{
+                    url_for('static', filename=user.profile_img)
+                    if user and user.profile_img
+                    else url_for('static', filename='image/myprofile/profile.jpg')
+                  }}"
               alt="프로필 이미지"
               class="profile-img"
+              id="profile-img"
             />
             <div>
               <div style="display: flex; flex-direction: row; gap: 12px">
@@ -71,6 +76,7 @@
                   <p>{{ user.username }}</p>
                   <!--username으로 바꿈-->
                 </div>
+                <!--method를 get으로 바꿈-->
                 <form action="{{ url_for('mypage_edit') }}" method="get">
                   <button class="edit-button" id="edit-button" type="submit">
                     프로필 수정하기
