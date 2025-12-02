@@ -17,10 +17,13 @@
   <body>
     <header>
       <div class="logo">
-        <img
-          src="{{ url_for('static', filename='image/Market-logo.png') }}"
-          alt="Ewha Market"
-        />
+        <a href="{{ url_for('home') }}">
+          <img
+            src="{{ url_for('static', filename='image/Market-logo.png') }}"
+            alt="Ewha Market"
+            class="logo"
+          />
+        </a>
       </div>
       <nav>
         <ul class="nav-menu">
@@ -151,29 +154,50 @@
         <!-- 상품 등록 내역 보기 -->
         <div class="content-container2">
           <div class="container-header">
-            <img src="{{ url_for('static', filename='image/icon/box.svg') }}" alt="박스 아이콘" class="content-icon" />
+            <img
+              src="{{ url_for('static', filename='image/icon/box.svg') }}"
+              alt="박스 아이콘"
+              class="content-icon"
+            />
             <p class="content-font">상품 등록 내역 보기</p>
             <p class="num-font">({{ my_items|length }})</p>
-            
+
             {% if my_items|length > 4 %}
-            <a href="{{ url_for('my_products') }}" style="margin-left:auto; font-size:14px; color:#666; text-decoration:none;">전체보기 ></a>
+            <a
+              href="{{ url_for('my_products') }}"
+              style="
+                margin-left: auto;
+                font-size: 14px;
+                color: #666;
+                text-decoration: none;
+              "
+              >전체보기 ></a
+            >
             {% endif %}
           </div>
 
           <div style="display: flex; flex-direction: column; gap: 12px">
             {% if my_items %}
-                <!-- 최대 4개까지만 반복 출력 -->
-                {% for item in my_items[:4] %}
-                <div class="content-box" onclick="location.href='{{ url_for('products_detail', name=item.name) }}';" style="cursor:pointer;">
-                  <p class="write-head" style="margin-bottom: 8px">{{ item.name }}</p>
-                  <div style="display:flex; justify-content:space-between;">
-                      <p class="write-content">{{ item.price }}원</p>
-                      <p class="write-date">등록일: {{ item.reg_date if item.reg_date else '날짜 정보 없음' }}</p>
-                  </div>
-                </div>
-                {% endfor %}
-            {% else %}
-                <p style="padding:10px; color:#666;">등록한 상품이 없습니다.</p>
+            <!-- 최대 4개까지만 반복 출력 -->
+            {% for item in my_items[:4] %}
+            <div
+              class="content-box"
+              onclick="location.href='{{ url_for('products_detail', name=item.name) }}';"
+              style="cursor: pointer"
+            >
+              <p class="write-head" style="margin-bottom: 8px">
+                {{ item.name }}
+              </p>
+              <div style="display: flex; justify-content: space-between">
+                <p class="write-content">{{ item.price }}원</p>
+                <p class="write-date">
+                  등록일: {{ item.reg_date if item.reg_date else '날짜 정보
+                  없음' }}
+                </p>
+              </div>
+            </div>
+            {% endfor %} {% else %}
+            <p style="padding: 10px; color: #666">등록한 상품이 없습니다.</p>
             {% endif %}
           </div>
         </div>

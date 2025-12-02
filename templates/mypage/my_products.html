@@ -13,33 +13,36 @@
       href="{{ url_for('static', filename='styles/mypage.css') }}"
     />
     <style>
-        /* 이 페이지에서만 쓰이는 간단한 스타일 */
-        .back-btn {
-            display: inline-block;
-            margin-bottom: 20px;
-            color: #00462a;
-            text-decoration: none;
-            font-weight: bold;
-        }
-        .back-btn:hover {
-            text-decoration: underline;
-        }
-        .full-list-container {
-            display: flex; 
-            flex-direction: column; 
-            gap: 12px;
-            margin-top: 20px;
-        }
+      /* 이 페이지에서만 쓰이는 간단한 스타일 */
+      .back-btn {
+        display: inline-block;
+        margin-bottom: 20px;
+        color: #00462a;
+        text-decoration: none;
+        font-weight: bold;
+      }
+      .back-btn:hover {
+        text-decoration: underline;
+      }
+      .full-list-container {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        margin-top: 20px;
+      }
     </style>
   </head>
   <body>
     <!-- 헤더 -->
     <header>
       <div class="logo">
-        <img
-          src="{{ url_for('static', filename='image/Market-logo.png') }}"
-          alt="Ewha Market"
-        />
+        <a href="{{ url_for('home') }}">
+          <img
+            src="{{ url_for('static', filename='image/Market-logo.png') }}"
+            alt="Ewha Market"
+            class="logo"
+          />
+        </a>
       </div>
       <nav>
         <ul class="nav-menu">
@@ -63,33 +66,44 @@
 
     <section id="container">
       <div class="mypage-container">
-        
         <!-- 뒤로가기 버튼 -->
-        <a href="{{ url_for('mypage_index') }}" class="back-btn">← 마이페이지로 돌아가기</a>
-        
-        <h2 class="mypage-font">내가 등록한 상품 전체 ({{ my_items|length }})</h2>
+        <a href="{{ url_for('mypage_index') }}" class="back-btn"
+          >← 마이페이지로 돌아가기</a
+        >
 
-        <div class="content-container2" style="margin-top:0;">
+        <h2 class="mypage-font">
+          내가 등록한 상품 전체 ({{ my_items|length }})
+        </h2>
+
+        <div class="content-container2" style="margin-top: 0">
           <div class="full-list-container">
-            {% if my_items %}
-                {% for item in my_items %}
-                <div class="content-box" onclick="location.href='{{ url_for('products_detail', name=item.name) }}';" style="cursor:pointer;">
-                  <p class="write-head" style="margin-bottom: 8px">
-                    {{ item.name }}
-                  </p>
-                  <div style="display:flex; justify-content:space-between;">
-                      <p class="write-content">{{ item.price }}원</p>
-                      <p class="write-content" style="color: #00462a;">{{ item.status }}</p>
-                      <p class="write-date">등록일: {{ item.reg_date if item.reg_date else '날짜 정보 없음' }}</p>
-                  </div>
-                </div>
-                {% endfor %}
-            {% else %}
-                <p style="padding:20px; text-align:center; color:#666;">등록한 상품이 없습니다.</p>
+            {% if my_items %} {% for item in my_items %}
+            <div
+              class="content-box"
+              onclick="location.href='{{ url_for('products_detail', name=item.name) }}';"
+              style="cursor: pointer"
+            >
+              <p class="write-head" style="margin-bottom: 8px">
+                {{ item.name }}
+              </p>
+              <div style="display: flex; justify-content: space-between">
+                <p class="write-content">{{ item.price }}원</p>
+                <p class="write-content" style="color: #00462a">
+                  {{ item.status }}
+                </p>
+                <p class="write-date">
+                  등록일: {{ item.reg_date if item.reg_date else '날짜 정보
+                  없음' }}
+                </p>
+              </div>
+            </div>
+            {% endfor %} {% else %}
+            <p style="padding: 20px; text-align: center; color: #666">
+              등록한 상품이 없습니다.
+            </p>
             {% endif %}
           </div>
         </div>
-
       </div>
     </section>
 

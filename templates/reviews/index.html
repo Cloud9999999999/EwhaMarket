@@ -6,26 +6,49 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Ewha Market | 전체 리뷰조회</title>
 
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles/global.css') }}" />
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles/review.index.css') }}" />
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles/auth.css') }}" />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='styles/global.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='styles/review.index.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='styles/auth.css') }}"
+    />
   </head>
 
   <body>
     <header>
       <div class="logo">
-        <img src="{{ url_for('static', filename='image/Market-logo.png') }}" alt="Ewha Market" />
+        <a href="{{ url_for('home') }}">
+          <img
+            src="{{ url_for('static', filename='image/Market-logo.png') }}"
+            alt="Ewha Market"
+            class="logo"
+          />
+        </a>
       </div>
 
       <nav>
         <ul class="nav-menu">
           <li><a href="{{ url_for('home') }}">상품 조회</a></li>
-          <li><a href="{{ url_for('reviews_index') }}" class="active">리뷰 조회</a></li>
+          <li>
+            <a href="{{ url_for('reviews_index') }}" class="active"
+              >리뷰 조회</a
+            >
+          </li>
           <li><a href="{{ url_for('reviews_write') }}">리뷰 등록</a></li>
           <li><a href="{{ url_for('products_enroll') }}">상품 등록</a></li>
 
           {% if session['id'] %}
-          <li><a href="{{ url_for('mypage_index') }}"><b>{{ session['id'] }}님 반갑습니다!</b></a></li>
+          <li>
+            <a href="{{ url_for('mypage_index') }}"
+              ><b>{{ session['id'] }}님 반갑습니다!</b></a
+            >
+          </li>
           <li><a href="/logout">로그아웃</a></li>
           {% else %}
           <li><a href="{{ url_for('login') }}">회원가입/로그인</a></li>
@@ -54,9 +77,9 @@
       const reviewContainer = document.getElementById("reviewList");
       const pagination = document.getElementById("pagination");
 
-      let reviews = [];      // 전체 리뷰 데이터 저장
-      let currentPage = 1;   // 현재 페이지
-      const perPage = 6;     // ➜ 한 페이지 6개
+      let reviews = []; // 전체 리뷰 데이터 저장
+      let currentPage = 1; // 현재 페이지
+      const perPage = 6; // ➜ 한 페이지 6개
 
       // ⭐ 리뷰 불러오기 API
       async function fetchReviews() {
@@ -71,7 +94,6 @@
 
           renderPage();
           renderPagination();
-
         } catch (e) {
           console.error("리뷰 로딩 실패:", e);
         }
@@ -88,7 +110,8 @@
         pageItems.forEach((r) => {
           const stars = "★★★★★".slice(0, r.rating) + "☆☆☆☆☆".slice(r.rating);
 
-          const img = r.images?.length > 0 ? r.images[0] : "/static/image/default.png";
+          const img =
+            r.images?.length > 0 ? r.images[0] : "/static/image/default.png";
 
           const card = `
             <div class="review-card">
@@ -112,7 +135,9 @@
         const totalPages = Math.ceil(reviews.length / perPage);
 
         for (let i = 1; i <= totalPages; i++) {
-          const btn = `<a href="#" class="${i === currentPage ? "active" : ""}" onclick="movePage(${i})">${i}</a>`;
+          const btn = `<a href="#" class="${
+            i === currentPage ? "active" : ""
+          }" onclick="movePage(${i})">${i}</a>`;
           pagination.insertAdjacentHTML("beforeend", btn);
         }
       }
