@@ -96,6 +96,23 @@
 }
 
 /* --- 찜 버튼 (하트) --- */
+.like-wrapper-card {
+  position: absolute;
+  bottom: 16px;
+  right: 16px;
+  
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  z-index: 10;
+}
+
+.like-count {
+  font-size: 14px;
+  color: #888;
+  font-weight: 500;
+}
+
 .like-toggle {
   display: none;
 }
@@ -109,17 +126,18 @@
   width: 24px;
   height: 24px;
   cursor: pointer;
-  flex: 0 0 auto;
-
-  /* 배경 이미지 (SVG 사용) */
+  
   background-image: url("../image/icon/heart.svg");
   background-size: cover;
   transition: transform 0.2s ease;
 }
 
 .like-toggle:checked + .like-icon {
-  /* 하트가 채워진 이미지 (활성화 상태) */
   background-image: url("../image/icon/heart-fill.svg");
+}
+
+.like-icon:hover {
+  transform: scale(1.1);
 }
 
 /* --- 페이지네이션 --- */

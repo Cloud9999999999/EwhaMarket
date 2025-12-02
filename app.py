@@ -76,8 +76,8 @@ def show_heart(name):
     if "id" not in session:
         return jsonify({"msg": "로그인이 필요합니다."}), 401
 
-    my_heart = DB.toggle_heart(session['id'], name)
-    return jsonify({'my_heart': my_heart})
+    my_heart, new_count = DB.toggle_heart(session['id'], name)
+    return jsonify({'my_heart': my_heart, 'like_count': new_count})
 
 # 리뷰 목록
 @application.route("/reviews")
