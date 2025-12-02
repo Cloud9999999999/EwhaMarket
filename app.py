@@ -228,6 +228,12 @@ def mypage_index():
     
     return render_template("mypage/index.html", user=user, my_items=my_items)
 
+
+    return render_template("mypage/index.html", user=user)
+
+    # 참여도 레벨(상품 등록: 30pts, 리뷰 등록: 50pts)
+    
+    
 # 마이페이지 - 상품 등록 내역 보기
 @application.route("/mypage/products")
 def my_products():
@@ -238,6 +244,7 @@ def my_products():
     my_items.sort(key=lambda x: x.get('reg_date', ''), reverse=True)
     
     return render_template("mypage/my_products.html", my_items=my_items)
+
 
 # 마이페이지-2 (회원 정보 수정 페이지)
 @application.route("/mypage/edit-info", methods=['GET', 'POST'])
@@ -309,13 +316,29 @@ def mypage_edit():
         "number": number,
         "pw": pw_hash,
     }
+    
+    # user 사진 변경
+    uploaded = request.files.get("profile_img")
+    if uploaded and uploaded.filename:
+        safe_name = secure_filename(uploaded.filename)
+        filename = f"{user_id}_{safe_name}"
+        
+        save_dir = os.path.join(application.root_path, "static", "image", "myprofile")
+        os.makedirs(save_dir, exist_ok=True)
+        
+        save_path = os.path.join(save_dir, filename)
+        uploaded.save(save_path)
+
+        update_data["profile_img"] = f"image/myprofile/{filename}"
+    
+    
+    #-- DB에 업데이트
     DB.update_user(user_id, update_data)
     session["username"] = username
     
     flash("회원 정보가 수정되었습니다.", "success")
     return redirect(url_for("mypage_index"))
 
-# (->다시 수정들어가면 이전 정보가 안뜸.. firebase에 업데이트는 되어있음. 로그인을 안해서??)
 # ----------------------------------------------------
 
 
