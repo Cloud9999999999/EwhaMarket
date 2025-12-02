@@ -1,4 +1,4 @@
-from flask import Flask, render_template, flash, redirect, url_for, session, request
+from flask import Flask, render_template, flash, redirect, url_for, session, request, jsonify
 from database import DBhandler
 import hashlib
 import sys
@@ -7,6 +7,9 @@ import math
 from datetime import datetime             
 import uuid                                
 from werkzeug.utils import secure_filename
+from dotenv import load_dotenv
+load_dotenv()
+
 
 
 application = Flask(__name__)
@@ -62,7 +65,9 @@ def reviews_index():
 # 리뷰 작성
 @application.route("/reviews/write")
 def reviews_write():
-    return render_template("reviews/write-review.html")
+    product = request.args.get("product", "")
+    img_path = request.args.get("img", "")
+    return render_template("reviews/write-review.html", product=product, img_path=img_path)
 
 # 리뷰 전체 조회 API
 @application.route("/api/reviews", methods=["GET"])
@@ -144,6 +149,15 @@ def review_detail(review_id):
 
     return render_template("reviews/detail.html", review=review)
 
+#내 리뷰만 보기 
+@application.route("/api/my-reviews", methods=["GET"])
+def get_my_reviews():
+    user_id = session.get("id")
+    if not user_id:
+        return jsonify({"error": "not logged in"}), 401
+
+    reviews = DB.get_reviews_by_user(user_id)
+    return jsonify(reviews), 200
 
 # 상품 등록
 @application.route("/products/enroll")
