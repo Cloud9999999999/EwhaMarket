@@ -100,9 +100,11 @@
   position: absolute;
   bottom: 16px;
   right: 16px;
-  
+
+  flex-direction: column-reverse;
   display: flex;
   align-items: center;
+
   gap: 6px;
   z-index: 10;
 }
@@ -118,15 +120,11 @@
 }
 
 .like-icon {
-  position: absolute;
-  bottom: 16px;
-  right: 16px;
-
   display: inline-block;
   width: 24px;
   height: 24px;
   cursor: pointer;
-  
+
   background-image: url("../image/icon/heart.svg");
   background-size: cover;
   transition: transform 0.2s ease;
@@ -184,29 +182,29 @@
   display: block;
 }
 
-page-nation li{
+page-nation li {
   list-style: none;
 }
 
-.page-wrap{
+.page-wrap {
   text-align: center;
   font-size: 0;
 }
 
-.page-nation{
+.page-nation {
   display: flex;
   justify-content: center;
   align-items: center;
   margin-top: 20px;
 }
 
-.page-nation ul{
+.page-nation ul {
   display: flex;
   padding: 0;
   margin: 0;
 }
 
-.page-nation a{
+.page-nation a {
   display: block;
   margin: 0 3px;
   float: left;

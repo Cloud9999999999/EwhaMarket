@@ -122,7 +122,7 @@
                   %}checked{%
                   endif
                   %}
-                  onchange="toggleLike('{{ item.name }}')"
+                  onchange="toggleLike(this, '{{ item.name }}')"
                 />
                 <label for="like_{{ item.name }}" class="like-icon"></label>
               </div>
@@ -155,26 +155,31 @@
     <footer><p>@cloud9</p></footer>
 
     <script>
-      function toggleLike(productName) {
-          fetch(`/show_heart/${productName}`)
-          .then(response => {
-              if (response.status === 401) {
-                  alert("로그인이 필요합니다.");
-                  document.getElementById(`like_${productName}`).checked = false;
-                  window.location.href = "/login";
-                  return null;
-              }
-              return response.json();
+      function toggleLike(obj, productName) {
+        fetch(`/show_heart/${encodeURIComponent(productName)}`)
+          .then((response) => {
+            if (response.status === 401) {
+              alert("로그인이 필요합니다.");
+              obj.checked = false;
+              window.location.href = "/login";
+              return null;
+            }
+            return response.json();
           })
-          .then(data => {
-              if (data) {
-                  console.log("찜 상태 변경:", data.my_heart);
-                  const countSpan = document.getElementById(`count_${productName}`);
-                  if(countSpan) {
-                      countSpan.innerText = data.like_count;
-                  }
+          .then((data) => {
+            if (!data) return;
+
+            console.log("찜 상태 변경:", data.my_heart);
+
+            const parent = obj.parentElement;
+
+            const countSpan = parent.querySelector(".like-count");
+
+            if (countSpan) {
+              countSpan.innerText = data.like_count;
+            }
           })
-          .catch(error => console.error('Error:', error));
+          .catch((error) => console.error("Error:", error));
       }
     </script>
   </body>
