@@ -127,24 +127,7 @@
               </div>
             </div>
 
-              <div class="like-wrapper">
-                <input
-                  type="checkbox"
-                  id="like_detail"
-                  class="like-toggle"
-                  {%
-                  if
-                  is_liked
-                  %}checked{%
-                  endif
-                  %}
-                  onchange="toggleLike('{{ name }}')"
-                />
-                <label for="like_detail" class="like-icon"></label>
-                <span id="count_detail" class="like-count-detail"
-                  >{{ data.like_count }}</span
-                >
-              </div>
+  
             </div>
           </div>
         </div>
