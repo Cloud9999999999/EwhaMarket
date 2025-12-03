@@ -16,11 +16,14 @@
   </head>
   <body>
     <header>
-      <div class="logo">
-        <img
-          src="{{ url_for('static', filename='image/Market-logo.png') }}"
-          alt="Ewha Market"
-        />
+       <div class="logo">
+        <a href="{{ url_for('home') }}">
+          <img
+            src="{{ url_for('static', filename='image/Market-logo.png') }}"
+            alt="Ewha Market"
+            class="logo"
+          />
+        </a>
       </div>
       <nav>
         <ul class="nav-menu">
@@ -54,7 +57,7 @@
           <!--프로필-->
           <div class="edit-container">
             <div class="content-container3">
-              <form action="{{ url_for('mypage_edit') }}" method="post">
+              <form action="{{ url_for('mypage_edit') }}" method="post" enctype="multipart/form-data">
                 <div
                   style="
                     display: flex;
@@ -64,10 +67,16 @@
                   "
                 >
                   <img
-                    src="{{ url_for('static', filename='image/icon/profile-img.svg') }}"
+                    src="{{
+                            url_for('static', filename=user.profile_img)
+                            if user and user.profile_img
+                            else url_for('static', filename='image/myprofile/profile.jpg')
+                          }}"
                     alt="프로필 이미지"
                     class="profile-img"
-                  />
+                    id="profile-img"
+                    />
+
                   <div>
                     <div style="display: flex; flex-direction: row; gap: 12px">
                       <div style=" margin: 0; padding-top: 15px; display: inline-block; font-weight: bold;"<label for="username">이름</label></div>
@@ -85,12 +94,28 @@
                           alt="카메라 아이콘"
                         />
                       </button>
-                      <button type="button" class="icon-button">
+                      <button type="button" id="imgBtn" class="icon-button">
                         <img
                           src="{{ url_for('static', filename='image/icon/image.svg') }}"
                           alt="갤러리 아이콘"
                         />
                       </button>
+                      
+                      <input type="file" id="imgInput" name="profile_img" accept="image/*" style="display: none;" />
+                        <script>
+                          document.getElementById('imgBtn').addEventListener('click', function () {
+                            document.getElementById('imgInput').click();
+                          });
+                          // 파일 선택 + 프로필 적용
+                          document.getElementById('imgInput').addEventListener('change', function (event) {
+                            const file = event.target.files[0];
+                            if (!file) return;
+                            const url = URL.createObjectURL(file);
+
+                            const profileImg = document.getElementById('profile-img');
+                            profileImg.src = url;
+                        });
+                        </script>
                     </div>
                   </div>
                 </div>

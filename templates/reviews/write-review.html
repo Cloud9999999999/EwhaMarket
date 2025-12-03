@@ -1,252 +1,265 @@
 <!-- 리뷰 작성 페이지 -->
 <!DOCTYPE html>
 <html lang="ko">
-<head>
+  <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Ewha Market | 리뷰 작성</title>
 
     <link
-        rel="stylesheet"
-        href="{{ url_for('static', filename='styles/global.css') }}"
+      rel="stylesheet"
+      href="{{ url_for('static', filename='styles/global.css') }}"
     />
     <link
-        rel="stylesheet"
-        href="{{ url_for('static', filename='styles/review.write.css') }}"
+      rel="stylesheet"
+      href="{{ url_for('static', filename='styles/review.write.css') }}"
     />
     <link
-        rel="stylesheet"
-        href="{{ url_for('static', filename='styles/auth.css') }}"
+      rel="stylesheet"
+      href="{{ url_for('static', filename='styles/auth.css') }}"
     />
-</head>
+  </head>
 
-<body>
-<header>
-    <div class="logo">
-        <img
+  <body>
+    <header>
+      <div class="logo">
+        <a href="{{ url_for('home') }}">
+          <img
             src="{{ url_for('static', filename='image/Market-logo.png') }}"
             alt="Ewha Market"
-        />
-    </div>
-
-    <nav>
+            class="logo"
+          />
+        </a>
+      </div>
+      <nav>
         <ul class="nav-menu">
-            <li><a href="{{ url_for('home') }}">상품 조회</a></li>
-            <li><a href="{{ url_for('reviews_index') }}">리뷰 조회</a></li>
-            <li>
-                <a href="{{ url_for('reviews_write') }}" class="active">
-                    리뷰 등록
-                </a>
-            </li>
-            <li><a href="{{ url_for('products_enroll') }}">상품 등록</a></li>
+          <li><a href="{{ url_for('home') }}">상품 조회</a></li>
+          <li><a href="{{ url_for('reviews_index') }}">리뷰 조회</a></li>
+          <li>
+            <a href="{{ url_for('reviews_write') }}" class="active">
+              리뷰 등록
+            </a>
+          </li>
+          <li><a href="{{ url_for('products_enroll') }}">상품 등록</a></li>
 
-            {% if session['id'] %}
-            <li>
-                <a href="{{ url_for('mypage_index') }}">
-                    <b>{{ session['id'] }}님 반갑습니다!</b>
-                </a>
-            </li>
-            <li><a href="/logout">로그아웃</a></li>
-            {% else %}
-            <li><a href="{{ url_for('login') }}">회원가입/로그인</a></li>
-            {% endif %}
+          {% if session['id'] %}
+          <li>
+            <a href="{{ url_for('mypage_index') }}">
+              <b>{{ session['id'] }}님 반갑습니다!</b>
+            </a>
+          </li>
+          <li><a href="/logout">로그아웃</a></li>
+          {% else %}
+          <li><a href="{{ url_for('login') }}">회원가입/로그인</a></li>
+          {% endif %}
         </ul>
-    </nav>
-</header>
+      </nav>
+    </header>
 
-<main class="container">
-    <div class="page">
+    <main class="container">
+      <div class="page">
         <section>
-            <!-- ⭐⭐⭐ form 태그 ⭐⭐⭐ -->
-            <form id="reviewForm" enctype="multipart/form-data">
-                <div class="review-container">
-                    
-                    <!-- 상단: 상품정보 + 파일업로드 -->
-                    <div class="top-section">
-                        <div class="product-info">
-                            <img src="../assets/products/운동화.jpeg" alt="제품 이미지" />
+          <!--  form 태그  -->
+          <form id="reviewForm" enctype="multipart/form-data">
+            <div class="review-container">
+              <!-- 상단: 상품정보 + 파일업로드 -->
+              <div class="top-section">
+                <div class="product-info">
+                  <img
+                    src="{{ url_for('static', filename='image/' + img_path) }}"
+                    alt="제품 이미지"
+                  />
 
-                            <div class="product-text">
-                                <b>아디다스 운동화</b>
-
-                                <label>구매일:</label>
-                                <input
-                                    type="date"
-                                    class="input-field"
-                                    name="purchase_date"
-                                />
-
-                                <br />
-
-                                <label>ID:</label>
-                                <input
-                                    type="text"
-                                    class="input-field"
-                                    name="user_id"
-                                    placeholder="아이디 입력"
-                                />
-                            </div>
-                        </div>
-
-                        <!-- 이미지 업로드 영역 -->
-                        <div class="upload-area" id="fileUploadArea">
-                            <div class="upload-boxes">
-                                <div class="upload-box">+</div>
-
-                                <div>
-                                    <div class="upload-img"></div>
-                                    <div class="upload-img"></div>
-                                </div>
-
-                                <div>
-                                    <div class="upload-img"></div>
-                                    <div class="upload-img"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- 별점 + 파일 선택 -->
-                    <div
-                        style="display: flex; justify-content: space-between; padding: 0 1.5rem;"
-                    >
-                        <div class="star-rating" id="starRating">
-                            <span>★</span><span>★</span><span>★</span>
-                            <span>★</span><span>★</span>
-                        </div>
-
-                        <button type="button" class="choose-file" id="chooseBtn">
-                            파일 선택
-                        </button>
-                    </div>
-
-                    <!-- 리뷰 입력 -->
+                  <div class="product-text">
+                    <b>{{ product }}</b>
                     <input
-                        type="text"
-                        class="review-title"
-                        name="title"
-                        placeholder="리뷰 제목을 입력해 주세요!"
+                      type="hidden"
+                      name="product_id"
+                      value="{{ product }}"
                     />
 
-                    <textarea
-                        class="review-content"
-                        name="content"
-                        placeholder="상품은 어떠셨나요? 자세한 후기를 남겨 주세요."
-                    ></textarea>
+                    <label>구매일:</label>
+                    <input
+                      type="date"
+                      class="input-field"
+                      name="purchase_date"
+                    />
 
-                    <!-- product_id -->
-                    <input type="hidden" name="product_id" value="1" />
+                    <br />
 
-                    <button type="button" class="submit-btn">등록하기</button>
+                    <label>ID:</label>
+                    <input
+                      type="text"
+                      class="input-field"
+                      name="user_id"
+                      value="{{ session['id'] }}"
+                      readonly
+                    />
+                  </div>
                 </div>
-            </form>
+
+                <!-- 이미지 업로드 영역 -->
+                <div class="upload-area" id="fileUploadArea">
+                  <div class="upload-boxes">
+                    <div class="upload-box">+</div>
+
+                    <div>
+                      <div class="upload-img"></div>
+                      <div class="upload-img"></div>
+                    </div>
+
+                    <div>
+                      <div class="upload-img"></div>
+                      <div class="upload-img"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 별점 + 파일 선택 -->
+              <div
+                style="
+                  display: flex;
+                  justify-content: space-between;
+                  padding: 0 1.5rem;
+                "
+              >
+                <div class="star-rating" id="starRating">
+                  <span>★</span><span>★</span><span>★</span> <span>★</span
+                  ><span>★</span>
+                </div>
+
+                <button type="button" class="choose-file" id="chooseBtn">
+                  파일 선택
+                </button>
+              </div>
+
+              <!-- 리뷰 입력 -->
+              <input
+                type="text"
+                class="review-title"
+                name="title"
+                placeholder="리뷰 제목을 입력해 주세요!"
+              />
+
+              <textarea
+                class="review-content"
+                name="content"
+                placeholder="상품은 어떠셨나요? 자세한 후기를 남겨 주세요."
+              ></textarea>
+
+              <!-- product_id -->
+              <input type="hidden" name="product_id" value="1" />
+
+              <button type="button" class="submit-btn">등록하기</button>
+            </div>
+          </form>
         </section>
-    </div>
-</main>
+      </div>
+    </main>
 
-<footer>@cloud9</footer>
+    <footer>@cloud9</footer>
 
-<script>
-    let selectedFiles = [];
-    let rating = 0;
+    <script>
+      let selectedFiles = [];
+      let rating = 0;
 
-    /* ⭐ 별점 기능 */
-    const stars = document.querySelectorAll("#starRating span");
-    stars.forEach((star, index) => {
+      /*  별점 기능 */
+      const stars = document.querySelectorAll("#starRating span");
+      stars.forEach((star, index) => {
         star.addEventListener("click", () => {
-            rating = index + 1;
-            stars.forEach((s, i) =>
-                s.classList.toggle("active", i <= index)
-            );
+          rating = index + 1;
+          stars.forEach((s, i) => s.classList.toggle("active", i <= index));
         });
-    });
+      });
 
-    /* ⭐ 파일 업로드 */
-    const uploadArea = document.getElementById("fileUploadArea");
-    const chooseBtn = document.getElementById("chooseBtn");
-    const maxFiles = 10;
+      /*  파일 업로드 */
+      const uploadArea = document.getElementById("fileUploadArea");
+      const chooseBtn = document.getElementById("chooseBtn");
+      const maxFiles = 10;
 
-    function createPreviewBox(file) {
+      function createPreviewBox(file) {
         const reader = new FileReader();
         const box = document.createElement("div");
         box.classList.add("upload-box");
 
         reader.onload = (e) => {
-            box.innerHTML = `<img src="${e.target.result}" alt="preview" />`;
+          box.innerHTML = `<img src="${e.target.result}" alt="preview" />`;
         };
 
         reader.readAsDataURL(file);
         uploadArea.querySelector(".upload-boxes").appendChild(box);
-    }
+      }
 
-    function handleFiles(files) {
+      function handleFiles(files) {
         const existing = uploadArea.querySelectorAll(".upload-box img").length;
         const remaining = maxFiles - existing;
 
         Array.from(files)
-            .slice(0, remaining)
-            .forEach((file) => {
-                if (file.type.startsWith("image/")) {
-                    selectedFiles.push(file);
-                    createPreviewBox(file);
-                }
-            });
-    }
+          .slice(0, remaining)
+          .forEach((file) => {
+            if (file.type.startsWith("image/")) {
+              selectedFiles.push(file);
+              createPreviewBox(file);
+            }
+          });
+      }
 
-    chooseBtn.addEventListener("click", () => {
+      chooseBtn.addEventListener("click", () => {
         const input = document.createElement("input");
         input.type = "file";
         input.accept = "image/*";
         input.multiple = true;
         input.onchange = (e) => handleFiles(e.target.files);
         input.click();
-    });
+      });
 
-    uploadArea.addEventListener("dragover", (e) => e.preventDefault());
-    uploadArea.addEventListener("drop", (e) => {
+      uploadArea.addEventListener("dragover", (e) => e.preventDefault());
+      uploadArea.addEventListener("drop", (e) => {
         e.preventDefault();
         handleFiles(e.dataTransfer.files);
-    });
+      });
 
-    /* ⭐ 리뷰 등록 */
-    document.querySelector(".submit-btn").addEventListener("click", async () => {
-        const form = document.getElementById("reviewForm");
-        const formData = new FormData(form);
+      /*  리뷰 등록 */
+      document
+        .querySelector(".submit-btn")
+        .addEventListener("click", async () => {
+          const form = document.getElementById("reviewForm");
+          const formData = new FormData(form);
 
-        formData.append("rating", rating);
+          formData.append("rating", rating);
 
-        selectedFiles.forEach((file) => {
+          selectedFiles.forEach((file) => {
             formData.append("images", file);
-        });
+          });
 
-        let res;
+          let res;
 
-        try {
+          try {
             res = await fetch("/reviews/submit", {
-                method: "POST",
-                body: formData
+              method: "POST",
+              body: formData,
             });
-        } catch (err) {
+          } catch (err) {
             alert("서버에 연결할 수 없습니다.");
             return;
-        }
+          }
 
-        let data;
-        try {
+          let data;
+          try {
             data = await res.json();
-        } catch (e) {
+          } catch (e) {
             alert("서버 오류 발생");
             return;
-        }
+          }
 
-        if (data.success) {
+          if (data.success) {
             alert("리뷰 등록 완료!");
             window.location.href = "/reviews";
-        } else {
+          } else {
             alert("오류: " + data.error);
-        }
-    });
-</script>
-
-</body>
+          }
+        });
+    </script>
+  </body>
 </html>

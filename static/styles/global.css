@@ -102,6 +102,7 @@ footer {
   justify-content: center;
   align-items: center;
   width: 100%;
+  flex-shrink: 0;
 }
 footer p {
   font-size: 12px;

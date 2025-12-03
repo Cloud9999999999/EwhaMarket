@@ -95,13 +95,15 @@ main {
   gap: 15px;
 }
 
-.action-buttons button {
+.action-buttons button,
+.action-buttons a {
   padding: 12px 25px;
   border: 1px solid #ccc;
   border-radius: 8px;
   font-size: 16px;
   cursor: pointer;
   font-weight: bold;
+  text-decoration: none;
   transition: background-color 0.2s;
 }
 

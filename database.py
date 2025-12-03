@@ -1,6 +1,7 @@
 import pyrebase
 import os
 from dotenv import load_dotenv
+from datetime import datetime
 
 load_dotenv()
 
@@ -77,24 +78,26 @@ class DBhandler:
     # ----------------------------------------------------
     # 상품 관련 함수
     # ----------------------------------------------------
-    def insert_item(self, name, data, img_path):
+    def insert_item(self, name, data, img_path, user_id):
         city = data.get('city', '')
         district = data.get('district', '')
         full_addr = f"{city} {district}".strip()
-
+        current_date = datetime.now().strftime("%Y-%m-%d")
+        
         item_info = {
-            "seller": data.get('sellerId'),
+            "seller": user_id,  # 세션에서 받아온 user_id 사용
             "addr": full_addr,
             "category": data.get('category'),
             "price": data.get('price'),
             "status": data.get('status', '새 상품'),
             "description": data.get('description'),
-            "img_path": img_path
+            "img_path": img_path,
+            "reg_date": current_date,
+            "like_count": 0
         }
-        
         self.db.child("item").child(name).set(item_info)
         
-        print(f"Item Saved: {name}")
+        print(f"Item Saved: {name}, Seller: {user_id}")
         return True
     
     def get_items(self):
@@ -108,6 +111,20 @@ class DBhandler:
             key_value = res.key()
             if key_value == name:
                 target_value=res.val()
+        return target_value
+    
+    def get_items_byseller(self, seller_id):
+        items = self.db.child("item").get()
+        target_value = []
+        if items.val() is None:
+            return target_value
+
+        for res in items.each():
+            value = res.val()
+            if value.get('seller') == seller_id:
+                value['name'] = res.key() # 상품명(key)을 데이터에 포함
+                target_value.append(value)
+        
         return target_value
     
     
@@ -142,23 +159,25 @@ class DBhandler:
         return False
     
     # 찜 목록
-    def add_favorite(self, user_id: str, item_name: str):
-        self.db.child("favorites").child(user_id).child(item_name).set(True)
-        return True
+    def toggle_heart(self, user_id, item_name):
+        is_liked = self.db.child("favorites").child(user_id).child(item_name).get().val()
+        item_data = self.db.child("item").child(item_name).get().val()
+        current_like_count = item_data.get("like_count", 0) if item_data else 0
 
-    def remove_favorite(self, user_id: str, item_name: str):
-        self.db.child("favorites").child(user_id).child(item_name).remove()
-        return True
+        if is_liked:
+            self.db.child("favorites").child(user_id).child(item_name).remove()
+            new_count = max(0, current_like_count - 1)
+            self.db.child("item").child(item_name).update({"like_count": new_count})
+            return False, new_count
+        else:
+            self.db.child("favorites").child(user_id).child(item_name).set(True)
+            new_count = current_like_count + 1
+            self.db.child("item").child(item_name).update({"like_count": new_count})
+            return True, new_count
 
-    def is_favorite(self, user_id: str, item_name: str) -> bool:
+    def is_heart(self, user_id, item_name):
         val = self.db.child("favorites").child(user_id).child(item_name).get().val()
         return bool(val)
-
-    def get_favorites(self, user_id: str):
-        data = self.db.child("favorites").child(user_id).get().val()
-        if not data:
-            return []
-        return list(data.keys())
     
 
     # ----------------------------------------------------
@@ -184,3 +203,20 @@ class DBhandler:
                 return r.val()
 
         return None
+    
+    #내가 쓴 리뷰만 조회 함수 추가
+    def get_reviews_by_user(self, user_id):
+        reviews = self.db.child("reviews").get()
+
+        if not reviews.val():
+            return []
+
+        result = []
+        for r in reviews.each():
+            data = r.val()
+            if data.get("user_id") == user_id:
+                item = data.copy()
+                item["id"] = r.key()
+                result.append(item)
+
+        return result

@@ -156,12 +156,10 @@
 
     <script>
       function toggleLike(obj, productName) {
-        // URL 인코딩은 서버 통신을 위해 유지
         fetch(`/show_heart/${encodeURIComponent(productName)}`)
           .then((response) => {
             if (response.status === 401) {
               alert("로그인이 필요합니다.");
-              // obj를 사용하여 체크박스 끄기
               obj.checked = false;
               window.location.href = "/login";
               return null;
@@ -173,11 +171,8 @@
 
             console.log("찜 상태 변경:", data.my_heart);
 
-            // [핵심 수정] ID로 찾는 방식 제거 -> 클릭된 요소(obj) 주변에서 찾기
-            // 1. 클릭된 체크박스의 부모(div.like-wrapper-card)를 찾음
             const parent = obj.parentElement;
 
-            // 2. 부모 안에 있는 .like-count 클래스를 가진 span을 찾음
             const countSpan = parent.querySelector(".like-count");
 
             if (countSpan) {
