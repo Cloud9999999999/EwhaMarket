@@ -216,20 +216,25 @@ def mypage_index():
         flash("로그인 후 이용 가능합니다.")
         return redirect(url_for("login"))
 
-    user = DB.get_user(user_id)   
+    user = DB.get_user(user_id)
 
     if not user:
         flash("사용자 정보를 찾을 수 없습니다.")
         return redirect(url_for("home"))
     
-    # 내가 등록한 상품 가져오기 & 최신순 정력
+    # 내가 등록한 상품 가져오기 & 최신순 정렬
     my_items = DB.get_items_byseller(user_id)
     my_items.sort(key=lambda x: x.get('reg_date', ''), reverse=True)
-    
-    return render_template("mypage/index.html", user=user, my_items=my_items)
 
+    #찜한 상품 목록
+    favorites = DB.get_favorite_items(user_id)
 
-    return render_template("mypage/index.html", user=user)
+    return render_template(
+        "mypage/index.html",
+        user=user,
+        my_items=my_items,
+        favorites=favorites,
+    )
 
     # 참여도 레벨(상품 등록: 30pts, 리뷰 등록: 50pts)
     
@@ -423,4 +428,4 @@ def reg_item_submit_post():
         return redirect(url_for('products_enroll'))
 
 if __name__ == "__main__":
-    application.run(host="0.0.0.0", debug=True)
+    application.run(host="0.0.0.0", port=5001, debug=True)

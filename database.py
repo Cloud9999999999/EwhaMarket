@@ -220,3 +220,46 @@ class DBhandler:
                 result.append(item)
 
         return result
+
+    #찜목록 추가
+    def get_favorite_items(self, user_id):
+        """
+        특정 유저가 찜한 상품들의 상세 정보를 리스트로 반환
+        각 원소는 { name, price, img_path, ... } 형태의 dict
+        """
+        fav_ref = self.db.child("favorites").child(user_id).get()
+
+        if not fav_ref.val():
+            return []
+
+        result = []
+        for fav in fav_ref.each():
+            item_name = fav.key()  # 찜한 상품명
+            item_data = self.db.child("item").child(item_name).get().val()
+            if not item_data:
+                continue
+
+            # 템플릿에서 사용하기 편하게 name 필드 추가
+            item_data["name"] = item_name
+            result.append(item_data)
+
+        return result
+    
+    # 찜목록 조회
+    def get_favorite_items(self, user_id):
+        fav_ref = self.db.child("favorites").child(user_id).get()
+
+        if not fav_ref.val():
+            return []
+
+        result = []
+        for fav in fav_ref.each():
+            item_name = fav.key()  # 찜한 상품 이름 (item 노드의 key)
+            item_data = self.db.child("item").child(item_name).get().val()
+            if not item_data:
+                continue
+
+            item_data["name"] = item_name  # 템플릿에서 쓰기 편하게 name 추가
+            result.append(item_data)
+
+        return result
