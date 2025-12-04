@@ -95,23 +95,24 @@
         </div>
 
         <!--참여도 레벨-->
+        <!--참여도 레벨-->
         <div class="content-container">
           <div class="container-header" style="justify-content: space-between">
             <p class="content-font">참여도 레벨</p>
             <p style="color: #34a853; font-size: 18px; font-weight: 600">
-              Level 3 • 120pts
+              Level {{ level }} • {{ total_points }}pts
             </p>
           </div>
           <input
             type="range"
             min="0"
-            max="200"
-            value="120"
-            step="10"
+            max="{{ bar_max }}"
+            value="{{ total_points if total_points <= bar_max else bar_max }}"
+            step="5"
             class="level-bar"
           />
           <p style="color: #666666; font-size: 14px; margin-top: 12px">
-            다음 레벨까지 80pts 남았어요
+            다음 레벨까지 {{ remaining_points }}pts 남았어요
           </p>
         </div>
 
