@@ -223,10 +223,6 @@ class DBhandler:
 
     #찜목록 추가
     def get_favorite_items(self, user_id):
-        """
-        특정 유저가 찜한 상품들의 상세 정보를 리스트로 반환
-        각 원소는 { name, price, img_path, ... } 형태의 dict
-        """
         fav_ref = self.db.child("favorites").child(user_id).get()
 
         if not fav_ref.val():
@@ -264,37 +260,3 @@ class DBhandler:
 
         return result
     
-    # 레벨바 구현
-    # ----------------------------------------------------
-    # 유저 포인트/스탯
-    # ----------------------------------------------------
-    def _increment_user_stat(self, user_id, field):
-        """user_stats/<user_id>/<field> 값을 +1 해주는 헬퍼"""
-        ref = self.db.child("user_stats").child(user_id)
-        current = ref.get().val() or {}
-
-        current_value = int(current.get(field, 0) or 0)
-        current[field] = current_value + 1
-
-        ref.set(current)
-
-    # 리뷰 1회 작성
-    def add_review_point(self, user_id):
-        self._increment_user_stat(user_id, "review_count")
-
-    # 상품 1개 등록
-    def add_item_point(self, user_id):
-        self._increment_user_stat(user_id, "item_count")
-
-    # 찜 버튼 1회 클릭(등록/해제 상관없이)
-    def add_heart_point(self, user_id):
-        self._increment_user_stat(user_id, "heart_count")
-
-    # 유저의 행동 카운트 조회
-    def get_user_stats(self, user_id):
-        stats = self.db.child("user_stats").child(user_id).get().val() or {}
-        # 값이 없으면 기본 0으로 채워주기
-        stats.setdefault("review_count", 0)
-        stats.setdefault("item_count", 0)
-        stats.setdefault("heart_count", 0)
-        return stats

@@ -25,24 +25,6 @@ application.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 DB = DBhandler()
 
-LEVEL_THRESHOLDS = [50, 100, 150, 200, 250]
-
-
-def calc_level_info(total_points: int):
-    level = 1
-    bar_max = LEVEL_THRESHOLDS[0]
-
-    for idx, th in enumerate(LEVEL_THRESHOLDS):
-        if total_points < th:
-            level = idx + 1
-            bar_max = th
-            break
-    else:
-        level = len(LEVEL_THRESHOLDS) + 1
-        bar_max = total_points + 50
-
-    remaining = max(0, bar_max - total_points)
-    return level, bar_max, remaining
 
 # 홈
 @application.route("/")
@@ -254,23 +236,12 @@ def mypage_index():
     #찜한 상품 목록
     favorites = DB.get_favorite_items(user_id)
 
-    # 레벨바 계산 관련
-    stats = DB.get_user_stats(user_id)
-    review_count = stats["review_count"]
-    item_count = stats["item_count"]
-    heart_count = stats["heart_count"]
-    total_points = review_count * 50 + item_count * 80 + heart_count * 15
-    level, bar_max, remaining_points = calc_level_info(total_points)
 
     return render_template(
         "mypage/index.html",
         user=user,
         my_items=my_items,
         favorites=favorites,
-        level=level,
-        total_points=total_points,
-        bar_max=bar_max,
-        remaining_points=remaining_points,
     )
 
     # 참여도 레벨(상품 등록: 30pts, 리뷰 등록: 50pts)
@@ -464,6 +435,7 @@ def reg_item_submit_post():
     
     # DB 함수 호출 시 seller_id를 추가로 전달
     if DB.insert_item(product_name, data, img_path, seller_id):
+        DB.add_item_point(seller_id) 
         flash(f"상품 '{product_name}' 등록이 완료되었습니다.")
         return redirect(url_for('products_enroll'))
     else:
