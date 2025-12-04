@@ -25,7 +25,6 @@ application.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 DB = DBhandler()
 
-
 # 홈
 @application.route("/")
 def home():
@@ -77,10 +76,7 @@ def show_heart(name):
     if "id" not in session:
         return jsonify({"msg": "로그인이 필요합니다."}), 401
 
-    user_id = session["id"]
-    my_heart, new_count = DB.toggle_heart(user_id, name)
-    DB.add_heart_point(user_id)
-
+    my_heart, new_count = DB.toggle_heart(session['id'], name)
     return jsonify({'my_heart': my_heart, 'like_count': new_count})
 
 # 리뷰 목록
@@ -91,9 +87,21 @@ def reviews_index():
 # 리뷰 작성
 @application.route("/reviews/write")
 def reviews_write():
-    product = request.args.get("product", "")
-    img_path = request.args.get("img", "")
-    return render_template("reviews/write-review.html", product=product, img_path=img_path)
+    product = request.args.get("product")  # 상품명
+    img_path = request.args.get("img")     # 이미지 경로
+
+    if not product:
+        return "product is required", 400
+
+    # 이미지 없으면 기본 이미지 사용
+    if not img_path:
+        img_path = "default.png"
+
+    return render_template(
+        "reviews/write-review.html",
+        product=product,
+        img_path=img_path
+    )
 
 # 리뷰 전체 조회 API
 @application.route("/api/reviews", methods=["GET"])
@@ -126,7 +134,7 @@ def get_review_detail(review_id):
 @application.route("/reviews/submit", methods=['POST'])
 def review_submit_post():
 
-    # ★ 로그인 필요 시 사용
+    # 로그인 필요 시 사용
     user_id = session.get("id", "guest")
 
     # 1) form 데이터 읽기
@@ -147,7 +155,7 @@ def review_submit_post():
             filename = secure_filename(f"{uuid.uuid4().hex}_{img.filename}")
             save_path = os.path.join(UPLOAD_FOLDER, filename)
             img.save(save_path)
-            saved_paths.append(f"/static/image/{filename}")
+            saved_paths.append(f"/static/image/products/{filename}")
 
     # 3) DB 저장
     review_data = {
@@ -160,10 +168,7 @@ def review_submit_post():
         "created_at": str(datetime.utcnow())
     }
 
-    DB.insert_review(review_data)   
-
-    if user_id != "guest":
-        DB.add_review_point(user_id)   
+    DB.insert_review(review_data)      
 
     return jsonify({"success": True})
     
@@ -187,6 +192,28 @@ def get_my_reviews():
 
     reviews = DB.get_reviews_by_user(user_id)
     return jsonify(reviews), 200
+
+# 리뷰 삭제 API
+@application.route("/api/reviews/<review_id>", methods=["DELETE"])
+def delete_review(review_id):
+    # 로그인 여부 확인
+    user_id = session.get("id")
+    if not user_id:
+        return jsonify({"success": False, "error": "not logged in"}), 401
+
+    review = DB.get_review_by_id(review_id)
+
+    if not review:
+        return jsonify({"success": False, "error": "review not found"}), 404
+
+    # 본인 리뷰인지 확인
+    if review["user_id"] != user_id:
+        return jsonify({"success": False, "error": "permission denied"}), 403
+
+    # 삭제 실행
+    DB.delete_review(review_id)
+
+    return jsonify({"success": True}), 200
 
 # 상품 등록
 @application.route("/products/enroll")
@@ -223,26 +250,20 @@ def mypage_index():
         flash("로그인 후 이용 가능합니다.")
         return redirect(url_for("login"))
 
-    user = DB.get_user(user_id)
+    user = DB.get_user(user_id)   
 
     if not user:
         flash("사용자 정보를 찾을 수 없습니다.")
         return redirect(url_for("home"))
     
-    # 내가 등록한 상품 가져오기 & 최신순 정렬
+    # 내가 등록한 상품 가져오기 & 최신순 정력
     my_items = DB.get_items_byseller(user_id)
     my_items.sort(key=lambda x: x.get('reg_date', ''), reverse=True)
+    
+    return render_template("mypage/index.html", user=user, my_items=my_items)
 
-    #찜한 상품 목록
-    favorites = DB.get_favorite_items(user_id)
 
-
-    return render_template(
-        "mypage/index.html",
-        user=user,
-        my_items=my_items,
-        favorites=favorites,
-    )
+    return render_template("mypage/index.html", user=user)
 
     # 참여도 레벨(상품 등록: 30pts, 리뷰 등록: 50pts)
     
@@ -430,10 +451,6 @@ def reg_item_submit_post():
         img_path = "default.png"
 
     # 3. DB 저장 함수 호출
-    product_name = data.get('productName')
-    seller_id = session.get('id')  # 세션에서 판매자 ID 가져오기
-    
-    # DB 함수 호출 시 seller_id를 추가로 전달
     if DB.insert_item(product_name, data, img_path, seller_id):
         DB.add_item_point(seller_id) 
         flash(f"상품 '{product_name}' 등록이 완료되었습니다.")
@@ -443,4 +460,4 @@ def reg_item_submit_post():
         return redirect(url_for('products_enroll'))
 
 if __name__ == "__main__":
-    application.run(host="0.0.0.0", port=5001, debug=True)
+    application.run(host="0.0.0.0", debug=True)

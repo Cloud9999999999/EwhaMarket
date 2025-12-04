@@ -47,7 +47,9 @@
 /* 프로필 이미지 */
 .profile-img {
   width: 100px;
-  heigh: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 50%;
 }
 
 .content-font {
@@ -137,10 +139,9 @@
 }
 .heart-container img {
   width: 150px;
-  height: 100px;
+  height: 150px;
   margin-bottom: 8px;
   border-radius: 20px;
-  object-fit: "cover";
 }
 .price-write {
   color: #34a853;

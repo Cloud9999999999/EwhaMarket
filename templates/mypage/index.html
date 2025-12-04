@@ -67,7 +67,7 @@
               src="{{
                     url_for('static', filename=user.profile_img)
                     if user and user.profile_img
-                    else url_for('static', filename='image/myprofile/profile.jpg')
+                    else url_for('static', filename='image/myprofile/profile.svg')
                   }}"
               alt="프로필 이미지"
               class="profile-img"
@@ -99,19 +99,19 @@
           <div class="container-header" style="justify-content: space-between">
             <p class="content-font">참여도 레벨</p>
             <p style="color: #34a853; font-size: 18px; font-weight: 600">
-              Level 1 • 20pts
+              Level 3 • 120pts
             </p>
           </div>
           <input
             type="range"
             min="0"
-            max="{{ bar_max }}"
-            value="{{ total_points if total_points <= bar_max else bar_max }}"
-            step="5"
+            max="200"
+            value="120"
+            step="10"
             class="level-bar"
           />
           <p style="color: #666666; font-size: 14px; margin-top: 12px">
-            다음 레벨까지 50pts 남았어요
+            다음 레벨까지 80pts 남았어요
           </p>
         </div>
 
@@ -124,9 +124,8 @@
               class="content-icon"
             />
             <p class="content-font">찜 목록 보기</p>
-            <p class="num-font">({{ favorites|length }})</p>
+            <p class="num-font">(4)</p>
           </div>
-
           <div
             style="
               display: flex;
@@ -135,24 +134,26 @@
               justify-content: space-between;
             "
           >
-            {% if favorites %}
-              {% for item in favorites %}
-                <div
-                  class="heart-container"
-                  onclick="location.href='{{ url_for('products_detail', name=item.name) }}';"
-                  style="cursor: pointer"
-                >
-                  <img
-                    src="{{ url_for('static', filename='image/products/' + item.img_path) }}"
-                    alt="{{ item.name }}"
-                  />
-                  <p class="write-head">{{ item.name }}</p>
-                  <p class="price-write">{{ item.price }}원</p>
-                </div>
-              {% endfor %}
-            {% else %}
-              <p style="padding: 10px; color: #666;">찜한 상품이 없습니다.</p>
-            {% endif %}
+            <div class="heart-container">
+              <img src="../assets/heart-img2.png" alt="블루 틴트 안경" />
+              <p class="write-head">블루 틴트 안경</p>
+              <p class="price-write">25,000원</p>
+            </div>
+            <div class="heart-container">
+              <img src="../assets/heart-img1.png" alt="블루 틴트 안경" />
+              <p class="write-head">화장품 세트</p>
+              <p class="price-write">15,000원</p>
+            </div>
+            <div class="heart-container">
+              <img src="../assets/heart-img4.png" alt="블루 틴트 안경" />
+              <p class="write-head">다이어리</p>
+              <p class="price-write">8,000원</p>
+            </div>
+            <div class="heart-container">
+              <img src="../assets/heart-img3.png" alt="블루 틴트 안경" />
+              <p class="write-head">실버 귀걸이</p>
+              <p class="price-write">12,000원</p>
+            </div>
           </div>
         </div>
 
