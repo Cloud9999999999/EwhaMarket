@@ -452,6 +452,7 @@ def reg_item_submit_post():
 
     # 3. DB 저장 함수 호출
     if DB.insert_item(product_name, data, img_path, seller_id):
+        DB.add_item_point(seller_id) 
         flash(f"상품 '{product_name}' 등록이 완료되었습니다.")
         return redirect(url_for('products_enroll'))
     else:
