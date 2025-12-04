@@ -66,9 +66,10 @@
               <div class="top-section">
                 <div class="product-info">
                   <img
-                    src="{{ url_for('static', filename='image/' + img_path) }}"
+                    src="{{ url_for('static', filename='image/products/' + img_path) }}"
                     alt="제품 이미지"
                   />
+
 
                   <div class="product-text">
                     <b>{{ product }}</b>
@@ -147,9 +148,6 @@
                 name="content"
                 placeholder="상품은 어떠셨나요? 자세한 후기를 남겨 주세요."
               ></textarea>
-
-              <!-- product_id -->
-              <input type="hidden" name="product_id" value="1" />
 
               <button type="button" class="submit-btn">등록하기</button>
             </div>
