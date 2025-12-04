@@ -13,6 +13,15 @@
   padding: 20px 20px;
 }
 
+.login-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 600px;
+  padding: 40px 50px;
+}
+
 .auth__form {
   display: flex;
   flex-direction: column;
@@ -22,6 +31,13 @@
   font-weight: 900;
   margin-bottom: 20px;
 }
+
+.login__header {
+  font-size: 45px;
+  font-weight: 900;
+  margin-bottom: 40px;
+}
+
 .auth__input {
   height: 60px;
   width: 420px;
@@ -56,6 +72,10 @@
 
 .auth__submit {
   margin: 10px 0px;
+}
+
+.login__submit {
+  margin: 20px 0px;
 }
 
 .auth__toggle {
