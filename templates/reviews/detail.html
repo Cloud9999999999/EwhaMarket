@@ -61,7 +61,7 @@
       <div class="page">
         <section>
           <div class="detail-container">
-            <!-- ⭐ 상단 제품 정보 -->
+            <!-- 상단 제품 정보 -->
             <div class="product-section">
               <img
                 src="{{ review.images[0] if review.images else '/static/image/default.png' }}"
@@ -69,14 +69,10 @@
               />
               <div class="product-info">
                 <b>{{ review.product_id }}</b>
-                <span
-                  >구매일 : {{ review.purchase_date if review.purchase_date else
-                  '-' }}</span
-                >
               </div>
             </div>
 
-            <!-- ⭐ 작성자 정보 -->
+            <!-- 작성자 정보 -->
             <div class="author-section">
               <img
                 src="https://randomuser.me/api/portraits/women/44.jpg"
@@ -90,14 +86,14 @@
               </div>
             </div>
 
-            <!-- ⭐ 리뷰 본문 -->
+            <!-- 리뷰 본문 -->
             <div class="review-body">
               <div class="review-text">
                 <div class="review-title">{{ review.title }}</div>
                 <div class="review-content">{{ review.content }}</div>
               </div>
 
-              <!-- ⭐ 이미지 출력 -->
+              <!-- 이미지 출력 -->
               <div class="review-images">
                 {% if review.images %} {% for img in review.images %}
                 <img src="{{ img }}" alt="리뷰 이미지" />
