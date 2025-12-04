@@ -136,10 +136,11 @@
   margin-top: 8px;
 }
 .heart-container img {
-  width: 250px;
-  height: 200px;
+  width: 150px;
+  height: 100px;
   margin-bottom: 8px;
   border-radius: 20px;
+  object-fit: "cover";
 }
 .price-write {
   color: #34a853;
