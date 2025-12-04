@@ -15,7 +15,6 @@
   </head>
 
   <body>
-    <!-- 헤더 -->
     <header>
       <div class="logo">
         <a href="{{ url_for('home') }}">
@@ -65,7 +64,6 @@
         <div class="register-container">
           <h2>상품 등록</h2>
 
-          <!-- [중요] action 및 enctype 확인 -->
           <form
             action="/reg_item_submit_post"
             method="POST"

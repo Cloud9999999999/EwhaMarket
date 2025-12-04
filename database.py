@@ -97,7 +97,7 @@ class DBhandler:
         }
         self.db.child("item").child(name).set(item_info)
         
-        print(f"Item Saved: {name}, Seller: {user_id}")
+        print(f"Item Saved: {name}, Seller: {user_id}, Image: {img_path}")
         return True
     
     def get_items(self):
