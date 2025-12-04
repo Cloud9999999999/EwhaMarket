@@ -109,9 +109,21 @@ def reviews_index():
 # 리뷰 작성
 @application.route("/reviews/write")
 def reviews_write():
-    product = request.args.get("product", "")
-    img_path = request.args.get("img", "")
-    return render_template("reviews/write-review.html", product=product, img_path=img_path)
+    product = request.args.get("product")  # 상품명
+    img_path = request.args.get("img")     # 이미지 경로
+
+    if not product:
+        return "product is required", 400
+
+    # 이미지 없으면 기본 이미지 사용
+    if not img_path:
+        img_path = "default.png"
+
+    return render_template(
+        "reviews/write-review.html",
+        product=product,
+        img_path=img_path
+    )
 
 # 리뷰 전체 조회 API
 @application.route("/api/reviews", methods=["GET"])
@@ -144,7 +156,7 @@ def get_review_detail(review_id):
 @application.route("/reviews/submit", methods=['POST'])
 def review_submit_post():
 
-    # ★ 로그인 필요 시 사용
+    # 로그인 필요 시 사용
     user_id = session.get("id", "guest")
 
     # 1) form 데이터 읽기
@@ -205,6 +217,28 @@ def get_my_reviews():
 
     reviews = DB.get_reviews_by_user(user_id)
     return jsonify(reviews), 200
+
+# 리뷰 삭제 API
+@application.route("/api/reviews/<review_id>", methods=["DELETE"])
+def delete_review(review_id):
+    # 로그인 여부 확인
+    user_id = session.get("id")
+    if not user_id:
+        return jsonify({"success": False, "error": "not logged in"}), 401
+
+    review = DB.get_review_by_id(review_id)
+
+    if not review:
+        return jsonify({"success": False, "error": "review not found"}), 404
+
+    # 본인 리뷰인지 확인
+    if review["user_id"] != user_id:
+        return jsonify({"success": False, "error": "permission denied"}), 403
+
+    # 삭제 실행
+    DB.delete_review(review_id)
+
+    return jsonify({"success": True}), 200
 
 # 상품 등록
 @application.route("/products/enroll")
