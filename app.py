@@ -25,25 +25,6 @@ application.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 DB = DBhandler()
 
-LEVEL_THRESHOLDS = [50, 100, 150, 200, 250]
-
-
-def calc_level_info(total_points: int):
-    level = 1
-    bar_max = LEVEL_THRESHOLDS[0]
-
-    for idx, th in enumerate(LEVEL_THRESHOLDS):
-        if total_points < th:
-            level = idx + 1
-            bar_max = th
-            break
-    else:
-        level = len(LEVEL_THRESHOLDS) + 1
-        bar_max = total_points + 50
-
-    remaining = max(0, bar_max - total_points)
-    return level, bar_max, remaining
-
 # 홈
 @application.route("/")
 def home():
@@ -95,10 +76,7 @@ def show_heart(name):
     if "id" not in session:
         return jsonify({"msg": "로그인이 필요합니다."}), 401
 
-    user_id = session["id"]
-    my_heart, new_count = DB.toggle_heart(user_id, name)
-    DB.add_heart_point(user_id)
-
+    my_heart, new_count = DB.toggle_heart(session['id'], name)
     return jsonify({'my_heart': my_heart, 'like_count': new_count})
 
 # 리뷰 목록
@@ -190,10 +168,7 @@ def review_submit_post():
         "created_at": str(datetime.utcnow())
     }
 
-    DB.insert_review(review_data)   
-
-    if user_id != "guest":
-        DB.add_review_point(user_id)   
+    DB.insert_review(review_data)      
 
     return jsonify({"success": True})
     
@@ -275,37 +250,20 @@ def mypage_index():
         flash("로그인 후 이용 가능합니다.")
         return redirect(url_for("login"))
 
-    user = DB.get_user(user_id)
+    user = DB.get_user(user_id)   
 
     if not user:
         flash("사용자 정보를 찾을 수 없습니다.")
         return redirect(url_for("home"))
     
-    # 내가 등록한 상품 가져오기 & 최신순 정렬
+    # 내가 등록한 상품 가져오기 & 최신순 정력
     my_items = DB.get_items_byseller(user_id)
     my_items.sort(key=lambda x: x.get('reg_date', ''), reverse=True)
+    
+    return render_template("mypage/index.html", user=user, my_items=my_items)
 
-    #찜한 상품 목록
-    favorites = DB.get_favorite_items(user_id)
 
-    # 레벨바 계산 관련
-    stats = DB.get_user_stats(user_id)
-    review_count = stats["review_count"]
-    item_count = stats["item_count"]
-    heart_count = stats["heart_count"]
-    total_points = review_count * 50 + item_count * 80 + heart_count * 15
-    level, bar_max, remaining_points = calc_level_info(total_points)
-
-    return render_template(
-        "mypage/index.html",
-        user=user,
-        my_items=my_items,
-        favorites=favorites,
-        level=level,
-        total_points=total_points,
-        bar_max=bar_max,
-        remaining_points=remaining_points,
-    )
+    return render_template("mypage/index.html", user=user)
 
     # 참여도 레벨(상품 등록: 30pts, 리뷰 등록: 50pts)
     
@@ -493,10 +451,6 @@ def reg_item_submit_post():
         img_path = "default.png"
 
     # 3. DB 저장 함수 호출
-    product_name = data.get('productName')
-    seller_id = session.get('id')  # 세션에서 판매자 ID 가져오기
-    
-    # DB 함수 호출 시 seller_id를 추가로 전달
     if DB.insert_item(product_name, data, img_path, seller_id):
         flash(f"상품 '{product_name}' 등록이 완료되었습니다.")
         return redirect(url_for('products_enroll'))
@@ -505,4 +459,4 @@ def reg_item_submit_post():
         return redirect(url_for('products_enroll'))
 
 if __name__ == "__main__":
-    application.run(host="0.0.0.0", port=5001, debug=True)
+    application.run(host="0.0.0.0", debug=True)

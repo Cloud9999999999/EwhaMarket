@@ -142,7 +142,6 @@
   height: 150px;
   margin-bottom: 8px;
   border-radius: 20px;
-  object-fit: "cover";
 }
 .price-write {
   color: #34a853;
