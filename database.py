@@ -179,6 +179,23 @@ class DBhandler:
         val = self.db.child("favorites").child(user_id).child(item_name).get().val()
         return bool(val)
     
+    # 레벨바
+    def add_item_point(self, user_id):
+        users = self.db.child("user").get()
+        if not users.val():
+            return False
+            
+        for res in users.each():
+            value = res.val()
+            if value.get("id") == user_id:
+                # 현재 포인트 가져오기 (없으면 0)
+                current_point = value.get("point", 0)
+                # 10점 추가 업데이트
+                self.db.child("user").child(res.key()).update({
+                    "point": current_point + 10
+                })
+                return True
+        return False
 
     # ----------------------------------------------------
     # 리뷰 관련 함수
