@@ -262,11 +262,6 @@ def mypage_index():
     
     return render_template("mypage/index.html", user=user, my_items=my_items)
 
-
-    return render_template("mypage/index.html", user=user)
-
-    # 참여도 레벨(상품 등록: 30pts, 리뷰 등록: 50pts)
-    
     
 # 마이페이지 - 상품 등록 내역 보기
 @application.route("/mypage/products")
@@ -440,19 +435,14 @@ def reg_item_submit_post():
     
     # 2. 이미지 저장
     if image_file and image_file.filename != "":
-        file_ext = os.path.splitext(image_file.filename)[1]
-        secure_name = str(uuid.uuid4()) + file_ext 
-        
-        save_path = os.path.join(application.config['UPLOAD_FOLDER'], secure_name)
+        filename = image_file.filename
+        save_path = os.path.join(application.config['UPLOAD_FOLDER'], filename)
         image_file.save(save_path)
-        
-        img_path = secure_name
     else:
-        img_path = "default.png"
+        filename = "default.png"
 
     # 3. DB 저장 함수 호출
-    if DB.insert_item(product_name, data, img_path, seller_id):
-        DB.add_item_point(seller_id) 
+    if DB.insert_item(product_name, data, filename, seller_id):
         flash(f"상품 '{product_name}' 등록이 완료되었습니다.")
         return redirect(url_for('products_enroll'))
     else:
