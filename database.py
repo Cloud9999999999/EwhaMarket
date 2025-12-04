@@ -220,6 +220,10 @@ class DBhandler:
                 result.append(item)
 
         return result
+    #리뷰 삭제 추가 
+    def delete_review(self, review_id):
+        self.db.child("reviews").child(review_id).remove()
+
 
     #찜목록 추가
     def get_favorite_items(self, user_id):
