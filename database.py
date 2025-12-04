@@ -186,13 +186,20 @@ class DBhandler:
     def insert_review(self, review_data):
         self.db.child("reviews").push(review_data)
         return True
+    
     def get_all_reviews(self):
-        return self.db.child("reviews").get().val()
+        snap = self.db.child("reviews").get()
+        if not snap.val():
+            return None
 
-    def get_review_by_id(self, rid):
-        return self.db.child("reviews").child(rid).get().val()
-
-    def get_review_by_id(self, review_id): #상세조회용 함수
+        result = {}
+        for r in snap.each():
+            data = r.val()
+            data = self._normalize_images_field(data)
+            result[r.key()] = data
+        return result
+    
+    def get_review_by_id(self, review_id):  # 상세조회용 함수
         reviews = self.db.child("reviews").get()
 
         if not reviews.val():
@@ -200,9 +207,12 @@ class DBhandler:
 
         for r in reviews.each():
             if r.key() == review_id:
-                return r.val()
+                data = r.val()
+                data = self._normalize_images_field(data)
+                return data
 
         return None
+
     
     #내가 쓴 리뷰만 조회 함수 추가
     def get_reviews_by_user(self, user_id):
@@ -215,90 +225,23 @@ class DBhandler:
         for r in reviews.each():
             data = r.val()
             if data.get("user_id") == user_id:
+                data = self._normalize_images_field(data)
                 item = data.copy()
                 item["id"] = r.key()
                 result.append(item)
 
         return result
+
     #리뷰 삭제 추가 
     def delete_review(self, review_id):
         self.db.child("reviews").child(review_id).remove()
 
-
-    #찜목록 추가
-    def get_favorite_items(self, user_id):
-        """
-        특정 유저가 찜한 상품들의 상세 정보를 리스트로 반환
-        각 원소는 { name, price, img_path, ... } 형태의 dict
-        """
-        fav_ref = self.db.child("favorites").child(user_id).get()
-
-        if not fav_ref.val():
-            return []
-
-        result = []
-        for fav in fav_ref.each():
-            item_name = fav.key()  # 찜한 상품명
-            item_data = self.db.child("item").child(item_name).get().val()
-            if not item_data:
-                continue
-
-            # 템플릿에서 사용하기 편하게 name 필드 추가
-            item_data["name"] = item_name
-            result.append(item_data)
-
-        return result
     
-    # 찜목록 조회
-    def get_favorite_items(self, user_id):
-        fav_ref = self.db.child("favorites").child(user_id).get()
+    def _normalize_images_field(self, data: dict):
+        imgs = data.get("images") or []
+        if isinstance(imgs, dict):
+            imgs = [v for k, v in sorted(imgs.items(), key=lambda x: int(x[0]))]
+        data["images"] = imgs
+        return data
 
-        if not fav_ref.val():
-            return []
 
-        result = []
-        for fav in fav_ref.each():
-            item_name = fav.key()  # 찜한 상품 이름 (item 노드의 key)
-            item_data = self.db.child("item").child(item_name).get().val()
-            if not item_data:
-                continue
-
-            item_data["name"] = item_name  # 템플릿에서 쓰기 편하게 name 추가
-            result.append(item_data)
-
-        return result
-    
-    # 레벨바 구현
-    # ----------------------------------------------------
-    # 유저 포인트/스탯
-    # ----------------------------------------------------
-    def _increment_user_stat(self, user_id, field):
-        """user_stats/<user_id>/<field> 값을 +1 해주는 헬퍼"""
-        ref = self.db.child("user_stats").child(user_id)
-        current = ref.get().val() or {}
-
-        current_value = int(current.get(field, 0) or 0)
-        current[field] = current_value + 1
-
-        ref.set(current)
-
-    # 리뷰 1회 작성
-    def add_review_point(self, user_id):
-        self._increment_user_stat(user_id, "review_count")
-
-    # 상품 1개 등록
-    def add_item_point(self, user_id):
-        self._increment_user_stat(user_id, "item_count")
-
-    # 찜 버튼 1회 클릭(등록/해제 상관없이)
-    def add_heart_point(self, user_id):
-        self._increment_user_stat(user_id, "heart_count")
-
-    # 유저의 행동 카운트 조회
-    def get_user_stats(self, user_id):
-        stats = self.db.child("user_stats").child(user_id).get().val() or {}
-        # 값이 없으면 기본 0으로 채워주기
-        stats.setdefault("review_count", 0)
-        stats.setdefault("item_count", 0)
-        stats.setdefault("heart_count", 0)
-        return stats
