@@ -186,13 +186,20 @@ class DBhandler:
     def insert_review(self, review_data):
         self.db.child("reviews").push(review_data)
         return True
+    
     def get_all_reviews(self):
-        return self.db.child("reviews").get().val()
+        snap = self.db.child("reviews").get()
+        if not snap.val():
+            return None
 
-    def get_review_by_id(self, rid):
-        return self.db.child("reviews").child(rid).get().val()
-
-    def get_review_by_id(self, review_id): #상세조회용 함수
+        result = {}
+        for r in snap.each():
+            data = r.val()
+            data = self._normalize_images_field(data)
+            result[r.key()] = data
+        return result
+    
+    def get_review_by_id(self, review_id):  # 상세조회용 함수
         reviews = self.db.child("reviews").get()
 
         if not reviews.val():
@@ -200,9 +207,12 @@ class DBhandler:
 
         for r in reviews.each():
             if r.key() == review_id:
-                return r.val()
+                data = r.val()
+                data = self._normalize_images_field(data)
+                return data
 
         return None
+
     
     #내가 쓴 리뷰만 조회 함수 추가
     def get_reviews_by_user(self, user_id):
@@ -215,12 +225,23 @@ class DBhandler:
         for r in reviews.each():
             data = r.val()
             if data.get("user_id") == user_id:
+                data = self._normalize_images_field(data)
                 item = data.copy()
                 item["id"] = r.key()
                 result.append(item)
 
         return result
+
     #리뷰 삭제 추가 
     def delete_review(self, review_id):
         self.db.child("reviews").child(review_id).remove()
+
+    
+    def _normalize_images_field(self, data: dict):
+        imgs = data.get("images") or []
+        if isinstance(imgs, dict):
+            imgs = [v for k, v in sorted(imgs.items(), key=lambda x: int(x[0]))]
+        data["images"] = imgs
+        return data
+
 

@@ -155,7 +155,7 @@ def review_submit_post():
             filename = secure_filename(f"{uuid.uuid4().hex}_{img.filename}")
             save_path = os.path.join(UPLOAD_FOLDER, filename)
             img.save(save_path)
-            saved_paths.append(f"/static/image/{filename}")
+            saved_paths.append(f"/static/image/products/{filename}")
 
     # 3) DB 저장
     review_data = {
