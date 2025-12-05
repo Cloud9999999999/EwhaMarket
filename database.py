@@ -243,5 +243,18 @@ class DBhandler:
             imgs = [v for k, v in sorted(imgs.items(), key=lambda x: int(x[0]))]
         data["images"] = imgs
         return data
+    def get_user_by_id(self, user_id):
+        users = self.db.child("user").get()
+        
+        if not users.val():
+            return None
+
+        for res in users.each():
+            user = res.val()
+            if user.get("id") == user_id:
+                return user
+
+        return None
+
 
 

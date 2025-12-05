@@ -75,8 +75,11 @@
             <!-- 작성자 정보 -->
             <div class="author-section">
               <img
-                src="https://randomuser.me/api/portraits/women/44.jpg"
+                src="{{ url_for('static', filename=user.profile_img)
+                      if user and user.profile_img
+                      else url_for('static', filename='image/myprofile/profile.jpg') }}"
                 alt="작성자 프로필"
+                class="author-profile"
               />
               <div class="author-info">
                 <div class="author-name">{{ review.user_id }}</div>
