@@ -175,13 +175,18 @@ def review_submit_post():
 # 리뷰 상세 조회
 @application.route("/reviews/detail/<review_id>")
 def review_detail(review_id):
-
     review = DB.get_review_by_id(review_id)
 
     if not review:
         return "리뷰를 찾을 수 없습니다.", 404
 
-    return render_template("reviews/detail.html", review=review)
+    user_id = review.get("user_id")
+    user = DB.get_user_by_id(user_id) 
+
+    return render_template("reviews/detail.html",
+                            review=review,
+                            user=user)  
+
 
 #내 리뷰만 보기 
 @application.route("/api/my-reviews", methods=["GET"])
