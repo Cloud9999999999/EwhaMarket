@@ -15,7 +15,7 @@
 
 | **이름** | **역할** | **담당 업무** | **Github** |
 | --- | --- | --- | --- |
-| **윤가빈** | **Backend / Frontend / Leader** | 상품 등록 및 조회(List, Detail) 구현, DB 설계, 페이징/정렬/필터링 로직 | [@](https://www.google.com/search?q=Link&authuser=1)yoongabin |
+| **윤가빈** | **Backend / Frontend / Leader** | 상품 등록 및 조회(List, Detail) 구현, 페이징/정렬/필터링 로직 | [@](https://www.google.com/search?q=Link&authuser=1)yoongabin |
 | **양승혜** | Backend / Frontend / Design | 전체 UI/UX 가이드라인, 마이페이지, Figma 디자인 총괄 | [@](https://www.google.com/search?q=Link&authuser=1)seunghye-rain |
 | **구지원** | Backend / Frontend| 마이페이지 백엔드 로직, 사용자 정보 수정 기능 | [@](https://www.google.com/search?q=Link&authuser=1)jeewon514 |
 | **조승연** | Backend / Frontend | 리뷰 시스템(등록, 조회, 상세) 화면 구현 및 연동 | [@s](https://www.google.com/search?q=Link&authuser=1)erena2140 |
