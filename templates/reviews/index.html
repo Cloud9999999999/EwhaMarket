@@ -40,6 +40,7 @@
               >리뷰 조회</a
             >
           </li>
+          <li><a href="{{ url_for('reviews_write') }}">리뷰 등록</a></li>
           <li><a href="{{ url_for('products_enroll') }}">상품 등록</a></li>
 
           {% if session['id'] %}
@@ -81,7 +82,7 @@
 
       let reviews = [];
       let currentPage = 1;
-      const perPage = 6;
+      const perPage = 4;
 
       //리뷰 불러오기 API
       async function fetchReviews() {
