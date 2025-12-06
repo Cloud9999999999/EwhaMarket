@@ -5,7 +5,7 @@
   padding: 0 0 40px 0;
 }
 
-/* --- 필터 바 --- */
+/* 필터 바 */
 .filter-bar {
   display: flex;
   justify-content: flex-end;
