@@ -85,23 +85,47 @@ main {
   padding: 1rem 0 1rem 0;
 }
 
-.pagination {
+.page-wrap {
+  text-align: center;
+  font-size: 0;
+  margin-top: 4rem;
+}
+
+.page-nation {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 12px;
-  margin-top: 4rem;
-}
-.pagination a {
-  text-decoration: none;
-  color: #333;
-  padding: 6px 10px;
-  border-radius: 6px;
 }
 
-.pagination a.active {
-  /* 활성화된 페이지는 굵게만 처리 */
+.page-nation ul {
+  display: flex;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.page-nation li {
+  list-style: none;
+  margin: 0 3px;
+}
+
+.page-nation a {
+  display: block;
+  border: 1px solid #e6e6e6;
+  width: 28px;
+  height: 28px;
+  line-height: 28px;
+  text-align: center;
+  background-color: #fff;
+  font-size: 13px;
+  color: black;
+  text-decoration: none;
   font-weight: bold;
-  background: none;
-  color: #217f39;
+  cursor: pointer;
+}
+
+.page-nation a.active {
+  background-color: #00462a;
+  color: #fff;
+  border-color: #00462a;
 }
