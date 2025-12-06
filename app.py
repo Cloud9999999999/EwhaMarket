@@ -79,6 +79,30 @@ def show_heart(name):
     my_heart, new_count = DB.toggle_heart(session['id'], name)
     return jsonify({'my_heart': my_heart, 'like_count': new_count})
 
+# 찜 토글
+def toggle_heart(self, user_id, item_name):
+    is_liked = self.db.child("favorites").child(user_id).child(item_name).get().val()
+    item_data = self.db.child("item").child(item_name).get().val()
+    current_like_count = item_data.get("like_count", 0) if item_data else 0
+
+    if is_liked:
+        # 이미 찜 → 해제
+        self.db.child("favorites").child(user_id).child(item_name).remove()
+        new_count = max(0, current_like_count - 1)
+        self.db.child("item").child(item_name).update({"like_count": new_count})
+        return False, new_count
+    else:
+        # 찜 추가
+        self.db.child("favorites").child(user_id).child(item_name).set(True)
+        new_count = current_like_count + 1
+        self.db.child("item").child(item_name).update({"like_count": new_count})
+        return True, new_count
+
+# 찜 여부 확인
+def is_heart(self, user_id, item_name):
+    val = self.db.child("favorites").child(user_id).child(item_name).get().val()
+    return bool(val)
+
 # 리뷰 목록
 @application.route("/reviews")
 def reviews_index():
@@ -261,6 +285,9 @@ def mypage_index():
         flash("사용자 정보를 찾을 수 없습니다.")
         return redirect(url_for("home"))
     
+    #찜한 상품 목록
+    favorites = DB.get_favorite_items(user_id)
+    
     # 내가 등록한 상품 가져오기 & 최신순 정력
     my_items = DB.get_items_byseller(user_id)
     my_items.sort(key=lambda x: x.get('reg_date', ''), reverse=True)
@@ -290,13 +317,14 @@ def mypage_index():
         "mypage/index.html", 
         user=user, 
         my_items=my_items,
+        favorites=favorites,
         # HTML에서 쓸 변수들 전달
         level=level,
         point=current_point,
         need_point=need_point,
         bar_value=bar_value,
-        bar_percent=bar_percent
-
+        bar_percent=bar_percent,
+   
     )
 
     # 참여도 레벨(상품 등록: 30pts, 리뷰 등록: 50pts)
@@ -489,4 +517,4 @@ def reg_item_submit_post():
         return redirect(url_for('products_enroll'))
 
 if __name__ == "__main__":
-    application.run(host="0.0.0.0", debug=True)
+    application.run(host="0.0.0.0", port=5001 ,debug=True)
