@@ -265,8 +265,42 @@ def mypage_index():
     my_items = DB.get_items_byseller(user_id)
     my_items.sort(key=lambda x: x.get('reg_date', ''), reverse=True)
     
-    return render_template("mypage/index.html", user=user, my_items=my_items)
+    # [수정된 부분] 상품 개수로 포인트 및 레벨 즉시 계산
+    # ---------------------------------------------------------
+    item_count = len(my_items)      # 등록한 상품 개수
+    current_point = item_count * 10 # 상품 1개당 10포인트
+    
+    # 레벨 계산 (30포인트 당 1레벨)
+    level = current_point // 30 
+    
+    # 다음 레벨 달성 기준 포인트 (현재 레벨 + 1) * 30
+    next_level_point = (level + 1) * 30
+    
+    # 남은 포인트 (다음 레벨 기준 - 현재 포인트)
+    need_point = next_level_point - current_point
+    
+    bar_value = current_point % 30
+    if current_point > 0 and bar_value == 0:
+        bar_value = 1
 
+    bar_percent = (bar_value / 30) * 100
+    # ---------------------------------------------------------
+
+    return render_template(
+        "mypage/index.html", 
+        user=user, 
+        my_items=my_items,
+        # HTML에서 쓸 변수들 전달
+        level=level,
+        point=current_point,
+        need_point=need_point,
+        bar_value=bar_value,
+        bar_percent=bar_percent
+
+    )
+
+    # 참여도 레벨(상품 등록: 30pts, 리뷰 등록: 50pts)
+    
     
 # 마이페이지 - 상품 등록 내역 보기
 @application.route("/mypage/products")
