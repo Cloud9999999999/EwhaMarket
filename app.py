@@ -161,7 +161,7 @@ def review_submit_post():
     # 로그인 필요 시 사용
     user_id = session.get("id", "guest")
 
-    # 1) form 데이터 읽기
+    # form 데이터 읽기
     product_id = request.form.get("product_id")
     rating = request.form.get("rating")
     title = request.form.get("title", "")
@@ -170,7 +170,7 @@ def review_submit_post():
     if not product_id or not rating or not content:
         return jsonify({"success": False, "error": "필수 항목 누락"}), 400
 
-    # 2) 이미지 처리
+    # 이미지 처리
     images = request.files.getlist("images")
     saved_paths = []
 
@@ -181,7 +181,7 @@ def review_submit_post():
             img.save(save_path)
             saved_paths.append(f"/static/image/products/{filename}")
 
-    # 3) DB 저장
+    # DB 저장
     review_data = {
         "product_id": product_id,
         "user_id": user_id,
@@ -292,18 +292,12 @@ def mypage_index():
     my_items = DB.get_items_byseller(user_id)
     my_items.sort(key=lambda x: x.get('reg_date', ''), reverse=True)
     
-    # [수정된 부분] 상품 개수로 포인트 및 레벨 즉시 계산
-    # ---------------------------------------------------------
-    item_count = len(my_items)      # 등록한 상품 개수
-    current_point = item_count * 10 # 상품 1개당 10포인트
+    #레벨바 업데이트
+    item_count = len(my_items)      
+    current_point = item_count * 10 
     
-    # 레벨 계산 (30포인트 당 1레벨)
     level = current_point // 30 
-    
-    # 다음 레벨 달성 기준 포인트 (현재 레벨 + 1) * 30
     next_level_point = (level + 1) * 30
-    
-    # 남은 포인트 (다음 레벨 기준 - 현재 포인트)
     need_point = next_level_point - current_point
     
     bar_value = current_point % 30
@@ -311,14 +305,12 @@ def mypage_index():
         bar_value = 1
 
     bar_percent = (bar_value / 30) * 100
-    # ---------------------------------------------------------
 
     return render_template(
         "mypage/index.html", 
         user=user, 
         my_items=my_items,
         favorites=favorites,
-        # HTML에서 쓸 변수들 전달
         level=level,
         point=current_point,
         need_point=need_point,
@@ -327,7 +319,6 @@ def mypage_index():
    
     )
 
-    # 참여도 레벨(상품 등록: 30pts, 리뷰 등록: 50pts)
     
     
 # 마이페이지 - 상품 등록 내역 보기
@@ -342,14 +333,14 @@ def my_products():
     return render_template("mypage/my_products.html", my_items=my_items)
 
 
-# 마이페이지-2 (회원 정보 수정 페이지)
+# 마이페이지2 - 회원 정보 수정 페이지
 @application.route("/mypage/edit-info", methods=['GET', 'POST'])
 def mypage_edit():
     user_id = session.get("id")    # 로그인한 사용자의 id
     if not user_id:
         return redirect(url_for("login"))
     
-    # 페이지 요청(GET): 수정 폼 표시
+    # 페이지 요청 - 수정 폼 표시
     if request.method == "GET":
         user = DB.get_user(user_id) or {}
         
@@ -365,7 +356,7 @@ def mypage_edit():
             page_count=0,
         )
     
-    # POST: 수정 저장
+    # POST - 수정 저장
     username = request.form.get('username')
     form_id  = request.form.get('id')
     email    = request.form.get('email')
