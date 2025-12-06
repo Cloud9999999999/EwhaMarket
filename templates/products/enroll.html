@@ -283,7 +283,7 @@
         });
 
       /* --- 시/도 및 시/군/구 동적 로딩 JavaScript --- */
-      // 1. 전국 시/군/구 데이터 정의
+      // 전국 시/군/구 데이터 정의
       const regionalData = {
         서울특별시: [
           "종로구",
@@ -551,7 +551,7 @@
       const citySelect = document.getElementById("city");
       const districtSelect = document.getElementById("district");
 
-      // 2. 시/도 선택 시 시/군/구 목록 업데이트 함수
+      // 시/도 선택 시 시/군/구 목록 업데이트 함수
       function updateDistricts() {
         const selectedCity = citySelect.value;
 
@@ -572,7 +572,7 @@
         }
       }
 
-      // 3. 이벤트 리스너 연결
+      // 이벤트 리스너 연결
       citySelect.addEventListener("change", updateDistricts);
     </script>
 
