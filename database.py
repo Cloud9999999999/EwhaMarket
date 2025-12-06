@@ -85,7 +85,7 @@ class DBhandler:
         current_date = datetime.now().strftime("%Y-%m-%d")
         
         item_info = {
-            "seller": user_id,  # 세션에서 받아온 user_id 사용
+            "seller": user_id,  
             "addr": full_addr,
             "category": data.get('category'),
             "price": data.get('price'),
@@ -122,7 +122,7 @@ class DBhandler:
         for res in items.each():
             value = res.val()
             if value.get('seller') == seller_id:
-                value['name'] = res.key() # 상품명(key)을 데이터에 포함
+                value['name'] = res.key() 
                 target_value.append(value)
         
         return target_value

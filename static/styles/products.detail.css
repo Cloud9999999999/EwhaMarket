@@ -2,7 +2,7 @@ main {
   flex-grow: 1;
   display: flex;
   justify-content: center;
-  align-items: flex-start; /* 콘텐츠를 상단에 정렬 */
+  align-items: flex-start; 
   padding: 50px 0;
 }
 
@@ -20,12 +20,12 @@ main {
 
 /* 상품 이미지 영역 */
 .product-image-area {
-  flex: 0 0 400px; /* 이미지 영역 너비 고정 */
+  flex: 0 0 400px; 
   height: 400px;
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #f9f9f9; /* 배경색으로 이미지 영역 강조 */
+  background-color: #f9f9f9; 
   border-radius: 10px;
   overflow: hidden;
 }
