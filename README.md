@@ -45,6 +45,8 @@
 
 ![image.png](https://raw.githubusercontent.com/Cloud9999999999/EwhaMarket/refs/heads/main/README_img/로그인.png)
 
+![image.png](https://raw.githubusercontent.com/Cloud9999999999/EwhaMarket/refs/heads/main/README_img/마이페이지.png)
+
 ### 🛍️ 상품 (Item)
 
 - **상품 등록:** 이미지 업로드 및 상품 상세 정보(가격, 카테고리, 상태 등) 입력.
@@ -109,18 +111,22 @@ Firebase Realtime Database (NoSQL)를 사용하여 데이터를 JSON 트리 구�
     
 
 ## 7. 폴더 구조 (Folder Structure)
-
-`flask_project/
-├── app.py                  # 메인 Flask 애플리케이션 파일 (라우팅 처리)
-├── database.py             # DB 핸들링 모듈 (DBHandler 클래스)
-├── authentication/         # Firebase 인증 키 보관 폴더
+<pre style="background-color: #1F3737; padding: 10px; border-radius: 5px; color: #ffffff;">
+<code>
+Start
+├── flask_project/
+└── app.py                  # 메인 Flask 애플리케이션 파일 (라우팅 처리)
+└── database.py             # DB 핸들링 모듈 (DBHandler 클래스)
+└── authentication/         # Firebase 인증 키 보관 폴더
 │   └── firebase_auth.json
-├── static/                 # 정적 파일 (CSS, JS, Images)
-│   ├── images/             # 업로드된 상품/리뷰 이미지
+└── static/                 # 정적 파일 (CSS, JS, Images)
+│   └── images/             # 업로드된 상품/리뷰 이미지
 │   └── styles/
 └── templates/              # HTML 템플릿 파일
-    ├── index.html          # 메인 페이지
-    ├── auth/               #로그인, 로그아웃, 회원가입
-    ├── mypage/             #마이페이지
-    ├── products/           #상품 전체조회, 상품 등록
-    └── reviews/            #리뷰 전체조회, 리뷰 등록`
+│   └── index.html          # 메인 페이지
+│   └── auth/               #로그인, 로그아웃, 회원가입
+│   └── mypage/             #마이페이지
+│   └── products/           #상품 전체조회, 상품 등록
+│   └── reviews/            #리뷰 전체조회, 리뷰 등록
+</code>
+</pre>
