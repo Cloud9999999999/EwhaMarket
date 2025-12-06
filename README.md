@@ -113,8 +113,7 @@ Firebase Realtime Database (NoSQL)를 사용하여 데이터를 JSON 트리 구�
 ## 7. 폴더 구조 (Folder Structure)
 <pre style="background-color: #1F3737; padding: 10px; border-radius: 5px; color: #ffffff;">
 <code>
-Start
-├── flask_project/
+flask_project/
 └── app.py                  # 메인 Flask 애플리케이션 파일 (라우팅 처리)
 └── database.py             # DB 핸들링 모듈 (DBHandler 클래스)
 └── authentication/         # Firebase 인증 키 보관 폴더
