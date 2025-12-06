@@ -126,6 +126,6 @@ flask_project/
 │   └── auth/               #로그인, 로그아웃, 회원가입
 │   └── mypage/             #마이페이지
 │   └── products/           #상품 전체조회, 상품 등록
-│   └── reviews/            #리뷰 전체조회, 리뷰 등록
+└── └── reviews/            #리뷰 전체조회, 리뷰 등록
 </code>
 </pre>
