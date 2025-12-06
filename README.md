@@ -81,7 +81,7 @@ Firebase Realtime Database (NoSQL)를 사용하여 데이터를 JSON 트리 구�
 
 1. **Repository Clone**Bash
     
-    [`git clone](https://github.com/Cloud9999999999/EwhaMarket.git) https://github.com/Cloud9999999999/EwhaMarket.git
+    `git clone(https://github.com/Cloud9999999999/EwhaMarket.git) https://github.com/Cloud9999999999/EwhaMarket.git
     cd EwhaMarket`
     
 2. **가상환경 생성 및 활성화**Bash
