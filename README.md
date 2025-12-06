@@ -85,20 +85,20 @@ Firebase Realtime Database (NoSQL)를 사용하여 데이터를 JSON 트리 구�
 
 1. **Repository Clone**Bash
     
-    `git clone(https://github.com/Cloud9999999999/EwhaMarket.git) https://github.com/Cloud9999999999/EwhaMarket.git
-    cd EwhaMarket`
+    `git clone https://github.com/Cloud9999999999/EwhaMarket.git`<br>
+    `cd EwhaMarket`
     
 2. **가상환경 생성 및 활성화**Bash
     
-    `conda create -n ewha_market python=3.8
-    conda activate ewha_market`
+    `conda create -n ewha_market python=3.8`<br>
+    `conda activate ewha_market`
     
 3. 필수 라이브러리 설치Bash
     
     주의: pyrebase가 아닌 pyrebase4를 설치해야 합니다.
     
-    `pip install flask
-    pip install pyrebase4`
+    `pip install flask`<br>
+    `pip install pyrebase4`
     
 4. **Firebase 설정 파일 추가**
     - `authentication` 폴더 내에 `firebase_auth.json` 파일을 생성하고, 본인의 Firebase 프로젝트 설정 키(API Key 등)를 입력해야 합니다.
