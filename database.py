@@ -85,7 +85,7 @@ class DBhandler:
         current_date = datetime.now().strftime("%Y-%m-%d")
         
         item_info = {
-            "seller": user_id,  # 세션에서 받아온 user_id 사용
+            "seller": user_id,  
             "addr": full_addr,
             "category": data.get('category'),
             "price": data.get('price'),
@@ -122,10 +122,35 @@ class DBhandler:
         for res in items.each():
             value = res.val()
             if value.get('seller') == seller_id:
-                value['name'] = res.key() # 상품명(key)을 데이터에 포함
+                value['name'] = res.key() 
                 target_value.append(value)
         
         return target_value
+    
+    # ----------------------------------------------------
+    # 찜 관련 함수
+    # ----------------------------------------------------
+    def toggle_heart(self, user_id, item_name):
+        is_liked = self.db.child("favorites").child(user_id).child(item_name).get().val()
+        item_data = self.db.child("item").child(item_name).get().val()
+        current_like_count = item_data.get("like_count", 0) if item_data else 0
+
+        if is_liked:
+            # 이미 찜 → 해제
+            self.db.child("favorites").child(user_id).child(item_name).remove()
+            new_count = max(0, current_like_count - 1)
+            self.db.child("item").child(item_name).update({"like_count": new_count})
+            return False, new_count
+        else:
+            # 찜 추가
+            self.db.child("favorites").child(user_id).child(item_name).set(True)
+            new_count = current_like_count + 1
+            self.db.child("item").child(item_name).update({"like_count": new_count})
+            return True, new_count
+
+    def is_heart(self, user_id, item_name):
+        val = self.db.child("favorites").child(user_id).child(item_name).get().val()
+        return bool(val)
     
     
     # ----------------------------------------------------
@@ -159,25 +184,42 @@ class DBhandler:
         return False
     
     # 찜 목록
-    def toggle_heart(self, user_id, item_name):
-        is_liked = self.db.child("favorites").child(user_id).child(item_name).get().val()
-        item_data = self.db.child("item").child(item_name).get().val()
-        current_like_count = item_data.get("like_count", 0) if item_data else 0
+    def get_favorite_items(self, user_id):
+        fav_ref = self.db.child("favorites").child(user_id).get()
 
-        if is_liked:
-            self.db.child("favorites").child(user_id).child(item_name).remove()
-            new_count = max(0, current_like_count - 1)
-            self.db.child("item").child(item_name).update({"like_count": new_count})
-            return False, new_count
-        else:
-            self.db.child("favorites").child(user_id).child(item_name).set(True)
-            new_count = current_like_count + 1
-            self.db.child("item").child(item_name).update({"like_count": new_count})
-            return True, new_count
+        if not fav_ref.val():
+            return []
 
-    def is_heart(self, user_id, item_name):
-        val = self.db.child("favorites").child(user_id).child(item_name).get().val()
-        return bool(val)
+        result = []
+        for fav in fav_ref.each():
+            item_name = fav.key()  
+            item_data = self.db.child("item").child(item_name).get().val()
+            if not item_data:
+                continue
+
+            item_data["name"] = item_name
+            result.append(item_data)
+
+        return result
+
+    # 찜목록 조회
+    def get_favorite_items(self, user_id):
+        fav_ref = self.db.child("favorites").child(user_id).get()
+
+        if not fav_ref.val():
+            return []
+
+        result = []
+        for fav in fav_ref.each():
+            item_name = fav.key()
+            item_data = self.db.child("item").child(item_name).get().val()
+            if not item_data:
+                continue
+
+            item_data["name"] = item_name  
+            result.append(item_data)
+
+        return result
     
     # 레벨바
     def add_item_point(self, user_id):

@@ -130,36 +130,35 @@
               class="content-icon"
             />
             <p class="content-font">찜 목록 보기</p>
-            <p class="num-font">(4)</p>
+            <p class="num-font">({{ favorites|length }})</p>
           </div>
           <div
             style="
-              display: flex;
-              flex-direction: row;
-              flex-wrap: wrap;
-              justify-content: space-between;
+              display: grid;
+              grid-template-columns: repeat(4, 1fr);
+
+              padding-bottom: 15px;
+              gap: 20px;
             "
           >
-            <div class="heart-container">
-              <img src="../assets/heart-img2.png" alt="블루 틴트 안경" />
-              <p class="write-head">블루 틴트 안경</p>
-              <p class="price-write">25,000원</p>
-            </div>
-            <div class="heart-container">
-              <img src="../assets/heart-img1.png" alt="블루 틴트 안경" />
-              <p class="write-head">화장품 세트</p>
-              <p class="price-write">15,000원</p>
-            </div>
-            <div class="heart-container">
-              <img src="../assets/heart-img4.png" alt="블루 틴트 안경" />
-              <p class="write-head">다이어리</p>
-              <p class="price-write">8,000원</p>
-            </div>
-            <div class="heart-container">
-              <img src="../assets/heart-img3.png" alt="블루 틴트 안경" />
-              <p class="write-head">실버 귀걸이</p>
-              <p class="price-write">12,000원</p>
-            </div>
+             {% if favorites %}
+              {% for item in favorites %}
+                <div
+                  class="heart-container"
+                  onclick="location.href='{{ url_for('products_detail', name=item.name) }}';"
+                  style="cursor: pointer"
+                >
+                  <img
+                    src="{{ url_for('static', filename='image/products/' + item.img_path) }}"
+                    alt="{{ item.name }}"
+                  />
+                  <p class="write-head">{{ item.name }}</p>
+                  <p class="price-write">{{ item.price }}원</p>
+                </div>
+              {% endfor %}
+            {% else %}
+              <p style="padding: 10px; color: #666;">찜한 상품이 없습니다.</p>
+            {% endif %}
           </div>
         </div>
 

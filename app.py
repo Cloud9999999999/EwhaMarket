@@ -79,6 +79,30 @@ def show_heart(name):
     my_heart, new_count = DB.toggle_heart(session['id'], name)
     return jsonify({'my_heart': my_heart, 'like_count': new_count})
 
+# 찜 토글
+def toggle_heart(self, user_id, item_name):
+    is_liked = self.db.child("favorites").child(user_id).child(item_name).get().val()
+    item_data = self.db.child("item").child(item_name).get().val()
+    current_like_count = item_data.get("like_count", 0) if item_data else 0
+
+    if is_liked:
+        # 이미 찜 → 해제
+        self.db.child("favorites").child(user_id).child(item_name).remove()
+        new_count = max(0, current_like_count - 1)
+        self.db.child("item").child(item_name).update({"like_count": new_count})
+        return False, new_count
+    else:
+        # 찜 추가
+        self.db.child("favorites").child(user_id).child(item_name).set(True)
+        new_count = current_like_count + 1
+        self.db.child("item").child(item_name).update({"like_count": new_count})
+        return True, new_count
+
+# 찜 여부 확인
+def is_heart(self, user_id, item_name):
+    val = self.db.child("favorites").child(user_id).child(item_name).get().val()
+    return bool(val)
+
 # 리뷰 목록
 @application.route("/reviews")
 def reviews_index():
@@ -137,7 +161,7 @@ def review_submit_post():
     # 로그인 필요 시 사용
     user_id = session.get("id", "guest")
 
-    # 1) form 데이터 읽기
+    # form 데이터 읽기
     product_id = request.form.get("product_id")
     rating = request.form.get("rating")
     title = request.form.get("title", "")
@@ -146,7 +170,7 @@ def review_submit_post():
     if not product_id or not rating or not content:
         return jsonify({"success": False, "error": "필수 항목 누락"}), 400
 
-    # 2) 이미지 처리
+    # 이미지 처리
     images = request.files.getlist("images")
     saved_paths = []
 
@@ -157,7 +181,7 @@ def review_submit_post():
             img.save(save_path)
             saved_paths.append(f"/static/image/products/{filename}")
 
-    # 3) DB 저장
+    # DB 저장
     review_data = {
         "product_id": product_id,
         "user_id": user_id,
@@ -261,22 +285,19 @@ def mypage_index():
         flash("사용자 정보를 찾을 수 없습니다.")
         return redirect(url_for("home"))
     
+    #찜한 상품 목록
+    favorites = DB.get_favorite_items(user_id)
+    
     # 내가 등록한 상품 가져오기 & 최신순 정력
     my_items = DB.get_items_byseller(user_id)
     my_items.sort(key=lambda x: x.get('reg_date', ''), reverse=True)
     
-    # [수정된 부분] 상품 개수로 포인트 및 레벨 즉시 계산
-    # ---------------------------------------------------------
-    item_count = len(my_items)      # 등록한 상품 개수
-    current_point = item_count * 10 # 상품 1개당 10포인트
+    #레벨바 업데이트
+    item_count = len(my_items)      
+    current_point = item_count * 10 
     
-    # 레벨 계산 (30포인트 당 1레벨)
     level = current_point // 30 
-    
-    # 다음 레벨 달성 기준 포인트 (현재 레벨 + 1) * 30
     next_level_point = (level + 1) * 30
-    
-    # 남은 포인트 (다음 레벨 기준 - 현재 포인트)
     need_point = next_level_point - current_point
     
     bar_value = current_point % 30
@@ -284,22 +305,20 @@ def mypage_index():
         bar_value = 1
 
     bar_percent = (bar_value / 30) * 100
-    # ---------------------------------------------------------
 
     return render_template(
         "mypage/index.html", 
         user=user, 
         my_items=my_items,
-        # HTML에서 쓸 변수들 전달
+        favorites=favorites,
         level=level,
         point=current_point,
         need_point=need_point,
         bar_value=bar_value,
-        bar_percent=bar_percent
-
+        bar_percent=bar_percent,
+   
     )
 
-    # 참여도 레벨(상품 등록: 30pts, 리뷰 등록: 50pts)
     
     
 # 마이페이지 - 상품 등록 내역 보기
@@ -314,14 +333,14 @@ def my_products():
     return render_template("mypage/my_products.html", my_items=my_items)
 
 
-# 마이페이지-2 (회원 정보 수정 페이지)
+# 마이페이지2 - 회원 정보 수정 페이지
 @application.route("/mypage/edit-info", methods=['GET', 'POST'])
 def mypage_edit():
     user_id = session.get("id")    # 로그인한 사용자의 id
     if not user_id:
         return redirect(url_for("login"))
     
-    # 페이지 요청(GET): 수정 폼 표시
+    # 페이지 요청 - 수정 폼 표시
     if request.method == "GET":
         user = DB.get_user(user_id) or {}
         
@@ -337,7 +356,7 @@ def mypage_edit():
             page_count=0,
         )
     
-    # POST: 수정 저장
+    # POST - 수정 저장
     username = request.form.get('username')
     form_id  = request.form.get('id')
     email    = request.form.get('email')
@@ -489,4 +508,4 @@ def reg_item_submit_post():
         return redirect(url_for('products_enroll'))
 
 if __name__ == "__main__":
-    application.run(host="0.0.0.0", debug=True)
+    application.run(host="0.0.0.0", port=5001 ,debug=True)

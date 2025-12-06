@@ -58,7 +58,6 @@
   font-weight: 600;
 }
 
-/*  */
 .write-head {
   color: #00462a;
   font-size: 18px;
@@ -134,12 +133,15 @@
 /* 찜목록 관련 */
 .heart-container {
   margin-top: 8px;
+  width: 200px;
+  height: 180px;
 }
 .heart-container img {
-  width: 150px;
+  width: 180px;
   height: 150px;
   margin-bottom: 8px;
   border-radius: 20px;
+  object-fit: cover;
 }
 .price-write {
   color: #34a853;

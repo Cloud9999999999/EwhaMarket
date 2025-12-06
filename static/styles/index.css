@@ -5,7 +5,7 @@
   padding: 0 0 40px 0;
 }
 
-/* --- 필터 바 --- */
+/* 필터 바 */
 .filter-bar {
   display: flex;
   justify-content: flex-end;
@@ -18,18 +18,18 @@
   padding: 6px 12px;
   border-radius: 20px;
   cursor: pointer;
-  white-space: nowrap; /* 필터 버튼 텍스트 줄바꿈 방지 */
+  white-space: nowrap; 
   transition: all 0.2s ease;
 }
 
-/* 최종 요청 사항 반영: 클릭 시 배경색 #00462A, 글씨색 흰색 */
+
 .filter.active {
   background-color: #00462a;
   color: white;
   border-color: #00462a;
 }
 
-/* --- 카드 레이아웃 --- */
+
 .product-list {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -95,7 +95,7 @@
   text-align: left;
 }
 
-/* --- 찜 버튼 (하트) --- */
+/* 찜 버튼 */
 .like-wrapper-card {
   position: absolute;
   bottom: 16px;
@@ -138,7 +138,7 @@
   transform: scale(1.1);
 }
 
-/* --- 페이지네이션 --- */
+/* 페이지네이션 */
 .pagination {
   display: flex;
   justify-content: center;
