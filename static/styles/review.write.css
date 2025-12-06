@@ -17,7 +17,7 @@ main {
   padding: 40px 3rem;
 }
 
-/* 🔹 상단 상품 정보 + 업로드 구역 */
+/* 상단 상품 정보 + 업로드 */
 .top-section {
   display: flex;
   justify-content: space-between;
@@ -59,7 +59,7 @@ main {
   margin-bottom: 10px;
 }
 
-/* 🔹 업로드 영역 */
+/* 업로드 영역 */
 .upload-area {
   display: flex;
   flex-direction: column;
@@ -113,7 +113,7 @@ main {
   width: 150px;
 }
 
-/* 🔹 별점 */
+/* 별점 */
 .star-rating {
   display: flex;
   justify-content: center;
@@ -129,7 +129,7 @@ main {
   color: #00462a;
 }
 
-/* 🔹 리뷰 입력 */
+/* 리뷰 입력 */
 .review-title,
 .review-content {
   width: 100%;
