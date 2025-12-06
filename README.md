@@ -43,7 +43,7 @@
 - **로그인/로그아웃:** Flask Session을 이용한 로그인 상태 관리.
 - **마이페이지:** 내 정보 수정, 내가 찜한 상품 목록, 내가 쓴 리뷰 관리.
 
-![image.png](https://raw.githubusercontent.com/Cloud9999999999/EwhaMarket/README_img/로그인.png)
+![image.png](https://raw.githubusercontent.com/Cloud9999999999/EwhaMarket/refs/heads/main/README_img/로그인.png)
 
 ### 🛍️ 상품 (Item)
 
@@ -53,16 +53,16 @@
     - **Sorting:** 신상품순, 인기순(찜 많은 순), 가격순 정렬.
 - **상품 상세 조회:** 판매자 정보 확인 및 찜하기 기능.
 
-![image.png](https://raw.githubusercontent.com/Cloud9999999999/EwhaMarket/README_img/전체상품조회.png)
+![image.png](https://raw.githubusercontent.com/Cloud9999999999/EwhaMarket/refs/heads/main/README_img/전체상품조회.png)
 
-![image.png](https://raw.githubusercontent.com/Cloud9999999999/EwhaMarket/README_img/상세조회.png)
+![image.png](https://raw.githubusercontent.com/Cloud9999999999/EwhaMarket/refs/heads/main/README_img/상세조회.png)
 
 ### ⭐ 리뷰 & 찜 (Review & Like)
 
 - **리뷰 시스템:** 구매한 상품에 대한 사진 리뷰 작성 및 별점 부여.
 - **찜하기(Like):** AJAX를 활용하여 새로고침 없이 상품 찜/찜 취소 기능 구현 (하트 토글).
 
-![image.png](https://raw.githubusercontent.com/Cloud9999999999/EwhaMarket/README_img/리뷰조회.png)
+![image.png](https://raw.githubusercontent.com/Cloud9999999999/EwhaMarket/refs/heads/main/README_img/리뷰조회.png)
 
 ## 5. 데이터베이스 구조 (Database Structure)
 
@@ -73,9 +73,9 @@ Firebase Realtime Database (NoSQL)를 사용하여 데이터를 JSON 트리 구�
 - `reviews`: 상품별 리뷰 데이터
 - `favorites`: 사용자별 찜한 상품 목록
 
-![image.png](https://raw.githubusercontent.com/Cloud9999999999/EwhaMarket/README_img/item.png)
-![image.png](https://raw.githubusercontent.com/Cloud9999999999/EwhaMarket/README_img/reviews.png)
-![image.png](https://raw.githubusercontent.com/Cloud9999999999/EwhaMarket/README_img/user.png)
+![image.png](https://raw.githubusercontent.com/Cloud9999999999/EwhaMarket/refs/heads/main/README_img/item.png)
+![image.png](https://raw.githubusercontent.com/Cloud9999999999/EwhaMarket/refs/heads/main/README_img/reviews.png)
+![image.png](https://raw.githubusercontent.com/Cloud9999999999/EwhaMarket/refs/heads/main/README_img/user.png)
 
 ## 6. 설치 및 실행 방법 (Installation & Usage)
 
